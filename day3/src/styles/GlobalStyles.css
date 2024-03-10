@@ -1,0 +1,14 @@
+.btn-success {
+  background-color: aqua;
+}
+
+* {
+  margin: 10px auto;
+}
+
+input {
+  background-color: rgb(235, 241, 239);
+  border: 1px solid #f3eeee;
+  border-radius: 8px;
+  height: 20px;
+}

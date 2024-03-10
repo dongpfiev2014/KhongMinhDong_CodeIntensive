@@ -1,10 +1,12 @@
 import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
+import HomeScreen from "./screens/HomeScreen";
 
 function App() {
   // JSX - Javascript XML
   return (
+    <HomeScreen />
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />
@@ -21,10 +23,6 @@ function App() {
     //     </a>
     //   </header>
     // </div>
-    <div className="">
-      Hello World !!
-      <h1>Alo</h1>
-    </div>
   );
 }
 
