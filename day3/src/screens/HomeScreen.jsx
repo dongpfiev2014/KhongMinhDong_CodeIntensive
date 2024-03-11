@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { globalStyles } from "../styles/GlobalStyles";
 import "../styles/GlobalStyles.css";
 import { ButtonComponent, Card, InputComponents } from "../components";
+import { handleGetDate } from "../utils/handleGetDate";
 
 const HomeScreen = () => {
   // const a = 5;
@@ -13,7 +14,15 @@ const HomeScreen = () => {
   //   fontWeight: "800",
   //   fontSize: 40,
   // };
-  console.log("Sida");
+
+  // let name = "";
+  // const LoadValue = () => {
+  //   console.log(name);
+  // };
+
+  const [name, setName] = useState("MindX");
+  const [age, setAge] = useState("");
+
   return (
     <div>
       {/* <h1>a + b = {a + b}</h1>
@@ -42,10 +51,34 @@ const HomeScreen = () => {
         <p>Hi</p>
       </Card>
 
-      <InputComponents prefix="a" onChange={(val) => console.log(val)} />
-      <InputComponents />
-      <InputComponents />
-      <InputComponents />
+      <InputComponents
+        type="number"
+        prefix="a"
+        onChange={(val) => console.log(val)}
+      />
+
+      <ButtonComponent
+        onClick={() => {
+          handleGetDate();
+        }}
+      />
+
+      <div>
+        <p>{name}</p>
+        <p>{age}</p>
+        {/* <input
+          onChange={(event) => {
+            name = event.target.value;
+          }}
+          type="text"
+          name=""
+          id=""
+        /> */}
+        <button
+          style={{ height: 30 }}
+          onClick={() => setName("Đông đại ca")}
+        ></button>
+      </div>
     </div>
   );
 };

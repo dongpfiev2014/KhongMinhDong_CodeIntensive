@@ -1,13 +1,13 @@
 import React from "react";
 
 const InputComponents = (props) => {
-  const { prefix, onChange } = props;
+  const { prefix, onChange, type } = props;
   return (
     <div className="input">
       {prefix}
       <input
         onChange={(val) => onChange(val.target.value)}
-        type="text"
+        type={type}
         name=""
         id=""
         placeholder="Content"

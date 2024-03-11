@@ -2,7 +2,6 @@ import React from "react";
 
 const ButtonComponent = (props) => {
   const { color, padding, text, onClick, borderRadius } = props;
-
   return (
     <button
       onClick={onClick}
