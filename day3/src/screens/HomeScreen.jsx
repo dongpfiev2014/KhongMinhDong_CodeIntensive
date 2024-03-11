@@ -21,7 +21,11 @@ const HomeScreen = () => {
   // };
 
   const [name, setName] = useState("MindX");
-  const [age, setAge] = useState("");
+  const [profile, setProfile] = useState({
+    name: "Đông",
+    age: "27",
+    height: "70",
+  });
 
   return (
     <div>
@@ -63,9 +67,11 @@ const HomeScreen = () => {
         }}
       />
 
+      {/* {Props, event, useState} */}
+
       <div>
-        <p>{name}</p>
-        <p>{age}</p>
+        <p>{profile.name}</p>
+        <p>{profile.age}</p>
         {/* <input
           onChange={(event) => {
             name = event.target.value;
@@ -74,9 +80,10 @@ const HomeScreen = () => {
           name=""
           id=""
         /> */}
+        <ButtonComponent text={profile.name} />
         <button
           style={{ height: 30 }}
-          onClick={() => setName("Đông đại ca")}
+          onClick={() => setProfile({ ...profile, name: "Vip pro" })}
         ></button>
       </div>
     </div>
