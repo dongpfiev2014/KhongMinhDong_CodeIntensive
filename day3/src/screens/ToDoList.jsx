@@ -74,7 +74,15 @@ const ToDoList = () => {
                 name=""
                 id=""
               />
-              <span style={{ width: "100%", fontSize: "18px" }}>
+              <span
+                style={{
+                  width: "100%",
+                  fontSize: "18px",
+                  textDecorationLine: item.isCompleted
+                    ? "line-through"
+                    : "none",
+                }}
+              >
                 {item.Contents}{" "}
               </span>
               <button className="TaskButton" style={{ border: "none" }}>
