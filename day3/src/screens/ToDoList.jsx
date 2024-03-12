@@ -7,6 +7,9 @@ const ToDoList = () => {
   const [originalTasks, setOriginalTasks] = useState([]);
   const [Contents, setContents] = useState("");
   const [EditID, setEditID] = useState(-1);
+  const [AllisActive, setAllIsActive] = useState(false);
+  const [PendingisActive, setPendingisActive] = useState();
+  const [CompletedisActive, setCompletedisActive] = useState();
   const inputRef = useRef(null);
 
   const handleAddNewTask = () => {
@@ -102,36 +105,45 @@ const ToDoList = () => {
           <ButtonComponent
             text="All"
             fontSize="18px"
-            FontColor="rgb(0, 174, 255)"
+            FontColor={AllisActive ? "rgb(4, 149, 216)" : "black"}
             onClick={() => {
               const items = [...originalTasks];
               setTasks(items);
+              setAllIsActive(true);
+              setCompletedisActive(false);
+              setPendingisActive(false);
             }}
           ></ButtonComponent>
           <ButtonComponent
             text="Pending"
             fontSize="18px"
-            FontColor="rgb(0, 174, 255)"
+            FontColor={PendingisActive ? "rgb(4, 149, 216)" : "black"}
             onClick={() => {
               const items = [...originalTasks];
               const incompleteTasks = items.filter((task) => !task.isCompleted);
               setTasks(incompleteTasks);
+              setAllIsActive(false);
+              setCompletedisActive(false);
+              setPendingisActive(true);
             }}
           ></ButtonComponent>
           <ButtonComponent
             text="Completed"
             fontSize="18px"
-            FontColor="rgb(0, 174, 255)"
+            FontColor={CompletedisActive ? "rgb(4, 149, 216)" : "black"}
             onClick={() => {
               const items = [...originalTasks];
               const completedTasks = items.filter((task) => task.isCompleted);
               setTasks(completedTasks);
+              setAllIsActive(false);
+              setCompletedisActive(true);
+              setPendingisActive(false);
             }}
           ></ButtonComponent>
           <ButtonComponent
             text="Clear All"
             fontSize="18px"
-            FontColor="rgb(0, 174, 255)"
+            FontColor="rgb(4, 149, 216)"
             onClick={() => {
               setTasks([]);
               setOriginalTasks([]);

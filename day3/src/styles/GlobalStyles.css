@@ -14,7 +14,7 @@ input {
   height: 20px;
 }
 input:focus {
-  border-color: rgb(0, 174, 255); /* Thay đổi màu viền */
+  border-color: rgb(4, 149, 216); /* Thay đổi màu viền */
 }
 
 button {
