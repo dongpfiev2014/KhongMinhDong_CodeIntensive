@@ -35,7 +35,7 @@ const ToDoList = () => {
 
   const handleClearTask = (id) => {
     const items = [...originalTasks];
-    const index = Tasks.findIndex((element) => element.id === id);
+    const index = items.findIndex((element) => element.id === id);
     if (index !== -1) {
       items.splice(index, 1);
     }
@@ -45,7 +45,7 @@ const ToDoList = () => {
 
   const handleEditTask = (id) => {
     const items = [...originalTasks];
-    const index = Tasks.findIndex((element) => element.id === id);
+    const index = items.findIndex((element) => element.id === id);
     if (index !== -1) {
       setContents(items[index].Contents);
       inputRef.current.focus();
@@ -132,6 +132,10 @@ const ToDoList = () => {
             text="Clear All"
             fontSize="18px"
             FontColor="rgb(0, 174, 255)"
+            onClick={() => {
+              setTasks([]);
+              setOriginalTasks([]);
+            }}
           ></ButtonComponent>
         </div>
         {Tasks.map((item, index) => (
