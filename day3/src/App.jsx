@@ -7,7 +7,8 @@ import React from "react";
 // import PcCalculatorScreen from "./screens/PcCalculatorScreen";
 // import ToDoList from "./screens/ToDoList";
 // import UsernamePassword from "./screens/UsernamePassword";
-import Antd from "./screens/Antd";
+// import Antd from "./screens/Antd";
+import ConditionalRendering from "./screens/ConditionalRendering";
 
 function App() {
   // JSX - Javascript XML
@@ -17,8 +18,8 @@ function App() {
     // <PcCalculatorScreen />
     // <ToDoList />
     // <UsernamePassword />
-    <Antd />
-
+    // <Antd />
+    <ConditionalRendering />
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />
