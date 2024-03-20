@@ -8,7 +8,8 @@ import React from "react";
 // import ToDoList from "./screens/ToDoList";
 // import UsernamePassword from "./screens/UsernamePassword";
 // import Antd from "./screens/Antd";
-import ConditionalRendering from "./screens/ConditionalRendering";
+// import ConditionalRendering from "./screens/ConditionalRendering";
+import ConditionalRendering2 from "./screens/ConditionalRendering2";
 
 function App() {
   // JSX - Javascript XML
@@ -19,7 +20,9 @@ function App() {
     // <ToDoList />
     // <UsernamePassword />
     // <Antd />
-    <ConditionalRendering />
+    // <ConditionalRendering />
+    <ConditionalRendering2 />
+
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />
