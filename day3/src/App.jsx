@@ -9,7 +9,9 @@ import React from "react";
 // import UsernamePassword from "./screens/UsernamePassword";
 // import Antd from "./screens/Antd";
 // import ConditionalRendering from "./screens/ConditionalRendering";
-import ConditionalRendering2 from "./screens/ConditionalRendering2";
+// import ConditionalRendering2 from "./screens/ConditionalRendering2";
+// import Lesson8 from "./screens/Lesson8";
+import UserEffect from "./screens/UserEffect";
 
 function App() {
   // JSX - Javascript XML
@@ -21,7 +23,9 @@ function App() {
     // <UsernamePassword />
     // <Antd />
     // <ConditionalRendering />
-    <ConditionalRendering2 />
+    // <ConditionalRendering2 />
+    // <Lesson8 />
+    <UserEffect />
 
     // <div className="App">
     //   <header className="App-header">
