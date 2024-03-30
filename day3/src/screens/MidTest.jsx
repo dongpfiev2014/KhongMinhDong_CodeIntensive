@@ -9,10 +9,6 @@ import FilmComponent from "../components/FilmComponent";
 const { Header, Content } = Layout;
 
 const MidTest = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   const data = [...films];
   return (
     <Layout>

@@ -1,6 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
+import Lecture9 from "./screens/Lesson9/Lecture9";
+import Lecture9Context from "./screens/Lesson9/Lecture9-Context";
 // import HomeScreen from "./screens/HomeScreen";
 // import CalculatorScreen from "./screens/CalculatorScreen";
 // import LoginScreen from "./screens/LoginScreen";
@@ -12,7 +14,7 @@ import React from "react";
 // import ConditionalRendering2 from "./screens/ConditionalRendering2";
 // import Lesson8 from "./screens/Lesson8";
 // import UserEffect from "./screens/UserEffect";
-import MidTest from "./screens/MidTest";
+// import MidTest from "./screens/MidTest";
 
 function App() {
   // JSX - Javascript XML
@@ -27,7 +29,8 @@ function App() {
     // <ConditionalRendering2 />
     // <Lesson8 />
     // <UserEffect />
-    <MidTest />
+    // <Lecture9 />
+    <Lecture9Context />
 
     // <div className="App">
     //   <header className="App-header">
