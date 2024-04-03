@@ -10,6 +10,7 @@ import NotFound from "./screens/NotFound";
 import HeaderComponent from "./components/HeaderComponent";
 import FooterComponent from "./components/FooterComponent";
 import LanguageSettingScreen from "./screens/LanguageSettingScreen";
+import Search from "./screens/Search";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/products/:id" element={<ProductsScreen />} />
           <Route path="/product-detail" element={<ProductDetail />} />
+          <Route path="/search" element={<Search />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

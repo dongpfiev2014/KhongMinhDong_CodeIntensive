@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 const ProductsScreen = () => {
+  // Truyền useParams
   const params = useParams();
   const { id } = params;
   return (
