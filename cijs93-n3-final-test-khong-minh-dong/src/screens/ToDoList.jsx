@@ -17,6 +17,7 @@ const ToDoList = () => {
 
   useEffect(() => {
     setTasks(originalTasks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddNewTask = () => {
@@ -47,12 +48,12 @@ const ToDoList = () => {
       setTasks(items);
     } else if (PendingisActive) {
       const PendingTasks = items.filter(
-        (element) => element.isCompleted == false
+        (element) => element.isCompleted === false
       );
       setTasks(PendingTasks);
     } else if (CompletedisActive) {
       const CompletedTasks = items.filter(
-        (element) => element.isCompleted == true
+        (element) => element.isCompleted === true
       );
       setTasks(CompletedTasks);
     }
