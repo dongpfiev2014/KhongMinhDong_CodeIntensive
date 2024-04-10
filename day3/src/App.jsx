@@ -7,7 +7,7 @@ import Lecture9Context from "./screens/Lesson9/Lecture9-Context";
 // import CalculatorScreen from "./screens/CalculatorScreen";
 // import LoginScreen from "./screens/LoginScreen";
 // import PcCalculatorScreen from "./screens/PcCalculatorScreen";
-// import ToDoList from "./screens/ToDoList";
+import ToDoList from "./screens/ToDoList";
 // import UsernamePassword from "./screens/UsernamePassword";
 // import Antd from "./screens/Antd";
 // import ConditionalRendering from "./screens/ConditionalRendering";
@@ -22,7 +22,7 @@ function App() {
     // <HomeScreen />
     // <LoginScreen />
     // <PcCalculatorScreen />
-    // <ToDoList />
+    <ToDoList />
     // <UsernamePassword />
     // <Antd />
     // <ConditionalRendering />
@@ -30,7 +30,7 @@ function App() {
     // <Lesson8 />
     // <UserEffect />
     // <Lecture9 />
-    <Lecture9Context />
+    // <Lecture9Context />
 
     // <div className="App">
     //   <header className="App-header">
