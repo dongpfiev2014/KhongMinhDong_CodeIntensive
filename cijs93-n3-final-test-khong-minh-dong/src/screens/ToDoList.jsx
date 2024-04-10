@@ -1,16 +1,23 @@
-import React, { useRef, useState } from "react";
-import { ButtonComponent, Card } from "../components";
-import "../styles/GlobalStyles.css";
+import React, { useEffect, useRef, useState } from "react";
+import ButtonComponent from "../components/ButtonComponent";
+import Card from "../components/Card";
+import { Button, Input, Checkbox } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import useLocalStorage from "use-local-storage";
 
 const ToDoList = () => {
   const [Tasks, setTasks] = useState([]);
-  const [originalTasks, setOriginalTasks] = useState([]);
+  const [originalTasks, setOriginalTasks] = useLocalStorage("tasks", []);
   const [Contents, setContents] = useState("");
   const [EditID, setEditID] = useState(-1);
-  const [AllisActive, setAllIsActive] = useState(false);
+  const [AllisActive, setAllIsActive] = useState(true);
   const [PendingisActive, setPendingisActive] = useState();
   const [CompletedisActive, setCompletedisActive] = useState();
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    setTasks(originalTasks);
+  }, []);
 
   const handleAddNewTask = () => {
     const items = [...originalTasks];
@@ -28,12 +35,28 @@ const ToDoList = () => {
         };
         items.push(data);
       }
-      setTasks(items);
-      setOriginalTasks(items);
+      handleTabTask(items);
       setContents("");
     } else {
       alert("Content is required");
     }
+  };
+
+  const handleTabTask = (items) => {
+    if (AllisActive) {
+      setTasks(items);
+    } else if (PendingisActive) {
+      const PendingTasks = items.filter(
+        (element) => element.isCompleted == false
+      );
+      setTasks(PendingTasks);
+    } else if (CompletedisActive) {
+      const CompletedTasks = items.filter(
+        (element) => element.isCompleted == true
+      );
+      setTasks(CompletedTasks);
+    }
+    setOriginalTasks(items);
   };
 
   const handleClearTask = (id) => {
@@ -42,8 +65,7 @@ const ToDoList = () => {
     if (index !== -1) {
       items.splice(index, 1);
     }
-    setTasks(items);
-    setOriginalTasks(items);
+    handleTabTask(items);
   };
 
   const handleEditTask = (id) => {
@@ -56,44 +78,9 @@ const ToDoList = () => {
     }
   };
   return (
-    <div>
+    <div className="container d-flex flex-column justify-content-center align-items-center">
+      <h1 className="m-5">#Todo</h1>
       <Card>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <input
-            style={{
-              backgroundColor: "white",
-              width: "100%",
-              height: "35px",
-              border: "1px solid white",
-              borderRadius: "10px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              paddingLeft: "10px",
-            }}
-            type="text"
-            onKeyDown={(val) => {
-              if (val.key === "Enter") {
-                setContents(val.target.value);
-                handleAddNewTask();
-              }
-            }}
-            onChange={(val) => {
-              setContents(val.target.value);
-            }}
-            ref={inputRef}
-            value={Contents}
-            name=""
-            id=""
-            placeholder="What do you want to do?"
-          />
-          <ButtonComponent
-            width="15%"
-            color="rgb(214, 203, 203)"
-            text="Add"
-            fontSize="20px"
-            onClick={handleAddNewTask}
-          ></ButtonComponent>
-        </div>
         <div
           style={{
             display: "flex",
@@ -115,7 +102,7 @@ const ToDoList = () => {
             }}
           ></ButtonComponent>
           <ButtonComponent
-            text="Pending"
+            text="Active"
             fontSize="18px"
             FontColor={PendingisActive ? "rgb(4, 149, 216)" : "black"}
             onClick={() => {
@@ -140,59 +127,95 @@ const ToDoList = () => {
               setPendingisActive(false);
             }}
           ></ButtonComponent>
-          <ButtonComponent
-            text="Clear All"
-            fontSize="18px"
-            FontColor="rgb(4, 149, 216)"
-            onClick={() => {
-              setTasks([]);
-              setOriginalTasks([]);
+        </div>
+        <hr />
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+            marginBottom: "15px",
+          }}
+        >
+          <Input
+            placeholder="What do you want to do ?"
+            size="large"
+            type="text"
+            ref={inputRef}
+            value={Contents}
+            onKeyDown={(val) => {
+              if (val.key === "Enter") {
+                setContents(val.target.value);
+                handleAddNewTask();
+              }
             }}
-          ></ButtonComponent>
+            onChange={(val) => {
+              setContents(val.target.value);
+            }}
+          ></Input>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleAddNewTask();
+            }}
+            size="large"
+          >
+            Add
+          </Button>
         </div>
         {Tasks.map((item, index) => (
-          <div key={item.id}>
-            <div className="Task">
-              <input
-                style={{ width: "10%" }}
-                type="checkbox"
-                onClick={() => {
-                  const items = [...Tasks];
-                  items[index].isCompleted = !items[index].isCompleted;
-                  setTasks(items);
-                }}
-                checked={item.isCompleted}
-                name=""
-                id=""
-              />
+          <div key={item.id} className="d-flex justify-content-between mt-2">
+            <Checkbox
+              onClick={() => {
+                const updatedTasks = originalTasks.map((task) => {
+                  if (task.id === item.id) {
+                    return { ...task, isCompleted: !item.isCompleted };
+                  }
+                  return task;
+                });
+                handleTabTask(updatedTasks);
+                setOriginalTasks(updatedTasks);
+              }}
+              checked={item.isCompleted}
+            >
               <span
                 style={{
-                  width: "100%",
-                  fontSize: "18px",
                   textDecorationLine: item.isCompleted
                     ? "line-through"
                     : "none",
+                  fontSize: "15px",
                 }}
               >
                 {item.Contents}
               </span>
-              <button
+            </Checkbox>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <Button
                 onClick={() => handleEditTask(item.id)}
-                className="TaskButton"
-                style={{ border: "none" }}
-              >
-                Edit
-              </button>
-              <button
+                size="small"
+                icon={<EditOutlined />}
+              ></Button>
+              <Button
                 onClick={() => handleClearTask(item.id)}
-                className="TaskButton"
-                style={{ border: "none" }}
-              >
-                X
-              </button>
+                danger
+                size="small"
+                icon={<DeleteOutlined />}
+              ></Button>
             </div>
           </div>
         ))}
+        <Button
+          type="primary"
+          danger
+          size="large"
+          style={{ float: "right", marginTop: "10px" }}
+          onClick={() => {
+            setTasks([]);
+            setOriginalTasks([]);
+          }}
+        >
+          Delete All
+        </Button>
       </Card>
     </div>
   );

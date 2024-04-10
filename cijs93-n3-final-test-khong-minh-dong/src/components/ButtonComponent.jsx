@@ -15,7 +15,7 @@ const ButtonComponent = (props) => {
     <button
       onClick={onClick}
       style={{
-        backgroundColor: color ?? "beige",
+        backgroundColor: color ?? "white",
         color: FontColor,
         padding: padding ?? 12,
         margin: 0,
@@ -24,7 +24,7 @@ const ButtonComponent = (props) => {
         fontSize: fontSize ?? "25px",
         fontWeight: 700,
         width: width ?? "100%",
-        height: "40px",
+        height: "20px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
