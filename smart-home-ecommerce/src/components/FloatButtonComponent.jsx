@@ -1,0 +1,273 @@
+import React, { useEffect, useRef, useState } from "react";
+import {
+  FloatButton,
+  Modal,
+  Button,
+  Input,
+  Divider,
+  Dropdown,
+  Avatar,
+  Card,
+  ConfigProvider,
+  List,
+  message,
+} from "antd";
+import {
+  NotificationOutlined,
+  CustomerServiceOutlined,
+} from "@ant-design/icons";
+import { FaFacebookMessenger } from "react-icons/fa";
+import { SiZalo } from "react-icons/si";
+import { CiFaceSmile } from "react-icons/ci";
+import "../styles/GlobalStyles.css";
+import EmojiPicker from "emoji-picker-react";
+import { PiHandPalmLight } from "react-icons/pi";
+import useLocalStorage from "use-local-storage";
+
+const FloatButtonComponent = () => {
+  const [chatBox, setChatBox] = useState(false);
+  const [messageList, setMessageList] = useLocalStorage("messageList", [
+    {
+      id: 0,
+      message: `Vui lòng cho chúng tôi biết nếu có bất cứ điều gì bạn cần trước
+    khi bạn rời đi. Bạn có cần chúng tôi hỗ trợ gì về điều bạn cần
+    không?`,
+      sender: "admin",
+      createdAt: `${new Date().toLocaleDateString()}, ${new Date().toLocaleTimeString()}`,
+    },
+  ]);
+  const [newMessage, setNewMessage] = useState("");
+  const [scrollToBottom, setScrollToBottom] = useState(false);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      showChatboxModal();
+    }, 30000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (scrollToBottom && listRef.current) {
+      listRef.current.scrollTo(0, listRef.current.scrollHeight);
+      setScrollToBottom(false);
+    }
+  }, [scrollToBottom]);
+
+  const showChatboxModal = () => {
+    setChatBox(true);
+  };
+  const closeChatboxModal = () => {
+    setChatBox(false);
+  };
+
+  const handleSendMessage = () => {
+    if (newMessage.trim() !== "") {
+      setMessageList([
+        ...messageList,
+        {
+          id: Date.now(),
+          message: newMessage,
+          sender: "guest",
+          createdAt: `${new Date().toLocaleDateString()}, ${new Date().toLocaleTimeString()}`,
+        },
+      ]);
+      setNewMessage("");
+      setScrollToBottom(true);
+    }
+  };
+  return (
+    <>
+      <div>
+        <FloatButton.Group
+          trigger="hover"
+          type="primary"
+          style={{ right: 36 }}
+          icon={<CustomerServiceOutlined />}
+          className="your-animation-class-wrapper"
+          onClick={showChatboxModal}
+        >
+          <FloatButton
+            shape="circle"
+            badge={{
+              dot: true,
+            }}
+            type="primary"
+            tooltip={<div>Notifications</div>}
+            icon={<NotificationOutlined />}
+            className="your-animation-class"
+          />
+          <FloatButton
+            shape="circle"
+            type="primary"
+            tooltip={<div>Messenger</div>}
+            icon={<FaFacebookMessenger />}
+            className="your-animation-class"
+          />
+          <FloatButton
+            type="primary"
+            tooltip={<div>Zalo</div>}
+            icon={<SiZalo />}
+            className="your-animation-class"
+          />
+        </FloatButton.Group>
+        <FloatButton.BackTop
+          visibilityHeight={100}
+          style={{ right: 36 + 70 }}
+        />
+      </div>
+      <ConfigProvider
+        theme={{
+          token: {},
+          components: {
+            Modal: {
+              contentBg: "lightblue",
+              headerBg: "lightblue",
+              footerBg: "lightblue",
+              borderRadiusLG: "20px",
+            },
+          },
+        }}
+      >
+        <Modal
+          title={[
+            <>
+              <Card
+                title={[
+                  <div className="d-flex align-items-stretch">
+                    <p>Hi, xin chào !</p>
+                    <PiHandPalmLight size="2em" />
+                  </div>,
+                ]}
+                style={{ backgroundColor: "lightblue", border: "none" }}
+              >
+                <Card.Meta
+                  description="Chúng tôi ở đây để hỗ trợ bạn."
+                  avatar={
+                    <Avatar.Group maxCount={1}>
+                      <Avatar src="https://image.lag.vn/upload/news/23/03/02/one-piece-oda-tiet-lo-gia-dinh-cua-zoro-2_SLFW.jpg" />
+                      <Avatar src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/01/luffy-gear-6.jpg" />
+                      <Avatar src="https://topnlist.com/wp-content/uploads/2021/09/Sanji.jpg" />
+                    </Avatar.Group>
+                  }
+                />
+              </Card>
+            </>,
+          ]}
+          open={chatBox}
+          onOk={closeChatboxModal}
+          onCancel={closeChatboxModal}
+          maskClosable={false}
+          mask={false}
+          width={400}
+          style={{
+            position: "fixed",
+            top: "20%",
+            right: "5%",
+          }}
+          footer={[
+            <>
+              <div className="bg-light rounded-4">
+                <Divider key="divider" style={{ marginBottom: "10px" }} />
+                <Input
+                  type="text"
+                  placeholder="Enter your message..."
+                  variant="borderless"
+                  size="medium"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setNewMessage(e.target.value);
+                      handleSendMessage();
+                    }
+                  }}
+                />
+                <div className="d-flex mt-2 p-1 justify-content-between">
+                  <Dropdown
+                    dropdownRender={() => (
+                      <EmojiPicker
+                        width={350}
+                        height={450}
+                        onEmojiClick={(e) => {
+                          setNewMessage((prevMessage) => prevMessage + e.emoji);
+                        }}
+                      />
+                    )}
+                    arrow={{ pointAtCenter: true }}
+                    placement="topRight"
+                  >
+                    <Button
+                      type="link"
+                      icon={<CiFaceSmile size="2em" title="icon" />}
+                    />
+                  </Dropdown>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    onClick={handleSendMessage}
+                  >
+                    Send
+                  </Button>
+                </div>
+              </div>
+            </>,
+          ]}
+        >
+          <div
+            className="bg-white rounded-4 p-1"
+            style={{
+              overflowY: "auto",
+              height: "40vh",
+              maxHeight: "40vh",
+            }}
+            ref={listRef}
+          >
+            <List
+              itemLayout="horizontal"
+              size="small"
+              dataSource={messageList}
+              split={false}
+              style={{
+                backgroundColor: "white",
+                padding: "10px",
+              }}
+              renderItem={(item) => (
+                <div key={item.id}>
+                  <p
+                    style={{
+                      textAlign: item.sender === "guest" ? "right" : "left",
+                    }}
+                  >
+                    <span
+                      style={{
+                        backgroundColor:
+                          item.sender === "guest" ? "#0a7cff" : "#f0f2f7",
+                        borderRadius: "15px",
+                        padding: "5px",
+                        color: item.sender === "guest" ? "white" : "black",
+                      }}
+                    >
+                      {item.message}
+                    </span>
+                  </p>
+                  <p
+                    className="text-body-secondary"
+                    style={{
+                      fontSize: "11px",
+                      textAlign: item.sender === "guest" ? "right" : "left",
+                    }}
+                  >
+                    {item.createdAt}
+                  </p>
+                </div>
+              )}
+            />
+          </div>
+        </Modal>
+      </ConfigProvider>
+    </>
+  );
+};
+
+export default FloatButtonComponent;
