@@ -10,7 +10,6 @@ import {
   Card,
   ConfigProvider,
   List,
-  message,
 } from "antd";
 import {
   NotificationOutlined,
@@ -29,9 +28,7 @@ const FloatButtonComponent = () => {
   const [messageList, setMessageList] = useLocalStorage("messageList", [
     {
       id: 0,
-      message: `Vui lòng cho chúng tôi biết nếu có bất cứ điều gì bạn cần trước
-    khi bạn rời đi. Bạn có cần chúng tôi hỗ trợ gì về điều bạn cần
-    không?`,
+      message: `Vui lòng cho chúng tôi biết nếu có bất cứ điều gì bạn cần trước khi bạn rời đi. Bạn có cần chúng tôi hỗ trợ gì về điều bạn cần không?`,
       sender: "admin",
       createdAt: `${new Date().toLocaleDateString()}, ${new Date().toLocaleTimeString()}`,
     },
@@ -39,6 +36,10 @@ const FloatButtonComponent = () => {
   const [newMessage, setNewMessage] = useState("");
   const [scrollToBottom, setScrollToBottom] = useState(false);
   const listRef = useRef(null);
+  const [cursorPosition, setCursorPosition] = useState(0);
+  // const [emoji, setEmoji] = useState("");
+  // const [beforeCursor, setBeforeCursor] = useState("");
+  // const [afterCursor, setAfterCursor] = useState("");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -53,6 +54,10 @@ const FloatButtonComponent = () => {
       setScrollToBottom(false);
     }
   }, [scrollToBottom]);
+
+  const handleEmojiClick = (e) => {
+    setNewMessage((prevMess) => prevMess + e.emoji);
+  };
 
   const showChatboxModal = () => {
     setChatBox(true);
@@ -169,16 +174,23 @@ const FloatButtonComponent = () => {
             <>
               <div className="bg-light rounded-4">
                 <Divider key="divider" style={{ marginBottom: "10px" }} />
-                <Input
+                <Input.TextArea
                   type="text"
                   placeholder="Enter your message..."
                   variant="borderless"
                   size="medium"
+                  allowClear
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={(e) => {
+                    setNewMessage(e.target.value);
+                  }}
+                  onSelect={(e) => {
+                    setCursorPosition(e.target.selectionStart);
+                    console.log(cursorPosition);
+                  }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      setNewMessage(e.target.value);
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
                       handleSendMessage();
                     }
                   }}
@@ -189,9 +201,7 @@ const FloatButtonComponent = () => {
                       <EmojiPicker
                         width={350}
                         height={450}
-                        onEmojiClick={(e) => {
-                          setNewMessage((prevMessage) => prevMessage + e.emoji);
-                        }}
+                        onEmojiClick={handleEmojiClick}
                       />
                     )}
                     arrow={{ pointAtCenter: true }}
@@ -205,6 +215,7 @@ const FloatButtonComponent = () => {
                   <Button
                     key="submit"
                     type="primary"
+                    shape="round"
                     onClick={handleSendMessage}
                   >
                     Send
@@ -224,7 +235,7 @@ const FloatButtonComponent = () => {
             ref={listRef}
           >
             <List
-              itemLayout="horizontal"
+              itemLayout="vertical"
               size="small"
               dataSource={messageList}
               split={false}
@@ -245,7 +256,12 @@ const FloatButtonComponent = () => {
                           item.sender === "guest" ? "#0a7cff" : "#f0f2f7",
                         borderRadius: "15px",
                         padding: "5px",
+                        fontSize: "14px",
                         color: item.sender === "guest" ? "white" : "black",
+                        display: "inline-block",
+                        marginBottom: "0px",
+                        maxWidth: "100%",
+                        whiteSpace: "pre-line",
                       }}
                     >
                       {item.message}
