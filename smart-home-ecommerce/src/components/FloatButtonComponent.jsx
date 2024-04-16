@@ -5,7 +5,7 @@ import {
   Button,
   Input,
   Divider,
-  Dropdown,
+  Popover,
   Avatar,
   Card,
   ConfigProvider,
@@ -36,7 +36,7 @@ const FloatButtonComponent = () => {
   const [newMessage, setNewMessage] = useState("");
   const [scrollToBottom, setScrollToBottom] = useState(false);
   const listRef = useRef(null);
-  const [cursorPosition, setCursorPosition] = useState(0);
+  // const [cursorPosition, setCursorPosition] = useState(0);
   // const [emoji, setEmoji] = useState("");
   // const [beforeCursor, setBeforeCursor] = useState("");
   // const [afterCursor, setAfterCursor] = useState("");
@@ -81,6 +81,7 @@ const FloatButtonComponent = () => {
       setScrollToBottom(true);
     }
   };
+
   return (
     <>
       <div>
@@ -162,7 +163,7 @@ const FloatButtonComponent = () => {
           open={chatBox}
           onOk={closeChatboxModal}
           onCancel={closeChatboxModal}
-          maskClosable={false}
+          maskClosable={true}
           mask={false}
           width={400}
           style={{
@@ -185,8 +186,7 @@ const FloatButtonComponent = () => {
                     setNewMessage(e.target.value);
                   }}
                   onSelect={(e) => {
-                    setCursorPosition(e.target.selectionStart);
-                    console.log(cursorPosition);
+                    // setCursorPosition(e.target.selectionStart);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
@@ -196,22 +196,21 @@ const FloatButtonComponent = () => {
                   }}
                 />
                 <div className="d-flex mt-2 p-1 justify-content-between">
-                  <Dropdown
-                    dropdownRender={() => (
+                  <Popover
+                    content={() => (
                       <EmojiPicker
                         width={350}
                         height={450}
                         onEmojiClick={handleEmojiClick}
                       />
                     )}
-                    arrow={{ pointAtCenter: true }}
-                    placement="topRight"
+                    placement="leftBottom"
                   >
                     <Button
                       type="link"
                       icon={<CiFaceSmile size="2em" title="icon" />}
                     />
-                  </Dropdown>
+                  </Popover>
                   <Button
                     key="submit"
                     type="primary"

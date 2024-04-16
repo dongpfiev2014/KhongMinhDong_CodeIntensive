@@ -1,12 +1,20 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+import VideoLandingPage from "../components/LandingPage/VideoLandingPage";
+import { Layout, Space } from "antd";
+import MediaLandingPage from "../components/LandingPage/MediaLandingPage";
 
 const HomeScreen = () => {
   return (
     <>
-      <div>Dong vippro</div>
+      <Layout>
+        <Space direction="vertical" size="middle">
+          <VideoLandingPage />
+          <MediaLandingPage />
+        </Space>
+      </Layout>
       <Helmet>
-        <title>My Title</title>
+        <title>Smart Home</title>
         <meta name="description" content="Helmet application" />
       </Helmet>
     </>
