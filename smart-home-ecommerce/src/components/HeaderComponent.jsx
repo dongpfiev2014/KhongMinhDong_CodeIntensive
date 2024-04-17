@@ -186,7 +186,7 @@ const HeaderComponent = () => {
         <Flex
           justify="center"
           align="center"
-          style={{ backgroundColor: 1 < 2 ? "#001529" : "white" }}
+          style={{ backgroundColor: theme === "dark" ? "#001529" : "white" }}
         >
           <Space
             size="large"
@@ -230,12 +230,12 @@ const HeaderComponent = () => {
                     direction="vertical"
                     size="medium"
                     style={{
-                      backgroundColor: theme === "dark" ? "#001529" : "white",
+                      backgroundColor: theme === "dark" ? "#001529" : "#f5f5f5",
                       borderRadius: "10px",
                     }}
                   >
-                    <Button type="text">English</Button>
-                    <Button type="text">Tiếng Việt</Button>
+                    <Button type="link">English</Button>
+                    <Button type="link">Tiếng Việt</Button>
                   </Space>
                 </>
               )}
@@ -258,11 +258,22 @@ const HeaderComponent = () => {
                 )}
               >
                 <Badge count={86} size="small">
-                  <PiShoppingCartLight size="1.5em" color="beige" />
+                  <PiShoppingCartLight
+                    size="1.5em"
+                    color={theme === "dark" ? "white" : "red"}
+                    style={{ cursor: "pointer" }}
+                  />
                 </Badge>
               </Dropdown>
-              <Button type="link">Log in</Button>
-              <Button type="primary">Sign up for free</Button>
+              <Button type="link" onClick={() => navigate("/accounts/login")}>
+                Log in
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => navigate("/accounts/signup")}
+              >
+                Sign up for free
+              </Button>
             </Space>
           </Space>
         </Flex>

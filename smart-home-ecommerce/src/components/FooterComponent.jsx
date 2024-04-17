@@ -42,60 +42,60 @@ const FooterComponent = () => {
             </Card>
             <Row gutter={[14, 14]} style={{ width: "350px" }}>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Shop
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Our Story
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Live Demo
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Our Projects
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   News
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Documentation
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Service
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Privacy Policy
                 </Button>
               </Col>
               <Col span={8}>
-                <Button type="link" onClick={() => navigate("/")}>
+                <Button type="text" onClick={() => navigate("/")}>
                   Terms & Conditions
                 </Button>
               </Col>
             </Row>
           </Flex>
-          <Divider />
+          <Divider orientation="center" />
           <Flex align="center" gap={350}>
             <span>Copyright © 2024. All right reserved</span>
             <Space size="small">
               <Button type="link" icon={<InstagramOutlined />} size="middle" />
-              <Button type="link" icon={<FacebookOutlined />} />
-              <Button type="link" icon={<TwitterOutlined />} />
-              <Button type="link" icon={<YoutubeOutlined />} />
+              <Button type="link" icon={<FacebookOutlined />} size="middle" />
+              <Button type="link" icon={<TwitterOutlined />} size="middle" />
+              <Button type="link" icon={<YoutubeOutlined />} size="middle" />
             </Space>
           </Flex>
         </Flex>

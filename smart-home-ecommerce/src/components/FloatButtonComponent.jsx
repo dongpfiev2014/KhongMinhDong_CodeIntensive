@@ -10,6 +10,10 @@ import {
   Card,
   ConfigProvider,
   List,
+  Form,
+  Space,
+  InputNumber,
+  Typography,
 } from "antd";
 import {
   NotificationOutlined,
@@ -35,7 +39,10 @@ const FloatButtonComponent = () => {
   ]);
   const [newMessage, setNewMessage] = useState("");
   const [scrollToBottom, setScrollToBottom] = useState(false);
+  const [registeredUser, setRegisteredUser] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const listRef = useRef(null);
+  const inputRef = useRef(null);
   // const [cursorPosition, setCursorPosition] = useState(0);
   // const [emoji, setEmoji] = useState("");
   // const [beforeCursor, setBeforeCursor] = useState("");
@@ -193,7 +200,9 @@ const FloatButtonComponent = () => {
                       e.preventDefault();
                       handleSendMessage();
                     }
+                    setIsTyping(true);
                   }}
+                  ref={inputRef}
                 />
                 <div className="d-flex mt-2 p-1 justify-content-between">
                   <Popover
@@ -279,6 +288,139 @@ const FloatButtonComponent = () => {
               )}
             />
           </div>
+        </Modal>
+      </ConfigProvider>
+      <ConfigProvider
+        theme={{
+          token: {},
+          components: {
+            Modal: {
+              contentBg: "lightblue",
+              headerBg: "white",
+              footerBg: "white",
+              borderRadiusLG: "20px",
+            },
+          },
+        }}
+      >
+        <Modal
+          open={isTyping && !registeredUser ? true : false}
+          onCancel={() => setIsTyping(false)}
+          maskClosable={true}
+          mask={false}
+          width={400}
+          style={{
+            position: "fixed",
+            top: "20%",
+            right: "5%",
+          }}
+          footer={null}
+        >
+          <Space
+            direction="vertical"
+            size="large"
+            align="center"
+            style={{
+              width: "100%",
+              height: "69vh",
+              backgroundColor: "white",
+              borderRadius: "20px",
+            }}
+            className="d-flex justify-content-center"
+          >
+            <Card.Meta
+              avatar={
+                <Avatar.Group maxCount={1}>
+                  <Avatar src="https://image.lag.vn/upload/news/23/03/02/one-piece-oda-tiet-lo-gia-dinh-cua-zoro-2_SLFW.jpg" />
+                  <Avatar src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/01/luffy-gear-6.jpg" />
+                  <Avatar src="https://topnlist.com/wp-content/uploads/2021/09/Sanji.jpg" />
+                </Avatar.Group>
+              }
+            />
+            <Typography.Title
+              style={{
+                fontSize: "16px",
+                textAlign: "center",
+                width: "250px",
+              }}
+            >
+              Bạn có thể để lại thông tin cá nhân, chúng tôi sẽ liên hệ sớm. Xin
+              cảm ơn.
+            </Typography.Title>
+            <Form
+              autoComplete="off"
+              style={{ width: "100%" }}
+              labelCol={{
+                span: 7,
+              }}
+              wrapperCol={{
+                span: 18,
+              }}
+            >
+              <Form.Item
+                label="Name"
+                name="name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập tên của bạn!",
+                  },
+                  {
+                    type: "name",
+                    message: "Tên không hợp lệ!",
+                  },
+                ]}
+              >
+                <Input allowClear size="middle" />
+              </Form.Item>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập email của bạn!",
+                  },
+                  {
+                    type: "email",
+                    message: "Địa chỉ email không hợp lệ!",
+                  },
+                ]}
+              >
+                <Input allowClear size="middle" />
+              </Form.Item>
+              <Form.Item
+                label="Telephone"
+                name="telephone"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập SĐT của bạn!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  allowClear
+                  size="middle"
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 9,
+                  span: 16,
+                }}
+              >
+                <Button
+                  style={{ marginTop: "10px" }}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
+          </Space>
         </Modal>
       </ConfigProvider>
     </>

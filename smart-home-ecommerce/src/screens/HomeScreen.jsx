@@ -7,9 +7,10 @@ import MediaLandingPage from "../components/LandingPage/MediaLandingPage";
 const HomeScreen = () => {
   return (
     <>
-      <Layout>
+      <Layout className="bg-white">
         <Space direction="vertical" size="middle">
           <VideoLandingPage />
+          <MediaLandingPage />
           <MediaLandingPage />
         </Space>
       </Layout>
