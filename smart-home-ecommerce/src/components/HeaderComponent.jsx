@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Menu,
   Image,
@@ -15,6 +16,9 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import { PiShoppingCartLight } from "react-icons/pi";
+import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
+import { useTranslation } from "react-i18next";
+import { LANGUAGES } from "../constants";
 
 const items = [
   {
@@ -170,23 +174,25 @@ const items = [
 ];
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("mail");
-  const [theme, setTheme] = useState("dark");
   const navigate = useNavigate();
+  const { mode } = useSelector((state) => state.darkMode);
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
 
   const onClick = ({ key }) => {
     setCurrent(key);
   };
-  const changeTheme = (value) => {
-    setTheme(value ? "dark" : "light");
-  };
 
   return (
     <>
+      <div>
+        <h1>{t("welcome")} Đông</h1>
+      </div>
       <Layout style={{ position: "sticky", zIndex: 1, top: 0 }}>
         <Flex
           justify="center"
           align="center"
-          style={{ backgroundColor: theme === "dark" ? "#001529" : "white" }}
+          style={{ backgroundColor: mode ? "#001529" : "white" }}
         >
           <Space
             size="large"
@@ -202,7 +208,7 @@ const HeaderComponent = () => {
               style={{ cursor: "pointer" }}
             />
             <Menu
-              theme={theme}
+              theme={mode ? "dark" : "light"}
               onClick={onClick}
               selectedKeys={[current]}
               mode="horizontal"
@@ -218,8 +224,8 @@ const HeaderComponent = () => {
               }}
             />
             <Switch
-              checked={theme === "dark"}
-              onChange={changeTheme}
+              checked={mode}
+              onChange={() => dispatch(toggleDarkMode())}
               checkedChildren="Dark"
               unCheckedChildren="Light"
             />
@@ -228,14 +234,23 @@ const HeaderComponent = () => {
                 <>
                   <Space
                     direction="vertical"
-                    size="medium"
+                    size="small"
                     style={{
-                      backgroundColor: theme === "dark" ? "#001529" : "#f5f5f5",
+                      backgroundColor: mode ? "#001529" : "#f5f5f5",
                       borderRadius: "10px",
                     }}
                   >
-                    <Button type="link">English</Button>
-                    <Button type="link">Tiếng Việt</Button>
+                    {LANGUAGES.map(({ code, label }) => (
+                      <>
+                        <Button
+                          key={code}
+                          type="link"
+                          onClick={() => i18n.changeLanguage(code)}
+                        >
+                          {label}
+                        </Button>
+                      </>
+                    ))}
                   </Space>
                 </>
               )}
@@ -260,7 +275,7 @@ const HeaderComponent = () => {
                 <Badge count={86} size="small">
                   <PiShoppingCartLight
                     size="1.5em"
-                    color={theme === "dark" ? "white" : "red"}
+                    color={mode ? "white" : "red"}
                     style={{ cursor: "pointer" }}
                   />
                 </Badge>

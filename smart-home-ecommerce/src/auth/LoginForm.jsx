@@ -30,6 +30,7 @@ const LoginForm = () => {
         }}
       >
         <Form
+          layout="vertical"
           name="normal_login"
           className="login-form"
           onFinish={onFinish}

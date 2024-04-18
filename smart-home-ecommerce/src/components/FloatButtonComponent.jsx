@@ -349,12 +349,15 @@ const FloatButtonComponent = () => {
             </Typography.Title>
             <Form
               autoComplete="off"
-              style={{ width: "100%" }}
+              style={{ maxWidth: 600 }}
               labelCol={{
                 span: 7,
               }}
               wrapperCol={{
                 span: 18,
+              }}
+              initialValues={{
+                remember: true,
               }}
             >
               <Form.Item
