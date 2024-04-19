@@ -12,182 +12,232 @@ import {
   Button,
   Badge,
   Card,
+  ConfigProvider,
 } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../constants";
 
-const items = [
-  {
-    label: "Giới thiệu",
-    key: "about",
-  },
-  {
-    label: "Nhà Thông Minh",
-    key: "features",
-    children: [
-      {
-        type: "Villa",
-        label: "Villa, Căn Hộ",
-        children: [
-          {
-            label: "Giải pháp chiếu sáng",
-            key: "villa-1",
-          },
-          {
-            label: "Giải pháp an ninh, báo động",
-            key: "villa-2",
-          },
-          {
-            label: "Giải pháp camera giám sát",
-            key: "villa-3",
-          },
-          {
-            label: "Giải pháp chuông hình",
-            key: "villa-4",
-          },
-          {
-            label: "Giải pháp điều khiển điều hòa",
-            key: "villa-5",
-          },
-          {
-            label: "Giải pháp điều khiển rèm",
-            key: "villa-6",
-          },
-        ],
-      },
-      {
-        type: "Hotel",
-        label: "Khách Sạn",
-        children: [
-          {
-            label: "Giải pháp Điều khiển phòng khách sạn RCU - GRMS",
-            key: "hotel-1",
-          },
-          {
-            label: "Phần mềm quản lý phòng khách sạn GRMS",
-            key: "hotel-2",
-          },
-          {
-            label: "Giải pháp IPTV và truyền hình tương tác GRMS",
-            key: "hotel-3",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: (
-      <Link to={"/livedemo"} style={{ textDecoration: "none" }}>
-        Live Demo
-      </Link>
-    ),
-    key: "live-demo",
-  },
-  {
-    label: "Sản Phẩm",
-    key: "product",
-    children: [
-      {
-        label: "Công Tắc",
-        key: "switch",
-      },
-      {
-        label: "Chuông Hình",
-        key: "doorEntry",
-      },
-      {
-        label: "Camera",
-        key: "camera",
-      },
-      {
-        label: "Báo Động",
-        key: "alarm",
-      },
-      {
-        label: "Khóa Cửa",
-        key: "lock",
-      },
-      {
-        label: "Động Cơ Rèm",
-        key: "motor",
-      },
-    ],
-  },
-
-  {
-    label: (
-      <Link to={"/projects"} style={{ textDecoration: "none" }}>
-        Dự Án
-      </Link>
-    ),
-    key: "projects",
-    children: [
-      {
-        label: "Công trình thương mại",
-        key: "abroad",
-      },
-      {
-        label: "Công trình dân dụng",
-        key: "civil",
-      },
-      {
-        label: "Khách sạn thông minh",
-        key: "hotelprojects",
-      },
-    ],
-  },
-  {
-    label: (
-      <Link to={"/news"} style={{ textDecoration: "none" }}>
-        Tin Tức
-      </Link>
-    ),
-    key: "news",
-    children: [
-      {
-        label: "Tin thị trường",
-        key: "market",
-      },
-      {
-        label: "Tin công trình",
-        key: "site",
-      },
-      {
-        label: "Tin công ty",
-        key: "company",
-      },
-    ],
-  },
-  {
-    label: (
-      <Link to={"/contact"} style={{ textDecoration: "none" }}>
-        Liên Hệ
-      </Link>
-    ),
-    key: "contact",
-    children: [{ label: "Dịch Vụ", key: "service" }],
-  },
-];
 const HeaderComponent = () => {
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState("about");
   const navigate = useNavigate();
   const { mode } = useSelector((state) => state.darkMode);
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
 
-  const onClick = ({ key }) => {
-    setCurrent(key);
+  const onClick = (val) => {
+    setCurrent(val.key);
   };
 
+  const items = [
+    {
+      label: t("about"),
+      key: "about",
+      // onTitleClick: (val) => setCurrent(val.key),
+      children: [
+        {
+          label: "VTD",
+          key: "vtd",
+        },
+        {
+          label: "VIMAR",
+          key: "vimar",
+        },
+        {
+          label: "VDA",
+          key: "vda",
+        },
+      ],
+    },
+    {
+      label: (
+        <NavLink
+          to={"/smarthome"}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {t("smart home")}
+        </NavLink>
+      ),
+      key: "features",
+      onTitleClick: (val) => setCurrent(val.key),
+      children: [
+        {
+          label: t("villa"),
+          key: "villa",
+          children: [
+            {
+              label: "Giải pháp chiếu sáng",
+              key: "villa-1",
+            },
+            {
+              label: "Giải pháp an ninh, báo động",
+              key: "villa-2",
+            },
+            {
+              label: "Giải pháp camera giám sát",
+              key: "villa-3",
+            },
+            {
+              label: "Giải pháp chuông hình",
+              key: "villa-4",
+            },
+            {
+              label: "Giải pháp điều khiển điều hòa",
+              key: "villa-5",
+            },
+            {
+              label: "Giải pháp điều khiển rèm",
+              key: "villa-6",
+            },
+          ],
+        },
+        {
+          label: t("hotel"),
+          key: "hotel",
+          children: [
+            {
+              label: "Giải pháp Điều khiển phòng khách sạn RCU - GRMS",
+              key: "hotel-1",
+            },
+            {
+              label: "Phần mềm quản lý phòng khách sạn GRMS",
+              key: "hotel-2",
+            },
+            {
+              label: "Giải pháp IPTV và truyền hình tương tác GRMS",
+              key: "hotel-3",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: (
+        <NavLink to={"/livedemo"} style={{ textDecoration: "none" }}>
+          {t("live demo")}
+        </NavLink>
+      ),
+      key: "live-demo",
+    },
+    {
+      label: (
+        <NavLink
+          to={"/products"}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {t("products")}
+        </NavLink>
+      ),
+      key: "product",
+      onTitleClick: (val) => setCurrent(val.key),
+      children: [
+        {
+          label: "Công Tắc",
+          key: "switch",
+        },
+        {
+          label: "Chuông Hình",
+          key: "doorEntry",
+        },
+        {
+          label: "Camera",
+          key: "camera",
+        },
+        {
+          label: "Báo Động",
+          key: "alarm",
+        },
+        {
+          label: "Khóa Cửa",
+          key: "lock",
+        },
+        {
+          label: "Động Cơ Rèm",
+          key: "motor",
+        },
+      ],
+    },
+
+    {
+      label: (
+        <NavLink
+          to={"/projects"}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {t("projects")}
+        </NavLink>
+      ),
+      key: "projects",
+      onTitleClick: (val) => setCurrent(val.key),
+      children: [
+        {
+          label: "Công trình thương mại",
+          key: "abroad",
+        },
+        {
+          label: "Công trình dân dụng",
+          key: "civil",
+        },
+        {
+          label: "Khách sạn thông minh",
+          key: "hotelprojects",
+        },
+      ],
+    },
+    {
+      label: (
+        <NavLink
+          to={"/news"}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {t("news")}
+        </NavLink>
+      ),
+      key: "news",
+      onTitleClick: (val) => setCurrent(val.key),
+      children: [
+        {
+          label: "Tin thị trường",
+          key: "market",
+        },
+        {
+          label: "Tin công trình",
+          key: "site",
+        },
+        {
+          label: "Tin công ty",
+          key: "company",
+        },
+      ],
+    },
+    {
+      label: (
+        <NavLink
+          to={"/contact"}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {t("contact")}
+        </NavLink>
+      ),
+      key: "contact",
+      onTitleClick: (val) => setCurrent(val.key),
+      children: [
+        {
+          label: (
+            <NavLink to={"/service"} style={{ textDecoration: "none" }}>
+              {t("service")}
+            </NavLink>
+          ),
+          key: "service",
+        },
+      ],
+    },
+  ];
   return (
     <>
-      <div>
-        <h1>{t("welcome")} Đông</h1>
-      </div>
       <Layout style={{ position: "sticky", zIndex: 1, top: 0 }}>
         <Flex
           justify="center"
@@ -207,20 +257,30 @@ const HeaderComponent = () => {
               onClick={() => navigate("/")}
               style={{ cursor: "pointer" }}
             />
-            <Menu
-              theme={mode ? "dark" : "light"}
-              onClick={onClick}
-              selectedKeys={[current]}
-              mode="horizontal"
-              items={items}
-            />
+            <ConfigProvider
+              theme={{
+                components: {
+                  Menu: {
+                    horizontalItemBorderRadius: "10px",
+                  },
+                },
+              }}
+            >
+              <Menu
+                theme={mode ? "dark" : "light"}
+                onClick={onClick}
+                selectedKeys={[current]}
+                mode="horizontal"
+                items={items}
+              />
+            </ConfigProvider>
             <Input.Search
               placeholder="Search"
               allowClear
               size="medium"
               // onSearch={onSearch}
               style={{
-                width: 250,
+                width: 200,
               }}
             />
             <Switch
@@ -281,13 +341,13 @@ const HeaderComponent = () => {
                 </Badge>
               </Dropdown>
               <Button type="link" onClick={() => navigate("/accounts/login")}>
-                Log in
+                {t("log in")}
               </Button>
               <Button
                 type="primary"
                 onClick={() => navigate("/accounts/signup")}
               >
-                Sign up for free
+                {t("sign up")}
               </Button>
             </Space>
           </Space>

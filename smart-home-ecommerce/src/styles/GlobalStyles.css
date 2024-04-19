@@ -95,8 +95,6 @@ video {
   transition: background-color 0.4s ease;
 }
 .custom-button:hover {
-  background-color: #ffffff;
+  background-color: #e0d2d2;
   color: #000000;
 }
-
-/*Cho Login Form*/

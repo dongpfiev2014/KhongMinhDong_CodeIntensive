@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Form, Input, Space, Image } from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, Space, Image, Alert } from "antd";
 import {
   UserOutlined,
   LockOutlined,
@@ -12,8 +12,20 @@ import { Link } from "react-router-dom";
 import "../styles/GlobalStyles.css";
 
 const RegisterForm = () => {
-  const onFinish = (values) => {
-    console.log("Values", values);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  console.log(password);
+  console.log(confirmPassword);
+  const onFinish = () => {
+    if (password === confirmPassword) {
+      console.log("Register", username, email, password, confirmPassword);
+      setShowError(false);
+    } else {
+      setShowError(true);
+    }
   };
   return (
     <div
@@ -53,6 +65,8 @@ const RegisterForm = () => {
               placeholder="Username"
               allowClear
               size="large"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
             />
           </Form.Item>
 
@@ -70,6 +84,8 @@ const RegisterForm = () => {
               type="password"
               placeholder="Password"
               size="large"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
           </Form.Item>
           <Form.Item
@@ -86,6 +102,8 @@ const RegisterForm = () => {
               type="password"
               placeholder="Confirm Password"
               size="large"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
             />
           </Form.Item>
           <Form.Item
@@ -98,6 +116,8 @@ const RegisterForm = () => {
               allowClear
               size="large"
               type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </Form.Item>
 
@@ -120,6 +140,16 @@ const RegisterForm = () => {
             </Space>
           </Form.Item>
         </Form>
+        {showError && (
+          <Alert
+            message="Error"
+            description="Passwords do not match."
+            type="error"
+            showIcon
+            closable
+            onClose={() => setShowError(false)}
+          />
+        )}
       </div>
     </div>
   );
