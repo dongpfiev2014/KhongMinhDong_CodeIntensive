@@ -12,7 +12,7 @@ import "../src/styles/GlobalStyles.css";
 import ProfileScreen from "./screens/ProfileScreen";
 import LoginForm from "./auth/LoginForm";
 import RegisterForm from "./auth/RegisterForm";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Spin } from "antd";
 import ProductsScreen from "./screens/ProductsScreen";
 import ProjectsScreen from "./screens/ProjectsScreen";
@@ -20,8 +20,15 @@ import NewsScreen from "./screens/NewsScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ServiceScreen from "./screens/ServiceScreen";
 import SmartHomeScreen from "./screens/SmartHomeScreen";
+import { useDispatch } from "react-redux";
+import { getCurrentUser } from "./Redux-reducer/auth";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
   return (
     <>
       <Suspense

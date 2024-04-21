@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Space, Image, Alert } from "antd";
 import {
   UserOutlined,
@@ -8,8 +8,11 @@ import {
   LinkedinOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, Navigate, json, useNavigate } from "react-router-dom";
 import "../styles/GlobalStyles.css";
+import { useDispatch } from "react-redux";
+import { register } from "../Redux-reducer/auth";
+import axios from "axios";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -17,16 +20,85 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showError, setShowError] = useState(false);
-  console.log(password);
-  console.log(confirmPassword);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const onFinish = () => {
     if (password === confirmPassword) {
-      console.log("Register", username, email, password, confirmPassword);
+      dispatch(register({ username, password, email }));
+      navigate("/");
       setShowError(false);
     } else {
       setShowError(true);
     }
   };
+
+  // Định nghĩa URL của API endpoint
+  // const API_URL = "https://6623cafa3e17a3ac8470401a.mockapi.io/api/users";
+
+  // const getAPI = async () => {
+  //   axios
+  //     .get(API_URL)
+  //     .then((response) => {
+  //       console.log("Dữ liệu từ API:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Lỗi khi gửi yêu cầu:", error);
+  //     });
+  // };
+
+  // const postAPI = async () => {
+  //   const userData = {
+  //     username: "example",
+  //     email: "example@example.com",
+  //     password: "password",
+  //   };
+  //   axios
+  //     .post(API_URL, userData)
+  //     .then((response) => {
+  //       console.log("Dữ liệu từ API:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Lỗi khi gửi yêu cầu:", error);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   submit();
+  // }, []);
+
+  // const submit = async () => {
+  //   try {
+  //     const reqBody = {
+  //       username: "kminchelle",
+  //       password: "0lelplR",
+  //     };
+  //     const response = await axios.post(
+  //       "https://dummyjson.com/auth/login",
+  //       reqBody
+  //     );
+  //     if (response) {
+  //       console.log(response.data);
+  //     }
+  //   } catch (e) {
+  //     console.log(e.response.data.message);
+  //   }
+  // };
+
+  // const deleteUser = async (userId) => {
+  //   try {
+  //     const response = await axios.delete(`${API_URL}/${userId}`);
+  //     console.log(response);
+  //     if (response.status === 200) {
+  //       console.log("Đã xóa người dùng thành công.");
+  //     } else {
+  //       console.error("Lỗi khi gửi yêu cầu:", response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi gửi yêu cầu:", error);
+  //   }
+  // };
+
   return (
     <div
       className="d-flex justify-content-center align-items-center"

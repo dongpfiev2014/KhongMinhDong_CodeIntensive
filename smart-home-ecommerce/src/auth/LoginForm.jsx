@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Checkbox, Form, Input, Space, Image } from "antd";
+import React, { useState } from "react";
+import { Button, Checkbox, Form, Input, Space, Image, Alert } from "antd";
 import {
   UserOutlined,
   LockOutlined,
@@ -7,13 +7,29 @@ import {
   FacebookOutlined,
   LinkedinOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/GlobalStyles.css";
+import { useDispatch } from "react-redux";
+import { login } from "../Redux-reducer/auth";
 
 const LoginForm = () => {
-  const onFinish = (values) => {
-    console.log("Values", values);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onFinish = () => {
+    dispatch(login({ username, password })).then((action) => {
+      if (action.payload === "Invalid credentials") {
+        setShowError(true);
+      } else {
+        navigate("/");
+        setShowError(false);
+      }
+    });
   };
+
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -52,6 +68,8 @@ const LoginForm = () => {
               placeholder="Username"
               allowClear
               size="large"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </Form.Item>
 
@@ -69,6 +87,8 @@ const LoginForm = () => {
               type="password"
               placeholder="Password"
               size="large"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Item>
           <Form.Item>
@@ -100,6 +120,16 @@ const LoginForm = () => {
             </Space>
           </Form.Item>
         </Form>
+        {showError && (
+          <Alert
+            message="Error"
+            description="Invalid credentials"
+            type="error"
+            showIcon
+            closable
+            onClose={() => setShowError(false)}
+          />
+        )}
       </div>
     </div>
   );

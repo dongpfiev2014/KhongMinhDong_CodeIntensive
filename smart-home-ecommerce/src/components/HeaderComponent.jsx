@@ -13,6 +13,7 @@ import {
   Badge,
   Card,
   ConfigProvider,
+  Avatar,
 } from "antd";
 import { useNavigate, NavLink } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
@@ -20,6 +21,7 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../constants";
+import { Fragment } from "react";
 
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("about");
@@ -27,6 +29,8 @@ const HeaderComponent = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
+  const auth = useSelector((state) => state.authen);
+  console.log(auth);
 
   const onClick = (val) => {
     setCurrent(val.key);
@@ -160,7 +164,6 @@ const HeaderComponent = () => {
         },
       ],
     },
-
     {
       label: (
         <NavLink
@@ -236,6 +239,7 @@ const HeaderComponent = () => {
       ],
     },
   ];
+
   return (
     <>
       <Layout style={{ position: "sticky", zIndex: 1, top: 0 }}>
@@ -314,6 +318,7 @@ const HeaderComponent = () => {
                   </Space>
                 </>
               )}
+              placement="bottom"
             >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
@@ -331,6 +336,7 @@ const HeaderComponent = () => {
                     </Card>
                   </>
                 )}
+                placement="bottom"
               >
                 <Badge count={86} size="small">
                   <PiShoppingCartLight
@@ -349,6 +355,27 @@ const HeaderComponent = () => {
               >
                 {t("sign up")}
               </Button>
+              <Dropdown
+                dropdownRender={() => (
+                  <>
+                    <Space
+                      direction="vertical"
+                      size="small"
+                      style={{
+                        backgroundColor: mode ? "#001529" : "#f5f5f5",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <Button type="link">{t("my account")}</Button>
+                      <Button type="link">{t("my purchase")}</Button>
+                      <Button type="link">{t("log out")}</Button>
+                    </Space>
+                  </>
+                )}
+                placement="bottom"
+              >
+                <Avatar />
+              </Dropdown>
             </Space>
           </Space>
         </Flex>
