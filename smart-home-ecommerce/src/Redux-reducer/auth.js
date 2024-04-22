@@ -18,8 +18,7 @@ export const register = createAsyncThunk(
         ...userData,
         token: token,
       });
-      localStorage.setItem("accessToken", token);
-      return response.data.user;
+      return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data.errors);
     }
@@ -31,14 +30,10 @@ export const login = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(API_LOGIN_URL, userData);
-      console.log(response);
-      if (response) {
-        console.log(response.data);
-        localStorage.setItem("accessToken", response.data.token);
-      }
-      return response.data.user;
+      console.log(response.data);
+      return response.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.message);
+      return thunkAPI.rejectWithValue(err.response.data.errors);
     }
   }
 );
@@ -48,18 +43,19 @@ export const getCurrentUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const token = localStorage.getItem("accessToken") ?? "";
-      console.log(token);
+      if (!token) {
+        throw new Error("Không tìm thấy token.");
+      }
       const response = await axios.get(API_USERS_URL, {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      if (response) {
-        console.log(response);
-      }
-      return response.data.user;
+      return response.data.find((user) => user.token === token);
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.errors || err.message
+      );
     }
   }
 );
@@ -73,8 +69,8 @@ const authSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.currentUser = action.payload;
-      state.currentUser = action.meta.arg.username;
+      state.currentUser = action.payload;
+      // state.currentUser = action.meta.arg.username;
     });
     builder.addCase(register.rejected, (state, action) => {
       state.isLoading = false;
@@ -85,8 +81,8 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.currentUser = action.payload;
-      state.currentUser = action.meta.arg.username;
+      state.currentUser = action.payload;
+      // state.currentUser = action.meta.arg.username;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.isLoading = false;
@@ -97,7 +93,6 @@ const authSlice = createSlice({
     });
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.currentUser = action.payload;
       state.currentUser = action.payload;
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {

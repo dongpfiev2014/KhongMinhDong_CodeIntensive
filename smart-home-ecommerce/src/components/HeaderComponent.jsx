@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Menu,
@@ -21,7 +21,6 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../constants";
-import { Fragment } from "react";
 
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("about");
@@ -29,8 +28,7 @@ const HeaderComponent = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const auth = useSelector((state) => state.authen);
-  console.log(auth);
+  const auth = useSelector((state) => state.authen.currentUser);
 
   const onClick = (val) => {
     setCurrent(val.key);
@@ -327,7 +325,7 @@ const HeaderComponent = () => {
                 </Space>
               </a>
             </Dropdown>
-            <Space>
+            <Space size="middle">
               <Dropdown
                 dropdownRender={() => (
                   <>
@@ -346,36 +344,47 @@ const HeaderComponent = () => {
                   />
                 </Badge>
               </Dropdown>
-              <Button type="link" onClick={() => navigate("/accounts/login")}>
-                {t("log in")}
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => navigate("/accounts/signup")}
-              >
-                {t("sign up")}
-              </Button>
-              <Dropdown
-                dropdownRender={() => (
-                  <>
-                    <Space
-                      direction="vertical"
-                      size="small"
-                      style={{
-                        backgroundColor: mode ? "#001529" : "#f5f5f5",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <Button type="link">{t("my account")}</Button>
-                      <Button type="link">{t("my purchase")}</Button>
-                      <Button type="link">{t("log out")}</Button>
-                    </Space>
-                  </>
-                )}
-                placement="bottom"
-              >
-                <Avatar />
-              </Dropdown>
+              {auth?.currentUser === null && (
+                <>
+                  <Button
+                    type="link"
+                    onClick={() => navigate("/accounts/login")}
+                  >
+                    {t("log in")}
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={() => navigate("/accounts/signup")}
+                  >
+                    {t("sign up")}
+                  </Button>
+                </>
+              )}
+              {auth?.currentUser && (
+                <Dropdown
+                  dropdownRender={() => (
+                    <>
+                      <Space
+                        direction="vertical"
+                        size="small"
+                        style={{
+                          backgroundColor: mode ? "#001529" : "#f5f5f5",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <Button type="link">{t("my account")}</Button>
+                        <Button type="link">{t("my purchase")}</Button>
+                        <Button type="link">{t("log out")}</Button>
+                      </Space>
+                    </>
+                  )}
+                  placement="bottom"
+                >
+                  <Avatar
+                    src={`${(auth && auth.avatar) || (auth && auth.image)}`}
+                  />
+                </Dropdown>
+              )}
             </Space>
           </Space>
         </Flex>

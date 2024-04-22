@@ -21,12 +21,11 @@ const LoginForm = () => {
 
   const onFinish = () => {
     dispatch(login({ username, password })).then((action) => {
-      if (action.payload === "Invalid credentials") {
-        setShowError(true);
-      } else {
+      if (action.payload) {
+        localStorage.setItem("accessToken", action.payload.token);
         navigate("/");
         setShowError(false);
-      }
+      } else setShowError(true);
     });
   };
 

@@ -26,9 +26,11 @@ import "../styles/GlobalStyles.css";
 import EmojiPicker from "emoji-picker-react";
 import { PiHandPalmLight } from "react-icons/pi";
 import useLocalStorage from "use-local-storage";
+import { useSelector } from "react-redux";
 
 const FloatButtonComponent = () => {
   const [chatBox, setChatBox] = useState(false);
+  const auth = useSelector((state) => state.authen.currentUser);
   const [messageList, setMessageList] = useLocalStorage("messageList", [
     {
       id: 0,

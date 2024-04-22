@@ -25,9 +25,11 @@ const RegisterForm = () => {
 
   const onFinish = () => {
     if (password === confirmPassword) {
-      dispatch(register({ username, password, email }));
-      navigate("/");
-      setShowError(false);
+      dispatch(register({ username, password, email })).then((action) => {
+        localStorage.setItem("accessToken", action.payload.token);
+        navigate("/");
+        setShowError(false);
+      });
     } else {
       setShowError(true);
     }
