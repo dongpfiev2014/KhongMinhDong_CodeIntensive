@@ -21,6 +21,7 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../constants";
+import { logout } from "../Redux-reducer/auth";
 
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("about");
@@ -28,7 +29,8 @@ const HeaderComponent = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const auth = useSelector((state) => state.authen.currentUser);
+  const auth = useSelector((state) => state.authen);
+  console.log(auth);
 
   const onClick = (val) => {
     setCurrent(val.key);
@@ -344,7 +346,7 @@ const HeaderComponent = () => {
                   />
                 </Badge>
               </Dropdown>
-              {auth?.currentUser === null && (
+              {auth.currentUser === null && (
                 <>
                   <Button
                     type="link"
@@ -360,7 +362,7 @@ const HeaderComponent = () => {
                   </Button>
                 </>
               )}
-              {auth?.currentUser && (
+              {auth.currentUser && (
                 <Dropdown
                   dropdownRender={() => (
                     <>
@@ -374,15 +376,31 @@ const HeaderComponent = () => {
                       >
                         <Button type="link">{t("my account")}</Button>
                         <Button type="link">{t("my purchase")}</Button>
-                        <Button type="link">{t("log out")}</Button>
+                        <Button type="link" onClick={() => dispatch(logout())}>
+                          {t("log out")}
+                        </Button>
                       </Space>
                     </>
                   )}
                   placement="bottom"
                 >
-                  <Avatar
-                    src={`${(auth && auth.avatar) || (auth && auth.image)}`}
-                  />
+                  <Space size="small" style={{ cursor: "pointer" }}>
+                    <Avatar
+                      src={`${
+                        (auth && auth.currentUser.image) ||
+                        (auth && auth.currentUser.avatar)
+                      }`}
+                    />
+                    <span
+                      style={{
+                        color: mode
+                          ? "rgba(255, 255, 255, 0.65)"
+                          : "rgba(0, 0, 0, 0.88)",
+                      }}
+                    >
+                      {auth.currentUser.username}
+                    </span>
+                  </Space>
                 </Dropdown>
               )}
             </Space>

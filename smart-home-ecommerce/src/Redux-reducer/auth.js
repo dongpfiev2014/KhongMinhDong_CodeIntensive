@@ -29,9 +29,13 @@ export const login = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
     try {
-      const response = await axios.post(API_LOGIN_URL, userData);
-      console.log(response.data);
-      return response.data;
+      const response1 = await axios.post(API_LOGIN_URL, userData);
+      console.log(response1.data);
+      const newToken = response1.data.token;
+      const response2 = await axios.put(`${API_USERS_URL}/1`, {
+        token: newToken,
+      });
+      return response1.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data.errors);
     }
@@ -51,6 +55,19 @@ export const getCurrentUser = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+
+      // const response2 = await fetch("https://dummyjson.com/auth/me", {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+      // const data1 = response1.data.find((user) => user.token === token);
+      // const data2 = await response2.json();
+      // if (data1) {
+      //   return data1;
+      // } else return data2;
+
       return response.data.find((user) => user.token === token);
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -59,6 +76,34 @@ export const getCurrentUser = createAsyncThunk(
     }
   }
 );
+
+// export const getCurrentUser = createAsyncThunk(
+//   "auth/getCurrentUser",
+//   async (_, thunkAPI) => {
+//     try {
+//       const token = localStorage.getItem("accessToken") ?? "";
+//       if (!token) {
+//         throw new Error("Không tìm thấy token.");
+//       }
+//       const response = await fetch("https://dummyjson.com/auth/me", {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+//       const data = await response.json();
+//       return data;
+//     } catch (err) {
+//       return thunkAPI.rejectWithValue(
+//         err.response?.data?.errors || err.message
+//       );
+//     }
+//   }
+// );
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+  localStorage.removeItem("accessToken");
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -96,6 +141,10 @@ const authSlice = createSlice({
       state.currentUser = action.payload;
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.currentUser = null;
+    });
+    builder.addCase(logout.fulfilled, (state, action) => {
       state.isLoading = false;
       state.currentUser = null;
     });
