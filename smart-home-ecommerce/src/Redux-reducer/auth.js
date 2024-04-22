@@ -30,12 +30,13 @@ export const login = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response1 = await axios.post(API_LOGIN_URL, userData);
-      console.log(response1.data);
+      const response1Admin = { ...response1.data, role: "admin" };
+      console.log(response1Admin);
       const newToken = response1.data.token;
       const response2 = await axios.put(`${API_USERS_URL}/1`, {
         token: newToken,
       });
-      return response1.data;
+      return response1Admin;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data.errors);
     }

@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/GlobalStyles.css";
 import { useDispatch } from "react-redux";
 import { login } from "../Redux-reducer/auth";
+import Logo from "../photos/vecteezy_smart-home-logo-icon-template_20040705.svg";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -52,11 +53,7 @@ const LoginForm = () => {
           initialValues={{ remember: true }}
         >
           <Form.Item className="d-flex justify-content-center">
-            <Image
-              src="/vecteezy_smart-home-logo-icon-template_20040705.svg"
-              width={120}
-              preview={false}
-            />
+            <Image src={Logo} width={120} preview={false} />
           </Form.Item>
           <Form.Item
             name="username"

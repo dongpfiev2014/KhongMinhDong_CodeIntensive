@@ -22,6 +22,7 @@ import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../constants";
 import { logout } from "../Redux-reducer/auth";
+import Logo from "../photos/vecteezy_smart-home-logo-icon-template_20040705.svg";
 
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("about");
@@ -255,7 +256,7 @@ const HeaderComponent = () => {
             wrap={false}
           >
             <Image
-              src="vecteezy_smart-home-logo-icon-template_20040705.svg"
+              src={Logo}
               width={80}
               preview={false}
               onClick={() => navigate("/")}
@@ -374,8 +375,18 @@ const HeaderComponent = () => {
                           borderRadius: "10px",
                         }}
                       >
-                        <Button type="link">{t("my account")}</Button>
-                        <Button type="link">{t("my purchase")}</Button>
+                        <Button
+                          type="link"
+                          onClick={() => navigate("/accounts/profile")}
+                        >
+                          {t("my account")}
+                        </Button>
+                        <Button
+                          type="link"
+                          onClick={() => navigate("/accounts/purchase")}
+                        >
+                          {t("my purchase")}
+                        </Button>
                         <Button type="link" onClick={() => dispatch(logout())}>
                           {t("log out")}
                         </Button>

@@ -22,6 +22,7 @@ import ServiceScreen from "./screens/ServiceScreen";
 import SmartHomeScreen from "./screens/SmartHomeScreen";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./Redux-reducer/auth";
+import SingleProfileComponent from "./components/ProfileComponents/SingleProfileComponent";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ function App() {
             <Route path="/news" element={<NewsScreen />} />
             <Route path="/contact" element={<ContactScreen />} />
             <Route path="/service" element={<ServiceScreen />} />
-            <Route path="/accounts" element={<ProfileScreen />} />
+            <Route path="/accounts/*" element={<ProfileScreen />} />
             <Route path="/accounts/login" element={<LoginForm />} />
             <Route path="/accounts/signup" element={<RegisterForm />} />
             <Route path="*" element={<NotFoundScreen />} />

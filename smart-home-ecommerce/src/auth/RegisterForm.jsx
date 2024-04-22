@@ -13,6 +13,7 @@ import "../styles/GlobalStyles.css";
 import { useDispatch } from "react-redux";
 import { register } from "../Redux-reducer/auth";
 import axios from "axios";
+import Logo from "../photos/vecteezy_smart-home-logo-icon-template_20040705.svg";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -124,11 +125,7 @@ const RegisterForm = () => {
           initialValues={{ remember: true }}
         >
           <Form.Item className="d-flex justify-content-center">
-            <Image
-              src="/vecteezy_smart-home-logo-icon-template_20040705.svg"
-              width={120}
-              preview={false}
-            />
+            <Image src={Logo} width={120} preview={false} />
           </Form.Item>
           <Form.Item
             name="username"

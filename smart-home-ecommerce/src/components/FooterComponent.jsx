@@ -19,6 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import Logo from "../photos/vecteezy_smart-home-logo-icon-template_20040705.svg";
 
 const FooterComponent = () => {
   const navigate = useNavigate();
@@ -42,9 +43,7 @@ const FooterComponent = () => {
               }}
             >
               <Card.Meta
-                avatar={
-                  <Avatar src="vecteezy_smart-home-logo-icon-template_20040705.svg" />
-                }
+                avatar={<Avatar src={Logo} />}
                 title={
                   <span
                     style={{
