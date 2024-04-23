@@ -347,7 +347,8 @@ const HeaderComponent = () => {
                   />
                 </Badge>
               </Dropdown>
-              {auth.currentUser === null && (
+              {(auth.currentUser === null ||
+                auth.currentUser === undefined) && (
                 <>
                   <Button
                     type="link"
@@ -387,7 +388,13 @@ const HeaderComponent = () => {
                         >
                           {t("my purchase")}
                         </Button>
-                        <Button type="link" onClick={() => dispatch(logout())}>
+                        <Button
+                          type="link"
+                          onClick={() => {
+                            dispatch(logout());
+                            navigate("/accounts/login");
+                          }}
+                        >
                           {t("log out")}
                         </Button>
                       </Space>

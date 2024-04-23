@@ -22,7 +22,6 @@ import ServiceScreen from "./screens/ServiceScreen";
 import SmartHomeScreen from "./screens/SmartHomeScreen";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./Redux-reducer/auth";
-import SingleProfileComponent from "./components/ProfileComponents/SingleProfileComponent";
 
 function App() {
   const dispatch = useDispatch();

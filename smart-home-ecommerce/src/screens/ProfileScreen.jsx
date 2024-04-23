@@ -42,7 +42,7 @@ const ProfileScreen = () => {
       ),
       key: "1",
       icon: <UserOutlined />,
-      onTitleClick: (val) => setCurrent(val.key),
+      onTitleClick: () => setCurrent("2"),
       children: [
         {
           label: (
@@ -101,6 +101,7 @@ const ProfileScreen = () => {
       ),
       key: "6",
       icon: <LuClipboardList />,
+      onTitleClick: (val) => setCurrent(val.key),
     },
     isAdmin && {
       label: (
@@ -113,6 +114,7 @@ const ProfileScreen = () => {
       ),
       key: "7",
       icon: <FcManager />,
+      onTitleClick: () => setCurrent("8"),
       children: [
         {
           label: (
@@ -143,14 +145,18 @@ const ProfileScreen = () => {
     <>
       {auth.currentUser ? (
         <Flex
-          style={{ backgroundColor: mode ? "#001529" : "white" }}
+          style={{
+            backgroundColor: mode ? "#001529" : "white",
+          }}
           justify="center"
           align="center"
         >
           <Row
-            className="bg-white"
-            justify="center"
-            style={{ width: "1800px" }}
+            style={{
+              width: "1800px",
+              minHeight: "75vh",
+              backgroundColor: mode ? "#001529" : "white",
+            }}
           >
             <Col span={4}>
               <Sider>
@@ -168,26 +174,24 @@ const ProfileScreen = () => {
               </Sider>
             </Col>
             <Col span={20}>
-              <Content>
-                <Routes>
-                  <Route path="/profile" element={<SingleProfileComponent />} />
-                  <Route path="/payment" element={<PaymentComponent />} />
-                  <Route path="/verify" element={<VerifyComponent />} />
-                  <Route
-                    path="/notification"
-                    element={<NotificationComponent />}
-                  />
-                  <Route path="purchase" element={<PurchaseComponent />} />
-                  <Route
-                    path="management/contents"
-                    element={<ContentsComponent />}
-                  />
-                  <Route
-                    path="management/products"
-                    element={<ProductsComponent />}
-                  />
-                </Routes>
-              </Content>
+              <Routes>
+                <Route path="/profile" element={<SingleProfileComponent />} />
+                <Route path="/payment" element={<PaymentComponent />} />
+                <Route path="/verify" element={<VerifyComponent />} />
+                <Route
+                  path="/notification"
+                  element={<NotificationComponent />}
+                />
+                <Route path="purchase" element={<PurchaseComponent />} />
+                <Route
+                  path="management/contents"
+                  element={<ContentsComponent />}
+                />
+                <Route
+                  path="management/products"
+                  element={<ProductsComponent />}
+                />
+              </Routes>
             </Col>
           </Row>
         </Flex>

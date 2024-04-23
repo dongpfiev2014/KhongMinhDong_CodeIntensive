@@ -30,13 +30,13 @@ export const login = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response1 = await axios.post(API_LOGIN_URL, userData);
-      const response1Admin = { ...response1.data, role: "admin" };
-      console.log(response1Admin);
+
       const newToken = response1.data.token;
       const response2 = await axios.put(`${API_USERS_URL}/1`, {
         token: newToken,
       });
-      return response1Admin;
+      const response2Admin = { ...response2.data, role: "admin" };
+      return response2Admin;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data.errors);
     }
@@ -106,6 +106,24 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("accessToken");
 });
 
+export const updateUserProfile = createAsyncThunk(
+  "auth/updateUserProfile",
+  async (updatedData, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `${API_USERS_URL}/${updatedData.id}`,
+        updatedData
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.errors || err.message
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -139,9 +157,22 @@ const authSlice = createSlice({
     });
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.isLoading = false;
+
       state.currentUser = action.payload;
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.currentUser = null;
+    });
+    builder.addCase(updateUserProfile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateUserProfile.fulfilled, (state, action) => {
+      state.isLoading = false;
+
+      state.currentUser = action.payload;
+    });
+    builder.addCase(updateUserProfile.rejected, (state, action) => {
       state.isLoading = false;
       state.currentUser = null;
     });
