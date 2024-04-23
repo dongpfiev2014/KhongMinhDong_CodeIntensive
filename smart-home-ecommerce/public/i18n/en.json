@@ -46,5 +46,13 @@
   "Add New Bank Account": "Add New Bank Account",
   "You don't have bank accounts yet": "You don't bank accounts yet",
   "Verify Password": "To protect your account security, please verify your identity with one of the methods below",
-  "Verify by Password": "Verify by Password"
+  "Verify by Password": "Verify by Password",
+  "Enable": "Enable",
+  "Email Notifications": "Email Notifications",
+  "Order Updates": "Order Updates",
+  "Order Updates 2": "Notify when there are updates on my orders, including payment-related updates.",
+  "Listing Updates": "Listing Updates",
+  "Listing Updates 2": "Notify when my listing as a seller becomes sold out, deleted or suspended.",
+  "Promotions": "Promotions",
+  "Promotions 2": "Send me news on exclusive offers and deals"
 }

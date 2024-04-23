@@ -106,7 +106,7 @@ const ProfileScreen = () => {
     isAdmin && {
       label: (
         <NavLink
-          to={"/accounts/management"}
+          to={"/accounts/management/contents"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           {t("management")}
@@ -158,22 +158,24 @@ const ProfileScreen = () => {
               backgroundColor: mode ? "#001529" : "white",
             }}
           >
-            <Col span={4}>
-              <Sider>
-                <Menu
-                  theme={mode ? "dark" : "light"}
-                  mode="inline"
-                  selectedKeys={[current]}
-                  items={items}
-                  onClick={onClick}
-                  style={{
-                    height: "100%",
-                    borderRight: 0,
-                  }}
-                />
-              </Sider>
+            <Col span={4} style={{ position: "fixed", width: "calc(100%/6)" }}>
+              <Flex justify="center" align="center">
+                <Sider>
+                  <Menu
+                    theme={mode ? "dark" : "light"}
+                    mode="inline"
+                    selectedKeys={[current]}
+                    items={items}
+                    onClick={onClick}
+                    style={{
+                      height: "100%",
+                      borderRight: 0,
+                    }}
+                  />
+                </Sider>
+              </Flex>
             </Col>
-            <Col span={20}>
+            <Col span={20} style={{ marginLeft: "calc(100%/6)" }}>
               <Routes>
                 <Route path="/profile" element={<SingleProfileComponent />} />
                 <Route path="/payment" element={<PaymentComponent />} />
