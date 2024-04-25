@@ -31,7 +31,6 @@ const HeaderComponent = () => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const auth = useSelector((state) => state.authen);
-  console.log(auth);
 
   const onClick = (val) => {
     setCurrent(val.key);
@@ -74,27 +73,27 @@ const HeaderComponent = () => {
           key: "villa",
           children: [
             {
-              label: "Giải pháp chiếu sáng",
+              label: t("Lighting solutions"),
               key: "villa-1",
             },
             {
-              label: "Giải pháp an ninh, báo động",
+              label: t("Security and alarm solutions"),
               key: "villa-2",
             },
             {
-              label: "Giải pháp camera giám sát",
+              label: t("Surveillance camera solutions"),
               key: "villa-3",
             },
             {
-              label: "Giải pháp chuông hình",
+              label: t("Intercom solutions"),
               key: "villa-4",
             },
             {
-              label: "Giải pháp điều khiển điều hòa",
+              label: t("Air conditioning control solutions"),
               key: "villa-5",
             },
             {
-              label: "Giải pháp điều khiển rèm",
+              label: t("Curtain control solutions"),
               key: "villa-6",
             },
           ],
@@ -104,29 +103,29 @@ const HeaderComponent = () => {
           key: "hotel",
           children: [
             {
-              label: "Giải pháp Điều khiển phòng khách sạn RCU - GRMS",
+              label: t("RCU"),
               key: "hotel-1",
             },
             {
-              label: "Phần mềm quản lý phòng khách sạn GRMS",
+              label: t("GRMS Software"),
               key: "hotel-2",
             },
             {
-              label: "Giải pháp IPTV và truyền hình tương tác GRMS",
+              label: t("IPTV"),
               key: "hotel-3",
             },
           ],
         },
       ],
     },
-    {
-      label: (
-        <NavLink to={"/livedemo"} style={{ textDecoration: "none" }}>
-          {t("live demo")}
-        </NavLink>
-      ),
-      key: "live-demo",
-    },
+    // {
+    //   label: (
+    //     <NavLink to={"/livedemo"} style={{ textDecoration: "none" }}>
+    //       {t("live demo")}
+    //     </NavLink>
+    //   ),
+    //   key: "live-demo",
+    // },
     {
       label: (
         <NavLink
@@ -140,27 +139,27 @@ const HeaderComponent = () => {
       onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: "Công Tắc",
+          label: t("Switch"),
           key: "switch",
         },
         {
-          label: "Chuông Hình",
+          label: t("Door Entry Intercom"),
           key: "doorEntry",
         },
         {
-          label: "Camera",
+          label: t("Camera"),
           key: "camera",
         },
         {
-          label: "Báo Động",
+          label: t("Alarm"),
           key: "alarm",
         },
         {
-          label: "Khóa Cửa",
+          label: t("Door Lock"),
           key: "lock",
         },
         {
-          label: "Động Cơ Rèm",
+          label: t("Curtain Motor"),
           key: "motor",
         },
       ],
@@ -178,15 +177,15 @@ const HeaderComponent = () => {
       onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: "Công trình thương mại",
+          label: t("Commercial Projects"),
           key: "abroad",
         },
         {
-          label: "Công trình dân dụng",
+          label: t("Civil Projects"),
           key: "civil",
         },
         {
-          label: "Khách sạn thông minh",
+          label: t("Smart Hotel Projects"),
           key: "hotelprojects",
         },
       ],
@@ -204,15 +203,15 @@ const HeaderComponent = () => {
       onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: "Tin thị trường",
+          label: t("Market News"),
           key: "market",
         },
         {
-          label: "Tin công trình",
+          label: t("Site News"),
           key: "site",
         },
         {
-          label: "Tin công ty",
+          label: t("Company News"),
           key: "company",
         },
       ],

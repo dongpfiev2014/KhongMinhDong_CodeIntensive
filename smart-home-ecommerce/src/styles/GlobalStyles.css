@@ -99,6 +99,30 @@ video {
   color: #000000;
 }
 
-/* .ant-form-item .ant-form-item-label > label {
-  color: white;
-} */
+.CKeditor {
+  width: 100%;
+  height: 100%;
+  padding: 0 auto;
+  margin: 0 auto;
+}
+
+.CKeditor img {
+  width: 100%;
+  height: 100%;
+}
+
+.image.image_resized.image-style-side {
+  float: right;
+}
+
+.image.image_resized {
+  margin: 0 auto;
+}
+/* Defining the default content styles for the block images.
+This is what the newly inserted image without any
+style-specific class will look like. */
+
+iframe {
+  width: 100%;
+  height: 600px;
+}

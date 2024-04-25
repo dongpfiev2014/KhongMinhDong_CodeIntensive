@@ -169,7 +169,8 @@ const FloatButtonComponent = () => {
               </Card>
             </>,
           ]}
-          open={chatBox}
+          open={false}
+          // open={chatBox}
           onOk={closeChatboxModal}
           onCancel={closeChatboxModal}
           maskClosable={true}
