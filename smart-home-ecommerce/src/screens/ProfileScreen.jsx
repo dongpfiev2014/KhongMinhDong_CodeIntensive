@@ -22,13 +22,11 @@ const ProfileScreen = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const { t } = useTranslation();
   const auth = useSelector((state) => state.authen);
-  console.log(auth);
   const onClick = (val) => {
     setCurrent(val.key);
   };
 
   const isAdmin = auth.currentUser && auth.currentUser.role === "admin";
-  console.log(isAdmin);
 
   const items = [
     {

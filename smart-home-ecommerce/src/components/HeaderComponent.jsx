@@ -43,15 +43,36 @@ const HeaderComponent = () => {
       // onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: "VTD",
+          label: (
+            <NavLink
+              to={"/about/vtd"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              VTD
+            </NavLink>
+          ),
           key: "vtd",
         },
         {
-          label: "VIMAR",
+          label: (
+            <NavLink
+              to={"/about/vimar"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              VIMAR
+            </NavLink>
+          ),
           key: "vimar",
         },
         {
-          label: "VDA",
+          label: (
+            <NavLink
+              to={"/about/vda"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              VDA
+            </NavLink>
+          ),
           key: "vda",
         },
       ],
@@ -73,28 +94,70 @@ const HeaderComponent = () => {
           key: "villa",
           children: [
             {
-              label: t("Lighting solutions"),
-              key: "villa-1",
+              label: (
+                <NavLink
+                  to={"/villa/lighting"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("Lighting solutions")}
+                </NavLink>
+              ),
+              key: "lighting",
             },
             {
-              label: t("Security and alarm solutions"),
-              key: "villa-2",
+              label: (
+                <NavLink
+                  to={"/villa/security"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("Security and alarm solutions")}
+                </NavLink>
+              ),
+              key: "security",
             },
             {
-              label: t("Surveillance camera solutions"),
-              key: "villa-3",
+              label: (
+                <NavLink
+                  to={"/villa/camera"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("Surveillance camera solutions")}
+                </NavLink>
+              ),
+              key: "camera",
             },
             {
-              label: t("Intercom solutions"),
-              key: "villa-4",
+              label: (
+                <NavLink
+                  to={"/villa/intercom"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("Intercom solutions")}
+                </NavLink>
+              ),
+              key: "intercom",
             },
             {
-              label: t("Air conditioning control solutions"),
-              key: "villa-5",
+              label: (
+                <NavLink
+                  to={"/villa/aircon"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("Air conditioning control solutions")}
+                </NavLink>
+              ),
+              key: "aircon",
             },
             {
-              label: t("Curtain control solutions"),
-              key: "villa-6",
+              label: (
+                <NavLink
+                  to={"/villa/curtain"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("Curtain control solutions")}
+                </NavLink>
+              ),
+              key: "curtain",
             },
           ],
         },
@@ -103,16 +166,37 @@ const HeaderComponent = () => {
           key: "hotel",
           children: [
             {
-              label: t("RCU"),
-              key: "hotel-1",
+              label: (
+                <NavLink
+                  to={"/hotel/rcu"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("RCU")}
+                </NavLink>
+              ),
+              key: "rcu",
             },
             {
-              label: t("GRMS Software"),
-              key: "hotel-2",
+              label: (
+                <NavLink
+                  to={"/hotel/grms"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("GRMS Software")}
+                </NavLink>
+              ),
+              key: "grms",
             },
             {
-              label: t("IPTV"),
-              key: "hotel-3",
+              label: (
+                <NavLink
+                  to={"/hotel/iptv"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {t("IPTV")}
+                </NavLink>
+              ),
+              key: "iptv",
             },
           ],
         },
@@ -178,7 +262,7 @@ const HeaderComponent = () => {
       children: [
         {
           label: t("Commercial Projects"),
-          key: "abroad",
+          key: "commercial",
         },
         {
           label: t("Civil Projects"),

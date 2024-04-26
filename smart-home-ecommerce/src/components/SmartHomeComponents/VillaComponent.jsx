@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getContent } from "../Redux-reducer/data";
+import { getContent } from "../../Redux-reducer/data";
 import { Flex, Row } from "antd";
 
-const AboutScreen = () => {
+const VillaComponent = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const dispatch = useDispatch();
   const params = useParams();
@@ -45,4 +45,4 @@ const AboutScreen = () => {
   );
 };
 
-export default AboutScreen;
+export default VillaComponent;

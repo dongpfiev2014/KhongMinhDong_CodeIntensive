@@ -27,6 +27,7 @@
   "notification settings": "Notification Settings",
   "management": "Management",
   "contents": "Contents",
+  "content": "Content",
   "Manage and protect your account": "Manage and protect your account",
   "Username": "Username",
   "Name": "Name",
@@ -90,5 +91,6 @@
   "images": "Images",
   "brand": "Brand",
   "origin": "Origin",
-  "code": "Order Code"
+  "code": "Order Code",
+  "place": "Place"
 }

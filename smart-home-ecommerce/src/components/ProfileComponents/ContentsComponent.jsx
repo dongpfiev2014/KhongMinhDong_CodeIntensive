@@ -10,24 +10,101 @@ import {
   Row,
   Col,
   Cascader,
+  message,
+  List,
+  Space,
+  Avatar,
+  Image,
+  Modal,
 } from "antd";
 import { t } from "i18next";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build/build/ckeditor";
+import {
+  deleteContent,
+  deleteProduct,
+  getAllContents,
+  getContent,
+  publishContent,
+} from "../../Redux-reducer/data";
+import {
+  LikeOutlined,
+  MessageOutlined,
+  StarOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 
 const { TabPane } = Tabs;
+const { confirm } = Modal;
+
+const IconText = ({ icon, text }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
 
 const ContentsComponent = () => {
   const { mode } = useSelector((state) => state.darkMode);
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.authen);
-  console.log(auth);
+  const [title, setTitle] = useState("");
   const [contentCkeditor, setContentCkeditor] = useState("");
+  const [image, setImage] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [form] = Form.useForm();
+  const [contents, setContents] = useState([]);
 
   const onFinish = (value) => {
-    console.log(value);
+    dispatch(publishContent(value)).then((action) => {
+      if (action.payload) {
+        const newContent = action.payload;
+        setContents([...contents, newContent]);
+        success();
+        setContentCkeditor("");
+        setSelectedCategory([]);
+        setTitle("");
+        setImage("");
+      }
+    });
+  };
+
+  useEffect(() => {
+    form.setFieldsValue({
+      title: title,
+      image: image,
+      category: selectedCategory,
+      content: contentCkeditor,
+    });
+  }, [title, image, selectedCategory, contentCkeditor]);
+
+  useEffect(() => {
+    dispatch(getAllContents()).then((action) => {
+      setContents(action.payload);
+    });
+  }, []);
+
+  const handleUpdateContent = (id) => {
+    const updatingData = contents.find((element) => element.id === id);
+    if (updatingData) {
+      setContentCkeditor(updatingData.content);
+      setSelectedCategory(updatingData.category);
+      setTitle(updatingData.title);
+      setImage(updatingData.image);
+    }
+  };
+
+  const handleDeleteContent = (id) => {
+    dispatch(deleteContent(id)).then((action) => {
+      if (action.payload) {
+        dispatch(getAllContents()).then((action) =>
+          setContents(action.payload)
+        );
+      }
+    });
   };
 
   const options = [
@@ -36,15 +113,15 @@ const ContentsComponent = () => {
       label: t("about"),
       children: [
         {
-          value: "VTD",
+          value: "vtd",
           label: "VTD",
         },
         {
-          value: "VIMAR",
+          value: "vimar",
           label: "VIMAR",
         },
         {
-          value: "VDA",
+          value: "vda",
           label: "VDA",
         },
       ],
@@ -133,9 +210,90 @@ const ContentsComponent = () => {
     },
   ];
 
-  const onChangeCascader = (value) => {
-    console.log(value);
-  };
+  const renderListContents = (data) => (
+    <>
+      <List
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: (page) => {
+            console.log(page);
+          },
+          pageSize: 5,
+        }}
+        dataSource={data}
+        renderItem={(item, index) => (
+          <List.Item
+            key={item.id}
+            actions={[
+              <IconText
+                icon={StarOutlined}
+                text="156"
+                key="list-vertical-star-o"
+              />,
+              <IconText
+                icon={LikeOutlined}
+                text="156"
+                key="list-vertical-like-o"
+              />,
+              <IconText
+                icon={MessageOutlined}
+                text="2"
+                key="list-vertical-message"
+              />,
+            ]}
+            extra={
+              <>
+                <Space size="large">
+                  <Image
+                    width={160}
+                    height={120}
+                    alt="logo"
+                    src={item.image}
+                    style={{
+                      height: "100%",
+                      borderRadius: "15px",
+                      objectFit: "cover",
+                      overflow: "hidden",
+                    }}
+                  />
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={() => handleUpdateContent(item.id)}
+                  />
+                  <Button
+                    icon={<DeleteOutlined />}
+                    onClick={() =>
+                      confirm({
+                        title: "Confirm",
+                        content: "Are you sure you want to delete it?",
+                        onOk: () => handleDeleteContent(item.id),
+                      })
+                    }
+                  />
+                </Space>
+              </>
+            }
+          >
+            <List.Item.Meta
+              avatar={<Avatar src={auth.currentUser.image} />}
+              title={item.title}
+              description={
+                <>
+                  <div style={{ maxHeight: "100px", overflow: "hidden" }}>
+                    <div
+                      className="CKeditor"
+                      dangerouslySetInnerHTML={{ __html: item.content }}
+                    ></div>
+                  </div>
+                </>
+              }
+            />
+          </List.Item>
+        )}
+      />
+    </>
+  );
 
   const items = [
     {
@@ -157,20 +315,30 @@ const ContentsComponent = () => {
                     wrapperCol={{
                       span: 22,
                     }}
-                    initialValues={{ author: auth.currentUser.username }}
+                    initialValues={{
+                      author: auth.currentUser.username,
+                    }}
                   >
                     <Form.Item label={t("Author")} name="author">
                       <Input disabled />
                     </Form.Item>
                     <Form.Item label={t("Category")} name="category">
-                      <Cascader options={options} onChange={onChangeCascader} />
+                      <Cascader
+                        options={options}
+                        onChange={(value) => setSelectedCategory(value)}
+                        value={selectedCategory}
+                      />
                     </Form.Item>
                     <Form.Item label={t("Title")} name="title">
-                      <Input.TextArea rows={2} />
+                      <Input.TextArea
+                        rows={2}
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
+                      />
                     </Form.Item>
                     <Form.Item
-                      label={t("contents")}
-                      name="contents"
+                      label={t("content")}
+                      name="content"
                       wrapperCol={{ span: 22 }}
                     >
                       <CKEditor
@@ -178,9 +346,8 @@ const ContentsComponent = () => {
                         data={contentCkeditor}
                         onChange={(event, editor) => {
                           const data = editor.getData();
-                          setContentCkeditor(data);
-
-                          form.setFieldsValue({ contents: data });
+                          // setContentCkeditor(data);
+                          form.setFieldsValue({ content: data });
                         }}
                         onReady={(editor) => {
                           editor.editing.view.change((writer) => {
@@ -191,6 +358,12 @@ const ContentsComponent = () => {
                             );
                           });
                         }}
+                      />
+                    </Form.Item>
+                    <Form.Item label="Image" name="image">
+                      <Input
+                        onChange={(e) => setImage(e.target.value)}
+                        value={image}
                       />
                     </Form.Item>
                     <Form.Item wrapperCol={{ offset: 2, span: 22 }}>
@@ -227,18 +400,28 @@ const ContentsComponent = () => {
               <TabPane tab={t("about")} key="1">
                 <Tabs defaultActiveKey="1">
                   <TabPane tab="VTD" key="2">
-                    <div>
-                      <div
-                        className="CKeditor"
-                        dangerouslySetInnerHTML={{ __html: contentCkeditor }}
-                      />
-                    </div>
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category && element.category.includes("vtd")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab="VIMAR" key="3">
-                    Content of Sub Tab Pane 2
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category && element.category.includes("vimar")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab="VDA" key="4">
-                    Content of Sub Tab Pane 3
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category && element.category.includes("vda")
+                      )
+                    )}
                   </TabPane>
                 </Tabs>
               </TabPane>
@@ -247,47 +430,145 @@ const ContentsComponent = () => {
                   <TabPane tab={t("villa")} key="6">
                     <Tabs>
                       <TabPane tab={t("Lighting solutions")} key="7">
-                        1
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("lighting")
+                          )
+                        )}
                       </TabPane>
                       <TabPane tab={t("Security and alarm solutions")} key="8">
-                        1
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("security")
+                          )
+                        )}
                       </TabPane>
                       <TabPane tab={t("Surveillance camera solutions")} key="9">
-                        1
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("camera")
+                          )
+                        )}
                       </TabPane>
                       <TabPane tab={t("Intercom solutions")} key="10">
-                        1
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("intercom")
+                          )
+                        )}
                       </TabPane>
                       <TabPane
                         tab={t("Air conditioning control solutions")}
                         key="11"
                       >
-                        1
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("aircon")
+                          )
+                        )}
                       </TabPane>
                       <TabPane tab={t("Curtain control solutions")} key="12">
-                        1
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("curtain")
+                          )
+                        )}
                       </TabPane>
                     </Tabs>
                   </TabPane>
                   <TabPane tab={t("hotel")} key="13">
                     <Tabs>
-                      <TabPane tab={t("RCU")} key="14"></TabPane>
-                      <TabPane tab={t("GRMS Software")} key="15"></TabPane>
-                      <TabPane tab={t("IPTV")} key="16"></TabPane>
+                      <TabPane tab={t("RCU")} key="14">
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("rcu")
+                          )
+                        )}
+                      </TabPane>
+                      <TabPane tab={t("GRMS Software")} key="15">
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("grms")
+                          )
+                        )}
+                      </TabPane>
+                      <TabPane tab={t("IPTV")} key="16">
+                        {renderListContents(
+                          contents.filter(
+                            (element) =>
+                              element.category &&
+                              element.category.includes("iptv")
+                          )
+                        )}
+                      </TabPane>
                     </Tabs>
                   </TabPane>
                 </Tabs>
               </TabPane>
               <TabPane tab={t("news")} key="17">
                 <Tabs>
-                  <TabPane tab={t("Market News")} key="18"></TabPane>
-                  <TabPane tab={t("Site News")} key="19"></TabPane>
-                  <TabPane tab={t("Company News")} key="20"></TabPane>
+                  <TabPane tab={t("Market News")} key="18">
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("market")
+                      )
+                    )}
+                  </TabPane>
+                  <TabPane tab={t("Site News")} key="19">
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category && element.category.includes("site")
+                      )
+                    )}
+                  </TabPane>
+                  <TabPane tab={t("Company News")} key="20">
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("company")
+                      )
+                    )}
+                  </TabPane>
                 </Tabs>
               </TabPane>
               <TabPane tab={t("contact")} key="21">
                 <Tabs>
-                  <TabPane tab={t("service")} key="22"></TabPane>
+                  <TabPane tab={t("service")} key="22">
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("contact")
+                      )
+                    )}
+                    {renderListContents(
+                      contents.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("service")
+                      )
+                    )}
+                  </TabPane>
                 </Tabs>
               </TabPane>
             </Tabs>
@@ -297,11 +578,19 @@ const ContentsComponent = () => {
     },
   ];
 
-  const onChange = (key) => {
-    console.log(key);
+  const onChange = (key) => {};
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Your post has been successfully submitted.",
+    });
   };
+
   return (
     <>
+      {contextHolder}
       <Layout
         style={{
           backgroundColor: mode ? "#000c17" : "white",

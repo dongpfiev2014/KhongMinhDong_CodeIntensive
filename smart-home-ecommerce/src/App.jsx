@@ -22,6 +22,8 @@ import ServiceScreen from "./screens/ServiceScreen";
 import SmartHomeScreen from "./screens/SmartHomeScreen";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./Redux-reducer/auth";
+import VillaComponent from "./components/SmartHomeComponents/VillaComponent";
+import HotelComponent from "./components/SmartHomeComponents/HotelComponent";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,8 +51,10 @@ function App() {
           <HeaderComponent />
           <Routes>
             <Route path="/" element={<HomeScreen />} />
-            <Route path="/about" element={<AboutScreen />} />
+            <Route path="/about/:id" element={<AboutScreen />} />
             <Route path="/smarthome" element={<SmartHomeScreen />} />
+            <Route path="/villa/:id" element={<VillaComponent />} />
+            <Route path="/hotel/:id" element={<HotelComponent />} />
             <Route path="/livedemo" element={<LiveDemoScreen />} />
             <Route path="/products" element={<ProductsScreen />} />
             <Route path="/projects" element={<ProjectsScreen />} />

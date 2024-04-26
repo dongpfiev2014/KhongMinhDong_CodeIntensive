@@ -27,6 +27,7 @@
   "notification settings": "Cài Đặt Thông Báo",
   "management": "Quản Lý",
   "contents": "Nội Dung",
+  "content": "Nội Dung",
   "Manage and protect your account": "Quản lý thông tin hồ sơ để bảo mật tài khoản",
   "Username": "Tên đăng nhập",
   "Name": "Tên",
@@ -90,5 +91,6 @@
   "images": "Hình Ảnh",
   "brand": "Thương Hiệu",
   "origin": "Xuất Xứ",
-  "code": "Mã Hàng"
+  "code": "Mã Hàng",
+  "place": "Địa Điểm"
 }

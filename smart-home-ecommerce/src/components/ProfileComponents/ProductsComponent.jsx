@@ -12,24 +12,165 @@ import {
   Cascader,
   InputNumber,
   Select,
+  message,
+  Space,
+  List,
+  Image,
+  Avatar,
+  Modal,
 } from "antd";
 import { t } from "i18next";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build/build/ckeditor";
+import {
+  deleteProduct,
+  editProduct,
+  getAllProducts,
+  publishProduct,
+} from "../../Redux-reducer/data";
+import {
+  LikeOutlined,
+  MessageOutlined,
+  StarOutlined,
+  EditOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 
 const { TabPane } = Tabs;
+const { confirm } = Modal;
+
+const IconText = ({ icon, text }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
 
 const ProductsComponent = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const auth = useSelector((state) => state.authen);
-  console.log(auth);
+  const dispatch = useDispatch();
   const [contentCkeditor, setContentCkeditor] = useState("");
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [code, setCode] = useState("");
+  const [stock, setStock] = useState("");
+  const [unitPrice, setUnitPrice] = useState("");
+  const [place, setPlace] = useState("");
+  const [brand, setBrand] = useState("");
+  const [origin, setOrigin] = useState("");
+  const [isProduct, setIsProduct] = useState(true);
+  const [currentEditingProduct, setCurrentEditingProduct] = useState([]);
   const [form] = Form.useForm();
+  const [products, setProducts] = useState([]);
+  const [editID, setEditID] = useState(-1);
 
   const onFinish = (value) => {
-    console.log(value);
+    if (editID !== -1) {
+      const updatedProduct = { ...currentEditingProduct, ...value };
+      dispatch(editProduct(updatedProduct)).then((action) => {
+        dispatch(getAllProducts()).then((action) => {
+          setProducts(action.payload);
+        });
+        setCurrentEditingProduct([]);
+        success2();
+        setContentCkeditor("");
+        setTitle("");
+        setImage("");
+        setSelectedCategory([]);
+        setCode("");
+        setStock("");
+        setUnitPrice("");
+        setPlace("");
+        setBrand("");
+        setOrigin("");
+        setEditID(-1);
+      });
+    } else {
+      dispatch(publishProduct(value)).then((action) => {
+        dispatch(getAllProducts()).then((action) => {
+          setProducts(action.payload);
+        });
+        success1();
+        setContentCkeditor("");
+        setTitle("");
+        setImage("");
+        setSelectedCategory([]);
+        setCode("");
+        setStock("");
+        setUnitPrice("");
+        setPlace("");
+        setBrand("");
+        setOrigin("");
+      });
+    }
+  };
+
+  useEffect(() => {
+    form.setFieldsValue({
+      title: title,
+      images: image,
+      category: selectedCategory,
+      content: contentCkeditor,
+      code: code,
+      stock: stock,
+      price: unitPrice,
+      place: place,
+      brand: brand,
+      origin: origin,
+    });
+  }, [
+    title,
+    image,
+    selectedCategory,
+    contentCkeditor,
+    code,
+    stock,
+    unitPrice,
+    place,
+    brand,
+    origin,
+  ]);
+
+  useEffect(() => {
+    dispatch(getAllProducts()).then((action) => {
+      setProducts(action.payload);
+      console.log(products);
+    });
+  }, []);
+
+  const handleUpdateProduct = (id) => {
+    const updatingData = products.find((element) => element.id === id);
+    setEditID(id);
+    console.log(updatingData);
+    if (updatingData) {
+      setCurrentEditingProduct(updatingData);
+      setContentCkeditor(updatingData.description);
+      setSelectedCategory(updatingData.category);
+      setTitle(updatingData.title);
+      setImage(updatingData.images);
+      setCode(updatingData.code);
+      setStock(updatingData.stock);
+      setUnitPrice(updatingData.price);
+      setPlace(updatingData.place);
+      setBrand(updatingData.brand);
+      setOrigin(updatingData.origin);
+    }
+  };
+
+  const handleDeleteProduct = (id) => {
+    dispatch(deleteProduct(id)).then((action) => {
+      if (action.payload) {
+        dispatch(getAllProducts()).then((action) =>
+          setProducts(action.payload)
+        );
+      }
+    });
   };
 
   const options = [
@@ -84,13 +225,101 @@ const ProductsComponent = () => {
   ];
 
   const onChangeCascader = (value) => {
-    console.log(value);
+    setSelectedCategory(value);
+    if (value.includes("products")) {
+      setIsProduct(true);
+    } else setIsProduct(false);
   };
+
+  const renderListProducts = (data) => (
+    <>
+      <List
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: (page) => {
+            console.log(page);
+          },
+          pageSize: 5,
+        }}
+        dataSource={data}
+        renderItem={(item, index) => (
+          <List.Item
+            key={item.id}
+            actions={[
+              <IconText
+                icon={StarOutlined}
+                text="156"
+                key="list-vertical-star-o"
+              />,
+              <IconText
+                icon={LikeOutlined}
+                text="156"
+                key="list-vertical-like-o"
+              />,
+              <IconText
+                icon={MessageOutlined}
+                text="2"
+                key="list-vertical-message"
+              />,
+            ]}
+            extra={
+              <>
+                <Space size="large">
+                  <Image
+                    width={160}
+                    height={120}
+                    alt="logo"
+                    src={item.images[0]}
+                    style={{
+                      height: "100%",
+                      borderRadius: "15px",
+                      objectFit: "cover",
+                      overflow: "hidden",
+                    }}
+                  />
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={() => handleUpdateProduct(item.id)}
+                  />
+                  <Button
+                    icon={<DeleteOutlined />}
+                    onClick={() =>
+                      confirm({
+                        title: "Confirm",
+                        content: "Are you sure you want to delete it?",
+                        onOk: () => handleDeleteProduct(item.id),
+                      })
+                    }
+                  />
+                </Space>
+              </>
+            }
+          >
+            <List.Item.Meta
+              avatar={<Avatar src={auth.currentUser.image} />}
+              title={item.title}
+              description={
+                <>
+                  <div style={{ maxHeight: "100px", overflow: "hidden" }}>
+                    <div
+                      className="CKeditor"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></div>
+                  </div>
+                </>
+              }
+            />
+          </List.Item>
+        )}
+      />
+    </>
+  );
 
   const items = [
     {
       key: "1",
-      label: t("Add Content"),
+      label: t("Add Product"),
       children: (
         <>
           <Flex justify="center" align="center" style={{ width: "100%" }}>
@@ -112,15 +341,28 @@ const ProductsComponent = () => {
                     <Form.Item label={t("Author")} name="author">
                       <Input disabled />
                     </Form.Item>
-                    <Form.Item label={t("Category")} name="category">
+                    <Form.Item
+                      label={t("Category")}
+                      name="category"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your category!",
+                        },
+                      ]}
+                    >
                       <Cascader
                         options={options}
                         onChange={onChangeCascader}
-                        onClick={(e) => console.log(e)}
+                        value={selectedCategory}
                       />
                     </Form.Item>
                     <Form.Item label={t("Title")} name="title">
-                      <Input.TextArea rows={2} />
+                      <Input.TextArea
+                        rows={2}
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
+                      />
                     </Form.Item>
                     <Form.Item
                       label={t("Description")}
@@ -132,8 +374,7 @@ const ProductsComponent = () => {
                         data={contentCkeditor}
                         onChange={(event, editor) => {
                           const data = editor.getData();
-                          setContentCkeditor(data);
-
+                          // setContentCkeditor(data);
                           form.setFieldsValue({ description: data });
                         }}
                         onReady={(editor) => {
@@ -147,43 +388,146 @@ const ProductsComponent = () => {
                         }}
                       />
                     </Form.Item>
-                    <Form.Item label={t("code")} name="code">
-                      <InputNumber style={{ width: "20%" }} />
-                    </Form.Item>
-                    <Form.Item label={t("stock")} name="stock">
-                      <InputNumber style={{ width: "20%" }} />
-                    </Form.Item>
-                    <Form.Item label={t("unit price")} name="price">
-                      <InputNumber style={{ width: "20%" }} addonAfter="VNĐ" />
-                    </Form.Item>
-                    <Form.Item label={t("brand")} name="brand">
-                      <Select
-                        defaultValue="Vimar"
-                        style={{ width: "20%" }}
-                        options={[
-                          { value: "vimar", label: "Vimar" },
-                          { value: "vda", label: "VDA" },
-                          { value: "epic", label: "Epic" },
-                          { value: "yale", label: "Yale" },
-                          { value: "somfy", label: "Somfy" },
-                        ]}
-                      />
-                    </Form.Item>
-                    <Form.Item label={t("origin")} name="origin">
-                      <Select
-                        defaultValue="Italia"
-                        style={{ width: "20%" }}
-                        options={[
-                          { value: "vn", label: "Vietnam" },
-                          { value: "italia", label: "Italia" },
-                          { value: "eu", label: "EU" },
-                          { value: "us", label: "US" },
-                          { value: "china", label: "China" },
-                          { value: "korea", label: "Korea" },
-                        ]}
-                      />
-                    </Form.Item>
-                    <Form.Item label={t("images")} name="images"></Form.Item>
+                    {isProduct ? (
+                      <>
+                        <Form.Item label={t("code")} name="code">
+                          <Input style={{ width: "30%" }} value={code} />
+                        </Form.Item>
+                        <Form.Item label={t("stock")} name="stock">
+                          <InputNumber style={{ width: "30%" }} value={stock} />
+                        </Form.Item>
+                        <Form.Item label={t("unit price")} name="price">
+                          <InputNumber
+                            style={{ width: "30%" }}
+                            addonAfter="VNĐ"
+                            formatter={(value) =>
+                              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            value={unitPrice}
+                          />
+                        </Form.Item>
+                        <Form.Item label={t("brand")} name="brand">
+                          <Select
+                            defaultValue="Vimar"
+                            style={{ width: "30%" }}
+                            options={[
+                              { value: "vimar", label: "Vimar" },
+                              { value: "vda", label: "VDA" },
+                              { value: "epic", label: "Epic" },
+                              { value: "yale", label: "Yale" },
+                              { value: "somfy", label: "Somfy" },
+                            ]}
+                          />
+                        </Form.Item>
+                        <Form.Item label={t("origin")} name="origin">
+                          <Select
+                            defaultValue="Italia"
+                            style={{ width: "30%" }}
+                            options={[
+                              { value: "vn", label: "Vietnam" },
+                              { value: "italia", label: "Italia" },
+                              { value: "eu", label: "EU" },
+                              { value: "us", label: "US" },
+                              { value: "china", label: "China" },
+                              { value: "korea", label: "Korea" },
+                            ]}
+                          />
+                        </Form.Item>
+                      </>
+                    ) : (
+                      <Form.Item label={t("place")} name="place">
+                        <Input
+                          onChange={(e) => setPlace(e.target.value)}
+                          value={place}
+                        />
+                      </Form.Item>
+                    )}
+                    <Form.List name="images">
+                      {(fields, { add, remove }, { errors }) => (
+                        <>
+                          {fields.map((field, index) => (
+                            <Form.Item
+                              {...(index === 0
+                                ? {
+                                    labelCol: {
+                                      xs: {
+                                        span: 2,
+                                      },
+                                      sm: {
+                                        span: 2,
+                                      },
+                                    },
+                                    wrapperCol: {
+                                      xs: {
+                                        span: 24,
+                                      },
+                                      sm: {
+                                        span: 24,
+                                      },
+                                    },
+                                  }
+                                : {
+                                    wrapperCol: {
+                                      xs: {
+                                        span: 24,
+                                        offset: 2,
+                                      },
+                                      sm: {
+                                        span: 24,
+                                        offset: 2,
+                                      },
+                                    },
+                                  })}
+                              label={index === 0 ? t("images") : ""}
+                              required={false}
+                              key={field.key}
+                            >
+                              <Form.Item
+                                {...field}
+                                validateTrigger={["onChange", "onBlur"]}
+                                rules={[
+                                  {
+                                    required: true,
+                                    whitespace: true,
+                                    message:
+                                      "Please input image url or delete this field.",
+                                  },
+                                ]}
+                                noStyle
+                              >
+                                <Input
+                                  placeholder="Image URL"
+                                  style={{
+                                    width: "60%",
+                                  }}
+                                />
+                              </Form.Item>
+                              {fields.length >= 1 ? (
+                                <MinusCircleOutlined
+                                  className="dynamic-delete-button"
+                                  onClick={() => remove(field.name)}
+                                />
+                              ) : null}
+                            </Form.Item>
+                          ))}
+                          <Form.Item wrapperCol={{ span: 10, offset: 2 }}>
+                            <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              style={{
+                                width: "60%",
+                              }}
+                              icon={<PlusOutlined />}
+                            >
+                              Add image
+                            </Button>
+
+                            <Form.ErrorList errors={errors} />
+                          </Form.Item>
+                        </>
+                      )}
+                    </Form.List>
                     <Form.Item wrapperCol={{ offset: 2, span: 16 }}>
                       <Button htmlType="submit" type="primary">
                         {t("Add")}
@@ -199,7 +543,7 @@ const ProductsComponent = () => {
     },
     {
       key: "2",
-      label: t("Table of Contents"),
+      label: t("Table of Products"),
       children: (
         <>
           <ConfigProvider
@@ -218,40 +562,85 @@ const ProductsComponent = () => {
               <TabPane tab={t("products")} key="1">
                 <Tabs defaultActiveKey="1">
                   <TabPane tab={t("Switch")} key="2">
-                    <div>
-                      <div
-                        className="CKeditor"
-                        dangerouslySetInnerHTML={{ __html: contentCkeditor }}
-                      />
-                    </div>
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("switch")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab={t("Door Entry Intercom")} key="3">
-                    Content of Sub Tab Pane 2
-                  </TabPane>
-                  <TabPane tab={t("Alarm")} key="4">
-                    Content of Sub Tab Pane 3
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("doorEntry")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab={t("Camera")} key="5">
-                    Content of Sub Tab Pane 3
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("camera")
+                      )
+                    )}
+                  </TabPane>
+                  <TabPane tab={t("Alarm")} key="4">
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category && element.category.includes("alarm")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab={t("Door Lock")} key="6">
-                    Content of Sub Tab Pane 3
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category && element.category.includes("lock")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab={t("Curtain Motor")} key="7">
-                    Content of Sub Tab Pane 3
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category && element.category.includes("motor")
+                      )
+                    )}
                   </TabPane>
                 </Tabs>
               </TabPane>
               <TabPane tab={t("projects")} key="8">
                 <Tabs>
                   <TabPane tab={t("Commercial Projects")} key="9">
-                    1
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("commercial")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab={t("Civil Projects")} key="10">
-                    1
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category && element.category.includes("civil")
+                      )
+                    )}
                   </TabPane>
                   <TabPane tab={t("Smart Hotel Projects")} key="11">
-                    1
+                    {renderListProducts(
+                      products.filter(
+                        (element) =>
+                          element.category &&
+                          element.category.includes("hotelprojects")
+                      )
+                    )}
                   </TabPane>
                 </Tabs>
               </TabPane>
@@ -265,8 +654,23 @@ const ProductsComponent = () => {
   const onChange = (key) => {
     console.log(key);
   };
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const success1 = () => {
+    messageApi.open({
+      type: "success",
+      content: "Your product has been successfully submitted.",
+    });
+  };
+  const success2 = () => {
+    messageApi.open({
+      type: "success",
+      content: "Your product has been successfully edited.",
+    });
+  };
   return (
     <>
+      {contextHolder}
       <Layout
         style={{
           backgroundColor: mode ? "#000c17" : "white",
