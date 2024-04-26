@@ -92,5 +92,7 @@
   "brand": "Brand",
   "origin": "Origin",
   "code": "Order Code",
-  "place": "Place"
+  "place": "Place",
+  "material": "Material",
+  "series": "Series"
 }

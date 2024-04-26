@@ -92,5 +92,7 @@
   "brand": "Thương Hiệu",
   "origin": "Xuất Xứ",
   "code": "Mã Hàng",
-  "place": "Địa Điểm"
+  "place": "Địa Điểm",
+  "material": "Chất liệu",
+  "series": "Dòng"
 }

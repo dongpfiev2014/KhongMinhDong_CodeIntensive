@@ -25,6 +25,7 @@ import Editor from "ckeditor5-custom-build/build/ckeditor";
 import {
   deleteContent,
   deleteProduct,
+  editContent,
   getAllContents,
   getContent,
   publishContent,
@@ -55,21 +56,39 @@ const ContentsComponent = () => {
   const [contentCkeditor, setContentCkeditor] = useState("");
   const [image, setImage] = useState("");
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [currentEditingContent, setCurrentEditingContent] = useState([]);
   const [form] = Form.useForm();
   const [contents, setContents] = useState([]);
+  const [editID, setEditID] = useState(-1);
+
+  const clearAll = () => {
+    setCurrentEditingContent([]);
+    setContentCkeditor("");
+    setSelectedCategory([]);
+    setTitle("");
+    setImage("");
+  };
 
   const onFinish = (value) => {
-    dispatch(publishContent(value)).then((action) => {
-      if (action.payload) {
-        const newContent = action.payload;
-        setContents([...contents, newContent]);
-        success();
-        setContentCkeditor("");
-        setSelectedCategory([]);
-        setTitle("");
-        setImage("");
-      }
-    });
+    if (editID !== -1) {
+      const updatedContent = { ...currentEditingContent, ...value };
+      dispatch(editContent(updatedContent)).then((action) => {
+        dispatch(getAllContents()).then((action) => {
+          setContents(action.payload);
+          success2();
+          setEditID(-1);
+          clearAll();
+        });
+      });
+    } else {
+      dispatch(publishContent(value)).then((action) => {
+        dispatch(getAllContents()).then((action) => {
+          setContents(action.payload);
+        });
+        success1();
+        clearAll();
+      });
+    }
   };
 
   useEffect(() => {
@@ -89,7 +108,9 @@ const ContentsComponent = () => {
 
   const handleUpdateContent = (id) => {
     const updatingData = contents.find((element) => element.id === id);
+    setEditID(id);
     if (updatingData) {
+      setCurrentEditingContent(updatingData);
       setContentCkeditor(updatingData.content);
       setSelectedCategory(updatingData.category);
       setTitle(updatingData.title);
@@ -346,7 +367,7 @@ const ContentsComponent = () => {
                         data={contentCkeditor}
                         onChange={(event, editor) => {
                           const data = editor.getData();
-                          // setContentCkeditor(data);
+                          setContentCkeditor(data);
                           form.setFieldsValue({ content: data });
                         }}
                         onReady={(editor) => {
@@ -581,10 +602,16 @@ const ContentsComponent = () => {
   const onChange = (key) => {};
 
   const [messageApi, contextHolder] = message.useMessage();
-  const success = () => {
+  const success1 = () => {
     messageApi.open({
       type: "success",
-      content: "Your post has been successfully submitted.",
+      content: "Your product has been successfully submitted.",
+    });
+  };
+  const success2 = () => {
+    messageApi.open({
+      type: "success",
+      content: "Your product has been successfully edited.",
     });
   };
 

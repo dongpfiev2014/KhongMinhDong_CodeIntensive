@@ -64,49 +64,47 @@ const ProductsComponent = () => {
   const [place, setPlace] = useState("");
   const [brand, setBrand] = useState("");
   const [origin, setOrigin] = useState("");
+  const [material, setMaterial] = useState("");
+  const [series, setSeries] = useState("");
   const [isProduct, setIsProduct] = useState(true);
   const [currentEditingProduct, setCurrentEditingProduct] = useState([]);
   const [form] = Form.useForm();
   const [products, setProducts] = useState([]);
   const [editID, setEditID] = useState(-1);
 
+  const clearAll = () => {
+    setCurrentEditingProduct([]);
+    setContentCkeditor("");
+    setTitle("");
+    setImage("");
+    setSelectedCategory([]);
+    setCode("");
+    setStock("");
+    setUnitPrice("");
+    setPlace("");
+    setBrand("");
+    setOrigin("");
+    setMaterial("");
+    setSeries("");
+  };
   const onFinish = (value) => {
     if (editID !== -1) {
       const updatedProduct = { ...currentEditingProduct, ...value };
       dispatch(editProduct(updatedProduct)).then((action) => {
         dispatch(getAllProducts()).then((action) => {
           setProducts(action.payload);
+          success2();
+          setEditID(-1);
+          clearAll();
         });
-        setCurrentEditingProduct([]);
-        success2();
-        setContentCkeditor("");
-        setTitle("");
-        setImage("");
-        setSelectedCategory([]);
-        setCode("");
-        setStock("");
-        setUnitPrice("");
-        setPlace("");
-        setBrand("");
-        setOrigin("");
-        setEditID(-1);
       });
     } else {
       dispatch(publishProduct(value)).then((action) => {
         dispatch(getAllProducts()).then((action) => {
           setProducts(action.payload);
+          success1();
+          clearAll();
         });
-        success1();
-        setContentCkeditor("");
-        setTitle("");
-        setImage("");
-        setSelectedCategory([]);
-        setCode("");
-        setStock("");
-        setUnitPrice("");
-        setPlace("");
-        setBrand("");
-        setOrigin("");
       });
     }
   };
@@ -116,13 +114,15 @@ const ProductsComponent = () => {
       title: title,
       images: image,
       category: selectedCategory,
-      content: contentCkeditor,
+      description: contentCkeditor,
       code: code,
       stock: stock,
       price: unitPrice,
       place: place,
       brand: brand,
       origin: origin,
+      material: material,
+      series: series,
     });
   }, [
     title,
@@ -135,19 +135,19 @@ const ProductsComponent = () => {
     place,
     brand,
     origin,
+    material,
+    series,
   ]);
 
   useEffect(() => {
     dispatch(getAllProducts()).then((action) => {
       setProducts(action.payload);
-      console.log(products);
     });
   }, []);
 
   const handleUpdateProduct = (id) => {
     const updatingData = products.find((element) => element.id === id);
     setEditID(id);
-    console.log(updatingData);
     if (updatingData) {
       setCurrentEditingProduct(updatingData);
       setContentCkeditor(updatingData.description);
@@ -160,6 +160,8 @@ const ProductsComponent = () => {
       setPlace(updatingData.place);
       setBrand(updatingData.brand);
       setOrigin(updatingData.origin);
+      setMaterial(updatingData.material);
+      setSeries(updatingData.series);
     }
   };
 
@@ -374,7 +376,7 @@ const ProductsComponent = () => {
                         data={contentCkeditor}
                         onChange={(event, editor) => {
                           const data = editor.getData();
-                          // setContentCkeditor(data);
+                          setContentCkeditor(data);
                           form.setFieldsValue({ description: data });
                         }}
                         onReady={(editor) => {
@@ -431,6 +433,31 @@ const ProductsComponent = () => {
                               { value: "us", label: "US" },
                               { value: "china", label: "China" },
                               { value: "korea", label: "Korea" },
+                            ]}
+                          />
+                        </Form.Item>
+                        <Form.Item label={t("material")} name="material">
+                          <Select
+                            defaultValue="techno"
+                            style={{ width: "30%" }}
+                            options={[
+                              { value: "techno", label: "Techno" },
+                              { value: "metal", label: "Metal" },
+                              { value: "glass", label: "Glass" },
+                              { value: "stone", label: "Stone" },
+                              { value: "wood", label: "Wood" },
+                              { value: "leather", label: "Leather" },
+                            ]}
+                          />
+                        </Form.Item>
+                        <Form.Item label={t("series")} name="series">
+                          <Select
+                            defaultValue="eikon"
+                            style={{ width: "30%" }}
+                            options={[
+                              { value: "eikon", label: "Eikon (Luxury)" },
+                              { value: "arke", label: "Arke (Mid-range)" },
+                              { value: "plana", label: "Plana (Entry-level)" },
                             ]}
                           />
                         </Form.Item>
