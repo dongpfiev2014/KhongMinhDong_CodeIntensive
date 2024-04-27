@@ -31,6 +31,7 @@ const FooterComponent = () => {
         style={{
           backgroundColor: mode ? "#001529" : "#f5f5f5",
           color: mode ? "rgba(255, 255, 255, 0.65)" : "rgba(0, 0, 0, 0.88)",
+          position: "relative",
         }}
       >
         <Flex justify="center" align="center" vertical>

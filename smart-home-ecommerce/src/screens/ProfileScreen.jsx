@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Row, Col, Flex, Menu } from "antd";
-import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { useSelector } from "react-redux";
 import { NavLink, Route, Routes } from "react-router-dom";
@@ -156,7 +155,10 @@ const ProfileScreen = () => {
               backgroundColor: mode ? "#001529" : "white",
             }}
           >
-            <Col span={4} style={{ position: "fixed", width: "calc(100%/6)" }}>
+            <Col
+              span={4}
+              style={{ position: "fixed", width: "calc(1800px/6)" }}
+            >
               <Flex justify="center" align="center">
                 <Sider>
                   <Menu
@@ -173,7 +175,7 @@ const ProfileScreen = () => {
                 </Sider>
               </Flex>
             </Col>
-            <Col span={20} style={{ marginLeft: "calc(100%/6)" }}>
+            <Col span={20} style={{ marginLeft: "calc(1800px/6)" }}>
               <Routes>
                 <Route path="/profile" element={<SingleProfileComponent />} />
                 <Route path="/payment" element={<PaymentComponent />} />

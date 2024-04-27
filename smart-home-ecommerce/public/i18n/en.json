@@ -94,5 +94,7 @@
   "code": "Order Code",
   "place": "Place",
   "material": "Material",
-  "series": "Series"
+  "series": "Series",
+  "All Categories": "All Categories",
+  "year": "Year"
 }

@@ -24,10 +24,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build/build/ckeditor";
 import {
   deleteContent,
-  deleteProduct,
   editContent,
   getAllContents,
-  getContent,
   publishContent,
 } from "../../Redux-reducer/data";
 import {

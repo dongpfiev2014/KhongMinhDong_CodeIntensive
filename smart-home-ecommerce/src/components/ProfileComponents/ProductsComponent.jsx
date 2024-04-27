@@ -62,6 +62,7 @@ const ProductsComponent = () => {
   const [stock, setStock] = useState("");
   const [unitPrice, setUnitPrice] = useState("");
   const [place, setPlace] = useState("");
+  const [year, setYear] = useState("");
   const [brand, setBrand] = useState("");
   const [origin, setOrigin] = useState("");
   const [material, setMaterial] = useState("");
@@ -86,6 +87,7 @@ const ProductsComponent = () => {
     setOrigin("");
     setMaterial("");
     setSeries("");
+    setYear("");
   };
   const onFinish = (value) => {
     if (editID !== -1) {
@@ -123,6 +125,7 @@ const ProductsComponent = () => {
       origin: origin,
       material: material,
       series: series,
+      year: year,
     });
   }, [
     title,
@@ -137,6 +140,7 @@ const ProductsComponent = () => {
     origin,
     material,
     series,
+    year,
   ]);
 
   useEffect(() => {
@@ -162,6 +166,7 @@ const ProductsComponent = () => {
       setOrigin(updatingData.origin);
       setMaterial(updatingData.material);
       setSeries(updatingData.series);
+      setYear(updatingData.year);
     }
   };
 
@@ -463,12 +468,20 @@ const ProductsComponent = () => {
                         </Form.Item>
                       </>
                     ) : (
-                      <Form.Item label={t("place")} name="place">
-                        <Input
-                          onChange={(e) => setPlace(e.target.value)}
-                          value={place}
-                        />
-                      </Form.Item>
+                      <>
+                        <Form.Item label={t("place")} name="place">
+                          <Input
+                            onChange={(e) => setPlace(e.target.value)}
+                            value={place}
+                          />
+                        </Form.Item>
+                        <Form.Item label={t("year")} name="year">
+                          <Input
+                            onChange={(e) => setYear(e.target.value)}
+                            value={year}
+                          />
+                        </Form.Item>
+                      </>
                     )}
                     <Form.List name="images">
                       {(fields, { add, remove }, { errors }) => (

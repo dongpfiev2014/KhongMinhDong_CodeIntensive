@@ -213,7 +213,7 @@ const HeaderComponent = () => {
     {
       label: (
         <NavLink
-          to={"/products"}
+          to={"/products/all"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           {t("products")}
@@ -223,27 +223,69 @@ const HeaderComponent = () => {
       onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: t("Switch"),
+          label: (
+            <NavLink
+              to={"/products/switch"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Switch")}
+            </NavLink>
+          ),
           key: "switch",
         },
         {
-          label: t("Door Entry Intercom"),
+          label: (
+            <NavLink
+              to={"/products/doorEntry"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Door Entry Intercom")}
+            </NavLink>
+          ),
           key: "doorEntry",
         },
         {
-          label: t("Camera"),
+          label: (
+            <NavLink
+              to={"/products/camera"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Camera")}
+            </NavLink>
+          ),
           key: "camera",
         },
         {
-          label: t("Alarm"),
+          label: (
+            <NavLink
+              to={"/products/alarm"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Alarm")}
+            </NavLink>
+          ),
           key: "alarm",
         },
         {
-          label: t("Door Lock"),
+          label: (
+            <NavLink
+              to={"/products/lock"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Door Lock")}
+            </NavLink>
+          ),
           key: "lock",
         },
         {
-          label: t("Curtain Motor"),
+          label: (
+            <NavLink
+              to={"/products/motor"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Curtain Motor")}
+            </NavLink>
+          ),
           key: "motor",
         },
       ],
@@ -251,7 +293,7 @@ const HeaderComponent = () => {
     {
       label: (
         <NavLink
-          to={"/projects"}
+          to={"/projects/all"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           {t("projects")}
@@ -261,15 +303,36 @@ const HeaderComponent = () => {
       onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: t("Commercial Projects"),
+          label: (
+            <NavLink
+              to={"/projects/commercial"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Commercial Projects")}
+            </NavLink>
+          ),
           key: "commercial",
         },
         {
-          label: t("Civil Projects"),
+          label: (
+            <NavLink
+              to={"/projects/civil"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Civil Projects")}
+            </NavLink>
+          ),
           key: "civil",
         },
         {
-          label: t("Smart Hotel Projects"),
+          label: (
+            <NavLink
+              to={"/projects/hotelprojects"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Smart Hotel Projects")}
+            </NavLink>
+          ),
           key: "hotelprojects",
         },
       ],
@@ -277,7 +340,7 @@ const HeaderComponent = () => {
     {
       label: (
         <NavLink
-          to={"/news"}
+          to={"/news/all"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           {t("news")}
@@ -287,15 +350,36 @@ const HeaderComponent = () => {
       onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
-          label: t("Market News"),
+          label: (
+            <NavLink
+              to={"/news/market"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Market News")}
+            </NavLink>
+          ),
           key: "market",
         },
         {
-          label: t("Site News"),
+          label: (
+            <NavLink
+              to={"/news/site"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Site News")}
+            </NavLink>
+          ),
           key: "site",
         },
         {
-          label: t("Company News"),
+          label: (
+            <NavLink
+              to={"/news/company"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {t("Company News")}
+            </NavLink>
+          ),
           key: "company",
         },
       ],

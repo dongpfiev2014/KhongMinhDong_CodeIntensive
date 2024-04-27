@@ -124,6 +124,24 @@ export const updateUserProfile = createAsyncThunk(
   }
 );
 
+export const addToCart = createAsyncThunk(
+  "auth/addToCart",
+  async (updatedData, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `${API_USERS_URL}/${updatedData.id}`,
+        updatedData
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.errors || err.message
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

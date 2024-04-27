@@ -43,6 +43,20 @@ export const getContent = createAsyncThunk(
   }
 );
 
+export const getIdContent = createAsyncThunk(
+  "contents/getId",
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_CONTENTS_URL}/${id}`);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.errors || err.message
+      );
+    }
+  }
+);
+
 export const getAllContents = createAsyncThunk(
   "contents/getAllContents",
   async (_, thunkAPI) => {
@@ -139,6 +153,16 @@ const contentsSlice = createSlice({
     builder.addCase(editContent.rejected, (state, action) => {
       state.isLoading = false;
     });
+    builder.addCase(getIdContent.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getIdContent.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.contents = action.payload;
+    });
+    builder.addCase(getIdContent.rejected, (state, action) => {
+      state.isLoading = false;
+    });
   },
 });
 
@@ -178,6 +202,20 @@ export const getProduct = createAsyncThunk(
       const response = await axios.get(
         `${API_PRODUCTS_URL}/?category=${category}`
       );
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.errors || err.message
+      );
+    }
+  }
+);
+
+export const getIdProduct = createAsyncThunk(
+  "products/getId",
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_PRODUCTS_URL}/${id}`);
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -279,9 +317,18 @@ const productsSlice = createSlice({
     builder.addCase(editProduct.fulfilled, (state, action) => {
       state.isLoading = false;
       state.products = action.payload;
-      console.log(action.payload);
     });
     builder.addCase(editProduct.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getIdProduct.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getIdProduct.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.products = action.payload;
+    });
+    builder.addCase(getIdProduct.rejected, (state, action) => {
       state.isLoading = false;
     });
   },
