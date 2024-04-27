@@ -193,6 +193,17 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.currentUser = null;
     });
+    builder.addCase(addToCart.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(addToCart.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.currentUser = action.payload;
+    });
+    builder.addCase(addToCart.rejected, (state, action) => {
+      state.isLoading = false;
+      state.currentUser = null;
+    });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.isLoading = false;
       state.currentUser = null;

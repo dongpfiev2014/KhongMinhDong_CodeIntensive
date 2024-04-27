@@ -31,10 +31,23 @@ const HeaderComponent = () => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const auth = useSelector((state) => state.authen);
+  const [totalProducts, setTotalProducts] = useState(0);
 
   const onClick = (val) => {
     setCurrent(val.key);
   };
+
+  useEffect(() => {
+    if (auth) {
+      const total =
+        auth.currentUser.product &&
+        auth.currentUser.product.reduce(
+          (total, product) => total + product.amount,
+          0
+        );
+      setTotalProducts(total);
+    }
+  }, [auth]);
 
   const items = [
     {
@@ -506,7 +519,7 @@ const HeaderComponent = () => {
                 )}
                 placement="bottom"
               >
-                <Badge count={86} size="small">
+                <Badge count={totalProducts} size="small">
                   <PiShoppingCartLight
                     size="1.5em"
                     color={mode ? "white" : "red"}

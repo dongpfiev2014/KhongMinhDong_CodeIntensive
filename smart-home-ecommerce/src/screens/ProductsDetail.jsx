@@ -27,16 +27,18 @@ import {
   HeartOutlined,
 } from "@ant-design/icons";
 import { t } from "i18next";
+import { addToCart } from "../Redux-reducer/auth";
 
 const ProductsDetail = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const [searchParams] = useSearchParams();
-  const [product, setProduct] = useState("");
   const dispatch = useDispatch();
   const id = searchParams.get("id");
   const [currentImage, setCurrentImage] = useState(0);
   const carouselRef = useRef(null);
+  const [product, setProduct] = useState("");
   const [value, setValue] = useState("1");
+  const auth = useSelector((state) => state.authen);
 
   useEffect(() => {
     if (id) {
@@ -190,8 +192,24 @@ const ProductsDetail = () => {
   ];
 
   const handleAddToCart = () => {
-    console.log(product);
+    const updateCart = { ...product, amount: parseInt(value) };
+    const currentUser = JSON.parse(JSON.stringify(auth.currentUser));
+
+    if (currentUser.product && currentUser.product.length > 0) {
+      const existingProductIndex = currentUser.product.findIndex(
+        (item) => item.id === updateCart.id
+      );
+      if (existingProductIndex !== -1) {
+        currentUser.product[existingProductIndex].amount += parseInt(value);
+      } else {
+        currentUser.product.push(updateCart);
+      }
+    } else currentUser.product = [updateCart];
+    dispatch(addToCart(currentUser)).then((action) => {
+      console.log(action.payload);
+    });
   };
+
   return (
     <>
       {product && (
