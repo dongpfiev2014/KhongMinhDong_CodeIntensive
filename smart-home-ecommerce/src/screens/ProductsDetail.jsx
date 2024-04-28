@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getIdProduct } from "../Redux-reducer/data";
 import {
   Carousel,
@@ -18,6 +18,7 @@ import {
   InputNumber,
   Tabs,
   Form,
+  message,
 } from "antd";
 import {
   InstagramOutlined,
@@ -28,6 +29,12 @@ import {
 } from "@ant-design/icons";
 import { t } from "i18next";
 import { addToCart } from "../Redux-reducer/auth";
+import { MdDesignServices } from "react-icons/md";
+import { MdInstallMobile } from "react-icons/md";
+import { MdOutlinePhonelinkSetup } from "react-icons/md";
+import { MdOutlineSupportAgent } from "react-icons/md";
+import { GrServices } from "react-icons/gr";
+import { GrHostMaintenance } from "react-icons/gr";
 
 const ProductsDetail = () => {
   const { mode } = useSelector((state) => state.darkMode);
@@ -39,6 +46,8 @@ const ProductsDetail = () => {
   const [product, setProduct] = useState("");
   const [value, setValue] = useState("1");
   const auth = useSelector((state) => state.authen);
+  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -77,7 +86,7 @@ const ProductsDetail = () => {
   };
 
   function formatCurrency(amount) {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   const items = [
@@ -191,6 +200,12 @@ const ProductsDetail = () => {
     },
   ];
 
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Item has been added to your shopping cart ",
+    });
+  };
   const handleAddToCart = () => {
     const updateCart = { ...product, amount: parseInt(value) };
     const currentUser = JSON.parse(JSON.stringify(auth.currentUser));
@@ -206,12 +221,17 @@ const ProductsDetail = () => {
       }
     } else currentUser.product = [updateCart];
     dispatch(addToCart(currentUser)).then((action) => {
-      console.log(action.payload);
+      if (action.payload) {
+        success();
+      }
     });
   };
 
+  const handleBuyNow = () => {};
+
   return (
     <>
+      {contextHolder}
       {product && (
         <>
           <Flex
@@ -384,7 +404,11 @@ const ProductsDetail = () => {
                           size="large"
                           danger
                           style={{ width: "150px" }}
-                          onClick={handleAddToCart}
+                          onClick={
+                            auth.currentUser
+                              ? handleAddToCart
+                              : () => navigate("/accounts/login")
+                          }
                         >
                           Add To Cart
                         </Button>
@@ -393,6 +417,11 @@ const ProductsDetail = () => {
                           danger
                           type="primary"
                           style={{ width: "150px" }}
+                          onClick={
+                            auth.currentUser
+                              ? handleBuyNow
+                              : () => navigate("/accounts/login")
+                          }
                         >
                           Buy Now
                         </Button>
@@ -418,6 +447,7 @@ const ProductsDetail = () => {
                     size="large"
                     type="dashed"
                     style={{ color: "#5a5a5a" }}
+                    icon={<MdDesignServices />}
                   >
                     Miễn phí Thiết Kế
                   </Button>
@@ -428,6 +458,7 @@ const ProductsDetail = () => {
                     size="large"
                     type="dashed"
                     style={{ color: "#5a5a5a" }}
+                    icon={<MdInstallMobile />}
                   >
                     Miễn phí Lắp Đặt
                   </Button>
@@ -438,6 +469,7 @@ const ProductsDetail = () => {
                     size="large"
                     type="dashed"
                     style={{ color: "#5a5a5a" }}
+                    icon={<MdOutlinePhonelinkSetup />}
                   >
                     Miễn phí Cài Đặt
                   </Button>
@@ -448,6 +480,7 @@ const ProductsDetail = () => {
                     size="large"
                     type="dashed"
                     style={{ color: "#5a5a5a" }}
+                    icon={<MdOutlineSupportAgent />}
                   >
                     Hướng dẫn Sử dụng
                   </Button>
@@ -458,6 +491,7 @@ const ProductsDetail = () => {
                     size="large"
                     type="dashed"
                     style={{ color: "#5a5a5a" }}
+                    icon={<GrServices />}
                   >
                     Bảo hành 2 năm
                   </Button>
@@ -468,6 +502,7 @@ const ProductsDetail = () => {
                     size="large"
                     type="dashed"
                     style={{ color: "#5a5a5a" }}
+                    icon={<GrHostMaintenance />}
                   >
                     Bảo trì 24/7
                   </Button>

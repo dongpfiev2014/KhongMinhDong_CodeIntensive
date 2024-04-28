@@ -14,15 +14,21 @@ import {
   Card,
   ConfigProvider,
   Avatar,
+  List,
+  Popconfirm,
+  InputNumber,
+  Modal,
 } from "antd";
 import { useNavigate, NavLink } from "react-router-dom";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { toggleDarkMode } from "../Redux-reducer/darkModeSlice";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../constants";
-import { logout } from "../Redux-reducer/auth";
+import { addToCart, logout } from "../Redux-reducer/auth";
 import Logo from "../photos/vecteezy_smart-home-logo-icon-template_20040705.svg";
+import Typography from "antd/es/typography/Typography";
+import { BsTrash } from "react-icons/bs";
 
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("about");
@@ -32,22 +38,103 @@ const HeaderComponent = () => {
   const { t, i18n } = useTranslation();
   const auth = useSelector((state) => state.authen);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const { product, ...rest } = (auth && auth.currentUser) || {};
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const onClick = (val) => {
     setCurrent(val.key);
   };
 
+  function formatCurrency(amount) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   useEffect(() => {
-    if (auth) {
-      const total =
-        auth.currentUser.product &&
-        auth.currentUser.product.reduce(
-          (total, product) => total + product.amount,
-          0
-        );
-      setTotalProducts(total);
+    if (auth && auth.currentUser && Array.isArray(auth.currentUser.product)) {
+      const totalAmount = auth.currentUser.product.reduce(
+        (total, product) => total + product.amount,
+        0
+      );
+      setTotalProducts(totalAmount);
+      const totalCost = auth.currentUser.product.reduce(
+        (total, product) => total + product.price * product.amount,
+        0
+      );
+      setTotalCost(totalCost);
+    } else {
+      setTotalProducts(0);
+      setTotalCost(0);
     }
   }, [auth]);
+
+  const handleRemoveItem = (index) => {
+    const updatedCart = [...auth.currentUser.product];
+    updatedCart.splice(index, 1);
+    const updatedUser = { ...rest, product: updatedCart };
+    dispatch(addToCart(updatedUser)).then((action) => {
+      if (action.payload) {
+        console.log(action.payload);
+      }
+    });
+  };
+
+  const handleIncreaseAmount = (index) => {
+    const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
+    updatedCart[index].amount += 1;
+    const updatedUser = { ...rest, product: updatedCart };
+    dispatch(addToCart(updatedUser)).then((action) => {
+      if (action.payload) {
+        console.log(action.payload);
+      }
+    });
+  };
+  const handleDecreaseAmount = (index) => {
+    const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
+    updatedCart[index].amount -= 1;
+    if (updatedCart[index].amount == 0) {
+      showDeleteConfirm(index);
+    } else {
+      const updatedUser = { ...rest, product: updatedCart };
+      dispatch(addToCart(updatedUser)).then((action) => {
+        if (action.payload) {
+          console.log(action.payload);
+        }
+      });
+    }
+  };
+
+  const handleOnChangeAmount = (index, value) => {
+    if (value !== null && value > 0) {
+      const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
+      updatedCart[index].amount = value;
+      const updatedUser = { ...rest, product: updatedCart };
+      dispatch(addToCart(updatedUser)).then((action) => {
+        if (action.payload) {
+          console.log(action.payload);
+        }
+      });
+    } else if (value == 0) {
+      showDeleteConfirm(index);
+    }
+  };
+
+  const showDeleteConfirm = (index) => {
+    Modal.confirm({
+      title: "Delete Item",
+      icon: <ExclamationCircleOutlined />,
+      content: "Are you sure to delete this item?",
+      okText: "Yes",
+      cancelText: "No",
+      onOk() {
+        setDropdownVisible(true);
+        handleRemoveItem(index);
+      },
+      onCancel() {
+        setDropdownVisible(true);
+      },
+    });
+  };
 
   const items = [
     {
@@ -512,12 +599,133 @@ const HeaderComponent = () => {
               <Dropdown
                 dropdownRender={() => (
                   <>
-                    <Card style={{ minWidth: 324 }} type="inner">
-                      <div>h1</div>
+                    <Card
+                      hoverable
+                      style={{
+                        minWidth: 500,
+                      }}
+                      type="inner"
+                    >
+                      <Flex vertical gap={10}>
+                        <div className="fw-medium">Newly added product</div>
+                        <List
+                          style={{ maxHeight: "50vh", overflowY: "auto" }}
+                          dataSource={auth.currentUser.product || []}
+                          renderItem={(item, index) => (
+                            <>
+                              <List.Item
+                                key={item.id}
+                                actions={[
+                                  <Typography.Text type="danger">
+                                    {`${
+                                      item.price &&
+                                      formatCurrency(item.price * item.amount)
+                                    }đ`}
+                                  </Typography.Text>,
+                                ]}
+                              >
+                                <List.Item.Meta
+                                  title={item.title}
+                                  avatar={
+                                    <>
+                                      <Space size="middle">
+                                        <Popconfirm
+                                          placement="bottom"
+                                          title="Remove the item"
+                                          description="Are you sure to remove this item?"
+                                          okText="Yes"
+                                          cancelText="No"
+                                          onConfirm={() =>
+                                            handleRemoveItem(index)
+                                          }
+                                        >
+                                          <BsTrash
+                                            style={{ cursor: "pointer" }}
+                                          />
+                                        </Popconfirm>
+                                        <Avatar
+                                          onClick={() =>
+                                            navigate(
+                                              `/product-detail?id=${item.id}&name=${item.title}&code=${item.code}&brand=${item.brand}&series=${item.series}&category=${item.category}`
+                                            )
+                                          }
+                                          size="large"
+                                          src={item.images[0]}
+                                          shape="square"
+                                          style={{ cursor: "pointer" }}
+                                        />
+                                      </Space>
+                                    </>
+                                  }
+                                  description={
+                                    <>
+                                      <Flex justify="flex-start" gap={5}>
+                                        <div>Số lượng:</div>
+                                        <Space size="small">
+                                          <Button
+                                            size="small"
+                                            onClick={() =>
+                                              handleDecreaseAmount(index)
+                                            }
+                                          >
+                                            -
+                                          </Button>
+                                          <InputNumber
+                                            size="small"
+                                            changeOnWheel
+                                            value={item.amount}
+                                            controls={false}
+                                            style={{
+                                              width: "35px",
+                                            }}
+                                            onBlur={(event) =>
+                                              handleOnChangeAmount(
+                                                index,
+                                                parseInt(event.target.value)
+                                              )
+                                            }
+                                          />
+                                          <Button
+                                            size="small"
+                                            onClick={() =>
+                                              handleIncreaseAmount(index)
+                                            }
+                                          >
+                                            +
+                                          </Button>
+                                        </Space>
+                                      </Flex>
+                                    </>
+                                  }
+                                />
+                              </List.Item>
+                            </>
+                          )}
+                        />
+                        <Flex justify="space-around">
+                          <Button
+                            type="primary"
+                            danger
+                            onClick={() => navigate("/cart")}
+                          >
+                            View My Shopping Cart
+                          </Button>
+                          <Space>
+                            <div className="fw-medium">Total: </div>
+                            <div className="fw-medium">
+                              <Typography.Text type="danger">
+                                {`${formatCurrency(totalCost)}đ`}
+                              </Typography.Text>
+                            </div>
+                          </Space>
+                        </Flex>
+                      </Flex>
                     </Card>
                   </>
                 )}
                 placement="bottom"
+                visible={dropdownVisible}
+                onVisibleChange={(visible) => setDropdownVisible(visible)}
               >
                 <Badge count={totalProducts} size="small">
                   <PiShoppingCartLight

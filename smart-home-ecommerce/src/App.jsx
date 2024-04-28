@@ -25,6 +25,7 @@ import { getCurrentUser } from "./Redux-reducer/auth";
 import VillaComponent from "./components/SmartHomeComponents/VillaComponent";
 import HotelComponent from "./components/SmartHomeComponents/HotelComponent";
 import ProductsDetail from "./screens/ProductsDetail";
+import CartScreen from "./screens/CartScreen";
 
 function App() {
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ function App() {
             <Route path="/livedemo" element={<LiveDemoScreen />} />
             <Route path="/products/:id" element={<ProductsScreen />} />
             <Route path="/product-detail" element={<ProductsDetail />} />
+            <Route path="/cart" element={<CartScreen />} />
             <Route path="/projects" element={<ProjectsScreen />} />
             <Route path="/news" element={<NewsScreen />} />
             <Route path="/contact" element={<ContactScreen />} />
