@@ -599,128 +599,137 @@ const HeaderComponent = () => {
               <Dropdown
                 dropdownRender={() => (
                   <>
-                    <Card
-                      hoverable
-                      style={{
-                        minWidth: 500,
-                      }}
-                      type="inner"
-                    >
-                      <Flex vertical gap={10}>
-                        <div className="fw-medium">Newly added product</div>
-                        <List
-                          style={{ maxHeight: "50vh", overflowY: "auto" }}
-                          dataSource={auth.currentUser.product || []}
-                          renderItem={(item, index) => (
-                            <>
-                              <List.Item
-                                key={item.id}
-                                actions={[
-                                  <Typography.Text type="danger">
-                                    {`${
-                                      item.price &&
-                                      formatCurrency(item.price * item.amount)
-                                    }đ`}
-                                  </Typography.Text>,
-                                ]}
-                              >
-                                <List.Item.Meta
-                                  title={item.title}
-                                  avatar={
-                                    <>
-                                      <Space size="middle">
-                                        <Popconfirm
-                                          placement="bottom"
-                                          title="Remove the item"
-                                          description="Are you sure to remove this item?"
-                                          okText="Yes"
-                                          cancelText="No"
-                                          onConfirm={() =>
-                                            handleRemoveItem(index)
-                                          }
-                                        >
-                                          <BsTrash
-                                            style={{ cursor: "pointer" }}
-                                          />
-                                        </Popconfirm>
-                                        <Avatar
-                                          onClick={() =>
-                                            navigate(
-                                              `/product-detail?id=${item.id}&name=${item.title}&code=${item.code}&brand=${item.brand}&series=${item.series}&category=${item.category}`
-                                            )
-                                          }
-                                          size="large"
-                                          src={item.images[0]}
-                                          shape="square"
-                                          style={{ cursor: "pointer" }}
-                                        />
-                                      </Space>
-                                    </>
-                                  }
-                                  description={
-                                    <>
-                                      <Flex justify="flex-start" gap={5}>
-                                        <div>Số lượng:</div>
-                                        <Space size="small">
-                                          <Button
-                                            size="small"
-                                            onClick={() =>
-                                              handleDecreaseAmount(index)
+                    {auth && auth.currentUser && auth.currentUser.product && (
+                      <Card
+                        hoverable
+                        style={{
+                          minWidth: 500,
+                        }}
+                        type="inner"
+                      >
+                        <Flex vertical gap={10}>
+                          <div className="fw-medium">Newly added product</div>
+                          <List
+                            style={{ maxHeight: "50vh", overflowY: "auto" }}
+                            dataSource={auth.currentUser.product || []}
+                            renderItem={(item, index) => (
+                              <>
+                                <List.Item
+                                  key={item.id}
+                                  actions={[
+                                    <Typography.Text type="danger">
+                                      {`${
+                                        item.price &&
+                                        formatCurrency(item.price * item.amount)
+                                      }đ`}
+                                    </Typography.Text>,
+                                  ]}
+                                >
+                                  <List.Item.Meta
+                                    title={
+                                      <Typography.Paragraph ellipsis>
+                                        {item.title}
+                                      </Typography.Paragraph>
+                                    }
+                                    avatar={
+                                      <>
+                                        <Space size="middle">
+                                          <Popconfirm
+                                            placement="bottom"
+                                            title="Remove the item"
+                                            description="Are you sure to remove this item?"
+                                            okText="Yes"
+                                            cancelText="No"
+                                            onConfirm={() =>
+                                              handleRemoveItem(index)
                                             }
                                           >
-                                            -
-                                          </Button>
-                                          <InputNumber
-                                            size="small"
-                                            changeOnWheel
-                                            value={item.amount}
-                                            controls={false}
-                                            style={{
-                                              width: "35px",
-                                            }}
-                                            onBlur={(event) =>
-                                              handleOnChangeAmount(
-                                                index,
-                                                parseInt(event.target.value)
+                                            <BsTrash
+                                              style={{
+                                                cursor: "pointer",
+                                                color: "red",
+                                              }}
+                                            />
+                                          </Popconfirm>
+                                          <Avatar
+                                            onClick={() =>
+                                              navigate(
+                                                `/product-detail?id=${item.id}&name=${item.title}&code=${item.code}&brand=${item.brand}&series=${item.series}&category=${item.category}`
                                               )
                                             }
+                                            size="large"
+                                            src={item.images[0]}
+                                            shape="square"
+                                            style={{ cursor: "pointer" }}
                                           />
-                                          <Button
-                                            size="small"
-                                            onClick={() =>
-                                              handleIncreaseAmount(index)
-                                            }
-                                          >
-                                            +
-                                          </Button>
                                         </Space>
-                                      </Flex>
-                                    </>
-                                  }
-                                />
-                              </List.Item>
-                            </>
-                          )}
-                        />
-                        <Flex justify="space-around">
-                          <Button
-                            type="primary"
-                            danger
-                            onClick={() => navigate("/cart")}
-                          >
-                            View My Shopping Cart
-                          </Button>
-                          <Space>
-                            <div className="fw-medium">Total: </div>
-                            <div className="fw-medium">
-                              <Typography.Text type="danger">
-                                {`${formatCurrency(totalCost)}đ`}
-                              </Typography.Text>
-                            </div>
-                          </Space>
+                                      </>
+                                    }
+                                    description={
+                                      <>
+                                        <Flex justify="flex-start" gap={5}>
+                                          <div>Số lượng:</div>
+                                          <Space size={0}>
+                                            <Button
+                                              size="small"
+                                              onClick={() =>
+                                                handleDecreaseAmount(index)
+                                              }
+                                            >
+                                              -
+                                            </Button>
+                                            <InputNumber
+                                              size="small"
+                                              changeOnWheel
+                                              value={item.amount}
+                                              controls={false}
+                                              style={{
+                                                width: "35px",
+                                              }}
+                                              onBlur={(event) =>
+                                                handleOnChangeAmount(
+                                                  index,
+                                                  parseInt(event.target.value)
+                                                )
+                                              }
+                                            />
+                                            <Button
+                                              size="small"
+                                              onClick={() =>
+                                                handleIncreaseAmount(index)
+                                              }
+                                            >
+                                              +
+                                            </Button>
+                                          </Space>
+                                        </Flex>
+                                      </>
+                                    }
+                                  />
+                                </List.Item>
+                              </>
+                            )}
+                          />
+                          <Flex justify="space-around">
+                            <Button
+                              type="primary"
+                              danger
+                              onClick={() => navigate("/cart")}
+                            >
+                              View My Shopping Cart
+                            </Button>
+                            <Space>
+                              <div className="fw-medium">Total: </div>
+                              <div className="fw-medium">
+                                <Typography.Text type="danger">
+                                  {`${formatCurrency(totalCost)}đ`}
+                                </Typography.Text>
+                              </div>
+                            </Space>
+                          </Flex>
                         </Flex>
-                      </Flex>
-                    </Card>
+                      </Card>
+                    )}
                   </>
                 )}
                 placement="bottom"
