@@ -66,10 +66,11 @@ const rowSelection = {
       selectedRows
     );
   },
-  //   getCheckboxProps: (record) => ({
-  //     disabled: record.name === "Disabled User",
-  //     name: record.name,
-  //   }),
+
+  getCheckboxProps: (record) => ({
+    disabled: record.name === "Disabled User",
+    name: record.name,
+  }),
 };
 
 const CartScreen = () => {
