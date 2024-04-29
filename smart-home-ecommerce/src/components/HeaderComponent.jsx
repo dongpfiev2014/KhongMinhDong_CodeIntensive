@@ -92,7 +92,7 @@ const HeaderComponent = () => {
   const handleDecreaseAmount = (index) => {
     const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
     updatedCart[index].amount -= 1;
-    if (updatedCart[index].amount == 0) {
+    if (updatedCart[index].amount === 0) {
       showDeleteConfirm(index);
     } else {
       const updatedUser = { ...rest, product: updatedCart };
@@ -114,7 +114,7 @@ const HeaderComponent = () => {
           console.log(action.payload);
         }
       });
-    } else if (value == 0) {
+    } else if (value === 0) {
       showDeleteConfirm(index);
     }
   };
@@ -719,9 +719,17 @@ const HeaderComponent = () => {
                               View My Shopping Cart
                             </Button>
                             <Space>
-                              <div className="fw-medium">Total: </div>
+                              <div
+                                className="fw-medium"
+                                style={{ fontSize: "15px" }}
+                              >
+                                Total:
+                              </div>
                               <div className="fw-medium">
-                                <Typography.Text type="danger">
+                                <Typography.Text
+                                  type="danger"
+                                  style={{ fontSize: "15px" }}
+                                >
                                   {`${formatCurrency(totalCost)}đ`}
                                 </Typography.Text>
                               </div>

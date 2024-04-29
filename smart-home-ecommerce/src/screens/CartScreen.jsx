@@ -10,6 +10,7 @@ import {
   Modal,
   Popconfirm,
   Affix,
+  Checkbox,
 } from "antd";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,19 +20,44 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { BsTrash } from "react-icons/bs";
 
 const PaymentBar = () => (
-  <Affix offsetBottom={0}>
-    <div
+  <Affix offsetBottom={0} style={{ width: "100%" }}>
+    <Flex
+      justify="space-between"
+      align="flex-end"
       style={{
-        padding: "10px",
-        backgroundColor: "white",
+        padding: "15px",
+        backgroundColor: "#eceff3",
         borderTop: "1px solid #ddd",
+        height: "12vh",
+        fontSize: "15px",
+        borderRadius: "15px",
       }}
     >
-      {/* Nội dung thanh toán ở đây */}
-      <Button type="primary" block>
-        Thanh toán
-      </Button>
-    </div>
+      <Space size="small">
+        <Checkbox style={{ fontSize: "15px" }}>Select All</Checkbox>
+        <Popconfirm
+          placement="top"
+          title="Remove all items"
+          description="Are you sure to remove all items?"
+          okText="Yes"
+          cancelText="No"
+          onConfirm={() => {}}
+        >
+          <Button style={{ fontSize: "15px" }} type="link">
+            Delete
+          </Button>
+        </Popconfirm>
+      </Space>
+      <Space size="middle" align="baseline">
+        <div style={{ fontSize: "15px" }}>Total ({2} item):</div>
+        <Typography.Text
+          style={{ fontSize: "20px", color: "red" }}
+        >{`${125000}đ`}</Typography.Text>
+        <Button type="primary" danger style={{ fontSize: "15px" }}>
+          Check Out!
+        </Button>
+      </Space>
+    </Flex>
   </Affix>
 );
 
@@ -67,10 +93,10 @@ const rowSelection = {
     );
   },
 
-  getCheckboxProps: (record) => ({
-    disabled: record.name === "Disabled User",
-    name: record.name,
-  }),
+  //   getCheckboxProps: (record) => ({
+  //     disabled: record.name === "Disabled User",
+  //     name: record.name,
+  //   }),
 };
 
 const CartScreen = () => {
@@ -105,7 +131,7 @@ const CartScreen = () => {
   const handleDecreaseAmount = (index) => {
     const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
     updatedCart[index].amount -= 1;
-    if (updatedCart[index].amount == 0) {
+    if (updatedCart[index].amount === 0) {
       showDeleteConfirm(index);
     } else {
       const updatedUser = { ...rest, product: updatedCart };
@@ -127,7 +153,7 @@ const CartScreen = () => {
           console.log(action.payload);
         }
       });
-    } else if (value == 0) {
+    } else if (value === 0) {
       showDeleteConfirm(index);
     }
   };
@@ -237,7 +263,6 @@ const CartScreen = () => {
       ),
       actions: (
         <>
-          {" "}
           <Space size="middle">
             <Popconfirm
               placement="bottom"
@@ -285,7 +310,10 @@ const CartScreen = () => {
             >
               <Table
                 style={{ width: "100%" }}
-                rowSelection={rowSelection}
+                rowSelection={{
+                  type: "checkbox",
+                  ...rowSelection,
+                }}
                 columns={columns}
                 dataSource={data}
               />

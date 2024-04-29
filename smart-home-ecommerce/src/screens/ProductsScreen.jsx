@@ -183,11 +183,11 @@ const ProductsScreen = () => {
       children: [
         {
           key: "2",
-          label: "Price: Low to High",
+          label: <Checkbox>Price: Low to High</Checkbox>,
         },
         {
           key: "3",
-          label: "Price: High to Low",
+          label: <Checkbox>Price: High to Low</Checkbox>,
         },
       ],
     },
@@ -350,6 +350,7 @@ const ProductsScreen = () => {
                     height: "100%",
                     borderRight: 0,
                   }}
+                  defaultOpenKeys={["1"]}
                 />
               </Flex>
               <Checkbox.Group onChange={handleBrandCheckboxChange}>
