@@ -627,9 +627,17 @@ const HeaderComponent = () => {
                                 >
                                   <List.Item.Meta
                                     title={
-                                      <Typography.Paragraph ellipsis>
-                                        {item.title}
-                                      </Typography.Paragraph>
+                                      <div
+                                        onClick={() =>
+                                          navigate(
+                                            `/product-detail?id=${item.id}&name=${item.title}&code=${item.code}&brand=${item.brand}&series=${item.series}&category=${item.category}`
+                                          )
+                                        }
+                                      >
+                                        <Typography.Paragraph ellipsis>
+                                          {item.title}
+                                        </Typography.Paragraph>
+                                      </div>
                                     }
                                     avatar={
                                       <>
