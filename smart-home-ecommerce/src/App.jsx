@@ -26,6 +26,7 @@ import VillaComponent from "./components/SmartHomeComponents/VillaComponent";
 import HotelComponent from "./components/SmartHomeComponents/HotelComponent";
 import ProductsDetail from "./screens/ProductsDetail";
 import CartScreen from "./screens/CartScreen";
+import CheckoutScreen from "./screens/CheckoutScreen";
 
 function App() {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ function App() {
             <Route path="/products/:id" element={<ProductsScreen />} />
             <Route path="/product-detail" element={<ProductsDetail />} />
             <Route path="/cart" element={<CartScreen />} />
+            <Route path="/checkout" element={<CheckoutScreen />} />
             <Route path="/projects" element={<ProjectsScreen />} />
             <Route path="/news" element={<NewsScreen />} />
             <Route path="/contact" element={<ContactScreen />} />

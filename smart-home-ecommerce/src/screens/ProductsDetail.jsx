@@ -35,6 +35,7 @@ import { MdOutlinePhonelinkSetup } from "react-icons/md";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { GrServices } from "react-icons/gr";
 import { GrHostMaintenance } from "react-icons/gr";
+import { setSelectedRowKeys } from "../Redux-reducer/selectedRowKeys";
 
 const ProductsDetail = () => {
   const { mode } = useSelector((state) => state.darkMode);
@@ -47,6 +48,7 @@ const ProductsDetail = () => {
   const [value, setValue] = useState("1");
   const auth = useSelector((state) => state.authen);
   const [messageApi, contextHolder] = message.useMessage();
+  const selectedRowKeys = useSelector((state) => state.selectedRowKeys);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -227,7 +229,12 @@ const ProductsDetail = () => {
     });
   };
 
-  const handleBuyNow = () => {};
+  const handleBuyNow = () => {
+    handleAddToCart();
+    const newSelectedRowKeys = [...selectedRowKeys, product.id];
+    dispatch(setSelectedRowKeys(newSelectedRowKeys));
+    navigate("/cart");
+  };
 
   return (
     <>

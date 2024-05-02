@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { addToCart } from "../Redux-reducer/auth";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { BsTrash } from "react-icons/bs";
+import { setSelectedRowKeys } from "../Redux-reducer/selectedRowKeys";
 
 const columns = [
   {
@@ -50,11 +51,11 @@ const CartScreen = () => {
   const { product, ...rest } = (auth && auth.currentUser) || {};
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [checkedSelectAll, setCheckedSelectAll] = useState(false);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const selectedRowKeys = useSelector((state) => state.selectedRowKeys);
   const [totalCost, setTotalCost] = useState(0);
 
   useEffect(() => {
-    if (product.length === 0) {
+    if (product && product.length === 0) {
       const timer = setTimeout(() => {
         navigate("/products/all");
       }, 2000);
@@ -62,7 +63,7 @@ const CartScreen = () => {
         clearTimeout(timer);
       };
     }
-  }, [product.length]);
+  }, [product && product.length]);
 
   useEffect(() => {
     if (auth && auth.currentUser && Array.isArray(auth.currentUser.product)) {
@@ -305,7 +306,7 @@ const CartScreen = () => {
               const newSelectedRowKeys = checked
                 ? data.map((item) => item.key)
                 : [];
-              setSelectedRowKeys(newSelectedRowKeys);
+              dispatch(setSelectedRowKeys(newSelectedRowKeys));
             }}
             checked={checkedSelectAll}
           >
@@ -329,11 +330,22 @@ const CartScreen = () => {
           </Popconfirm>
         </Space>
         <Space size="middle" align="baseline">
-          <div style={{ fontSize: "15px" }}>Total ({2} item):</div>
+          <Space size={5}>
+            <div style={{ fontSize: "15px" }}>Total</div>
+            <div style={{ fontSize: "15px", color: "red" }}>
+              {selectedRowKeys.length}
+            </div>
+            <div style={{ fontSize: "15px" }}>items: </div>
+          </Space>
           <Typography.Text style={{ fontSize: "20px", color: "red" }}>
             {`${totalCost.toLocaleString()}đ`}
           </Typography.Text>
-          <Button type="primary" danger style={{ fontSize: "15px" }}>
+          <Button
+            type="primary"
+            danger
+            style={{ fontSize: "15px" }}
+            onClick={() => navigate("/checkout")}
+          >
             Check Out!
           </Button>
         </Space>
@@ -349,7 +361,7 @@ const CartScreen = () => {
         "selectedRows: ",
         selectedRows
       );
-      setSelectedRowKeys(selectedRowKeys);
+      dispatch(setSelectedRowKeys(selectedRowKeys));
       if (selectedRows.length === auth.currentUser.product.length) {
         setCheckedSelectAll(true);
       } else setCheckedSelectAll(false);
