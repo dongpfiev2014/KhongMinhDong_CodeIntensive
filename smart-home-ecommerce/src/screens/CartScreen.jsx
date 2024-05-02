@@ -12,54 +12,12 @@ import {
   Affix,
   Checkbox,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../Redux-reducer/auth";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { BsTrash } from "react-icons/bs";
-
-const PaymentBar = () => (
-  <Affix offsetBottom={0} style={{ width: "100%" }}>
-    <Flex
-      justify="space-between"
-      align="flex-end"
-      style={{
-        padding: "15px",
-        backgroundColor: "#eceff3",
-        borderTop: "1px solid #ddd",
-        height: "12vh",
-        fontSize: "15px",
-        borderRadius: "15px",
-      }}
-    >
-      <Space size="small">
-        <Checkbox style={{ fontSize: "15px" }}>Select All</Checkbox>
-        <Popconfirm
-          placement="top"
-          title="Remove all items"
-          description="Are you sure to remove all items?"
-          okText="Yes"
-          cancelText="No"
-          onConfirm={() => {}}
-        >
-          <Button style={{ fontSize: "15px" }} type="link">
-            Delete
-          </Button>
-        </Popconfirm>
-      </Space>
-      <Space size="middle" align="baseline">
-        <div style={{ fontSize: "15px" }}>Total ({2} item):</div>
-        <Typography.Text
-          style={{ fontSize: "20px", color: "red" }}
-        >{`${125000}đ`}</Typography.Text>
-        <Button type="primary" danger style={{ fontSize: "15px" }}>
-          Check Out!
-        </Button>
-      </Space>
-    </Flex>
-  </Affix>
-);
 
 const columns = [
   {
@@ -84,21 +42,6 @@ const columns = [
   },
 ];
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-
-  //   getCheckboxProps: (record) => ({
-  //     disabled: record.name === "Disabled User",
-  //     name: record.name,
-  //   }),
-};
-
 const CartScreen = () => {
   const { mode } = useSelector((state) => state.darkMode);
   const auth = useSelector((state) => state.authen);
@@ -106,11 +49,61 @@ const CartScreen = () => {
   const dispatch = useDispatch();
   const { product, ...rest } = (auth && auth.currentUser) || {};
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [checkedSelectAll, setCheckedSelectAll] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
+
+  useEffect(() => {
+    if (product.length === 0) {
+      const timer = setTimeout(() => {
+        navigate("/products/all");
+      }, 2000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [product.length]);
+
+  useEffect(() => {
+    if (auth && auth.currentUser && Array.isArray(auth.currentUser.product)) {
+      const updatedCart = auth.currentUser.product.filter((item) =>
+        selectedRowKeys.includes(item.id)
+      );
+      const totalCost = updatedCart.reduce(
+        (total, product) => total + product.price * product.amount,
+        0
+      );
+      setTotalCost(totalCost);
+    } else setTotalCost(0);
+  }, [selectedRowKeys]);
 
   const handleRemoveItem = (index) => {
     const updatedCart = [...auth.currentUser.product];
     updatedCart.splice(index, 1);
     const updatedUser = { ...rest, product: updatedCart };
+    dispatch(addToCart(updatedUser)).then((action) => {
+      if (action.payload) {
+        console.log(action.payload);
+      }
+    });
+  };
+
+  const handleRemoveSelectedItems = () => {
+    const updatedCart = [...auth.currentUser.product];
+    const updatedUser = {
+      ...rest,
+      product: updatedCart.filter((item) => !selectedRowKeys.includes(item.id)),
+    };
+    console.log(updatedUser);
+    dispatch(addToCart(updatedUser)).then((action) => {
+      if (action.payload) {
+        console.log(action.payload);
+      }
+    });
+  };
+
+  const handleRemoveAllItems = () => {
+    const updatedUser = { ...rest, product: [] };
     dispatch(addToCart(updatedUser)).then((action) => {
       if (action.payload) {
         console.log(action.payload);
@@ -289,6 +282,90 @@ const CartScreen = () => {
       ),
     }));
 
+  const PaymentBar = () => (
+    <Affix offsetBottom={0} style={{ width: "100%" }}>
+      <Flex
+        justify="space-between"
+        align="flex-end"
+        style={{
+          padding: "15px",
+          backgroundColor: "#e9e7e7",
+          borderTop: "1px solid #ddd",
+          height: "12vh",
+          fontSize: "15px",
+          borderRadius: "15px",
+        }}
+      >
+        <Space size="small">
+          <Checkbox
+            style={{ fontSize: "15px" }}
+            onChange={(e) => {
+              const { checked } = e.target;
+              setCheckedSelectAll(checked);
+              const newSelectedRowKeys = checked
+                ? data.map((item) => item.key)
+                : [];
+              setSelectedRowKeys(newSelectedRowKeys);
+            }}
+            checked={checkedSelectAll}
+          >
+            Select All
+          </Checkbox>
+          <Popconfirm
+            placement="top"
+            title="Remove the selected items"
+            description="Are you sure to remove the selected items?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => {
+              if (!checkedSelectAll) {
+                handleRemoveSelectedItems();
+              } else handleRemoveAllItems();
+            }}
+          >
+            <Button style={{ fontSize: "15px" }} type="link">
+              Delete
+            </Button>
+          </Popconfirm>
+        </Space>
+        <Space size="middle" align="baseline">
+          <div style={{ fontSize: "15px" }}>Total ({2} item):</div>
+          <Typography.Text style={{ fontSize: "20px", color: "red" }}>
+            {`${totalCost.toLocaleString()}đ`}
+          </Typography.Text>
+          <Button type="primary" danger style={{ fontSize: "15px" }}>
+            Check Out!
+          </Button>
+        </Space>
+      </Flex>
+    </Affix>
+  );
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows
+      );
+      setSelectedRowKeys(selectedRowKeys);
+      if (selectedRows.length === auth.currentUser.product.length) {
+        setCheckedSelectAll(true);
+      } else setCheckedSelectAll(false);
+    },
+    onSelectAll: (selected, selectedRows, changeRows) => {
+      if (selected) {
+        setCheckedSelectAll(true);
+      } else setCheckedSelectAll(false);
+    },
+
+    //   getCheckboxProps: (record) => ({
+    //     disabled: record.name === "Disabled User",
+    //     name: record.name,
+    //   }),
+  };
+
   return (
     <>
       {auth && auth.currentUser && (
@@ -309,6 +386,7 @@ const CartScreen = () => {
               }}
             >
               <Table
+                rowHoverable
                 style={{ width: "100%" }}
                 rowSelection={{
                   type: "checkbox",
