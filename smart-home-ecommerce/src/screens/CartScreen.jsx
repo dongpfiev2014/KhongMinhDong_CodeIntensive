@@ -198,7 +198,7 @@ const CartScreen = () => {
             <Typography.Paragraph
               ellipsis={{ rows: 2, expandable: false }}
               className="fw-medium"
-              style={{ maxWidth: "200px", cursor: "pointer" }}
+              style={{ maxWidth: "240px", cursor: "pointer" }}
               onClick={() =>
                 navigate(
                   `/product-detail?id=${item.id}&name=${item.title}&code=${item.code}&brand=${item.brand}&series=${item.series}&category=${item.category}`
