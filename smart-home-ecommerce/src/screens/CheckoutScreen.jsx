@@ -3,7 +3,6 @@ import {
   Card,
   Divider,
   Flex,
-  List,
   Row,
   Space,
   Typography,
@@ -13,7 +12,7 @@ import {
   Input,
   Select,
 } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -72,8 +71,28 @@ const tabList = [
 ];
 
 const contentList = {
-  credit: <p>content1</p>,
-  cash: <p>content2</p>,
+  credit: (
+    <>
+      <Space>
+        <Typography.Title level={5} type="normal">
+          Select payment account:
+        </Typography.Title>
+        <Button>+ Pay With New Card</Button>
+      </Space>
+    </>
+  ),
+  cash: (
+    <>
+      <Space align="baseline">
+        <Typography.Title level={5} type="normal">
+          Cash on Delivery:
+        </Typography.Title>
+        <Typography.Paragraph>
+          You will be charged extra 0₫ for this payment method.
+        </Typography.Paragraph>
+      </Space>
+    </>
+  ),
 };
 
 const CheckoutScreen = () => {
@@ -82,9 +101,43 @@ const CheckoutScreen = () => {
   const { product, ...rest } = (auth && auth.currentUser) || {};
   const selectedRowKeys = useSelector((state) => state.selectedRowKeys);
   const navigate = useNavigate();
+  const [totalCost, setTotalCost] = useState(0);
+  const [randomPrices, setRandomPrices] = useState([]);
   const dataSource = product.filter((item) =>
     selectedRowKeys.includes(item.id)
   );
+
+  const generateRandomPrices = () => {
+    const prices = [];
+    for (let i = 0; i < dataSource.length; i++) {
+      const price = Math.floor(Math.random() * (max - min + 1)) + min;
+      prices.push(price);
+    }
+    setRandomPrices(prices);
+  };
+
+  // Gọi hàm khi component được render
+  useEffect(() => {
+    generateRandomPrices();
+  }, []);
+
+  const totalShipping = randomPrices.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+
+  useEffect(() => {
+    if (auth && auth.currentUser && Array.isArray(auth.currentUser.product)) {
+      const updatedCart = auth.currentUser.product.filter((item) =>
+        selectedRowKeys.includes(item.id)
+      );
+      const totalCost = updatedCart.reduce(
+        (total, product) => total + product.price * product.amount,
+        0
+      );
+      setTotalCost(totalCost);
+    } else setTotalCost(0);
+  }, [selectedRowKeys]);
 
   const data = dataSource.map((item, index) => ({
     key: item.id,
@@ -158,9 +211,10 @@ const CheckoutScreen = () => {
                     Guaranteed to get by {deliveryDate}
                   </Typography.Text>
                 </Space>
-                <Typography.Text>{`${(
-                  Math.floor(Math.random() * (max - min + 1)) + min
-                ).toLocaleString()}đ`}</Typography.Text>
+                <Typography.Text>
+                  {randomPrices[index] &&
+                    `${randomPrices[index].toLocaleString()}đ`}
+                </Typography.Text>
               </Flex>
               <Typography.Text>Order is eligible for co-check.</Typography.Text>
             </Space>
@@ -200,7 +254,7 @@ const CheckoutScreen = () => {
                   height: "2px",
                   border: "none",
                   backgroundImage:
-                    "linear-gradient(to right, pink 50%, lightblue 50%)",
+                    "linear-gradient(to right, #FB6F92 50%, #0073CF 50%)",
                   backgroundSize: "150px 100%", // Độ rộng và chiều cao của mỗi vết đứt
                 }}
               />
@@ -260,11 +314,71 @@ const CheckoutScreen = () => {
                 onTabChange={onTab1Change}
                 tabProps={{
                   size: "middle",
-                  type: "editable-card",
+                  type: "card",
                   centered: "true",
                 }}
               >
                 {contentList[activeTabKey1]}
+              </Card>
+              <Card
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Space direction="vertical" size={0} style={{ width: "100%" }}>
+                  <Flex justify="center" align="flex-end" vertical>
+                    <Flex justify="space-between" style={{ width: "300px" }}>
+                      <Typography.Text type="secondary">
+                        Merchandise Subtotal:
+                      </Typography.Text>
+                      <Typography.Text>
+                        {`${totalCost.toLocaleString()}đ`}
+                      </Typography.Text>
+                    </Flex>
+                    <Flex justify="space-between" style={{ width: "300px" }}>
+                      <Typography.Text type="secondary">
+                        Shipping Total:
+                      </Typography.Text>
+                      <Typography.Text>{`${totalShipping.toLocaleString()}đ`}</Typography.Text>
+                    </Flex>
+                    <Flex justify="space-between" style={{ width: "300px" }}>
+                      <Typography.Text type="secondary">
+                        Total Payment:
+                      </Typography.Text>
+                      <Typography.Text
+                        type="danger"
+                        strong
+                        style={{ fontSize: "18px" }}
+                      >{`${(
+                        totalCost + totalShipping
+                      ).toLocaleString()}đ`}</Typography.Text>
+                    </Flex>
+                  </Flex>
+                  <Divider
+                    style={{
+                      width: "100%",
+                      height: "2px",
+                      border: "none",
+                      backgroundImage:
+                        "linear-gradient(to right, pink 50%, lightblue 50%)",
+                      backgroundSize: "150px 100%", // Độ rộng và chiều cao của mỗi vết đứt
+                    }}
+                  />
+                  <Flex justify="space-between" align="center">
+                    <div>
+                      By clicking 'Place Order', you are agreeing to our Terms
+                      of Service
+                    </div>
+                    <Button
+                      danger
+                      type="primary"
+                      style={{ fontSize: "15px", width: "150px" }}
+                      onClick={() => navigate("/accounts/purchase")}
+                    >
+                      Place Order
+                    </Button>
+                  </Flex>
+                </Space>
               </Card>
             </Flex>
           </Row>
