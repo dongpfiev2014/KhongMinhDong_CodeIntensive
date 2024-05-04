@@ -52,8 +52,8 @@ const VillaComponent = () => {
               backgroundColor: mode ? "#001529" : "white",
             }}
           >
-            <Flex vertical gap={10}>
-              <Typography.Title level={3} style={{ color: "#0070af" }}>
+            <Flex vertical gap={15}>
+              <Typography.Title level={4} style={{ color: "#0070af" }}>
                 {listContents[listContents.length - 1].title}
               </Typography.Title>
               <Typography.Text type="secondary" italic>

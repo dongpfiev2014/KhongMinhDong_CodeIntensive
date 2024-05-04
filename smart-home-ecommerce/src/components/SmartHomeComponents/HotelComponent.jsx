@@ -53,7 +53,7 @@ const HotelComponent = () => {
             }}
           >
             <Flex vertical gap={10}>
-              <Typography.Title level={3} style={{ color: "#0070af" }}>
+              <Typography.Title level={4} style={{ color: "#0070af" }}>
                 {listContents[listContents.length - 1].title}
               </Typography.Title>
               <Typography.Text type="secondary" italic>

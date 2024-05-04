@@ -65,7 +65,7 @@ function App() {
             <Route path="/project-detail" element={<ProjectsDetail />} />
             <Route path="/news/:id" element={<NewsScreen />} />
             <Route path="/new-detail" element={<NewDetail />} />
-            <Route path="/contact" element={<ContactScreen />} />
+            <Route path="/contact/:id" element={<ContactScreen />} />
             <Route path="/service" element={<ServiceScreen />} />
             <Route path="/accounts/*" element={<ProfileScreen />} />
             <Route path="/accounts/login" element={<LoginForm />} />

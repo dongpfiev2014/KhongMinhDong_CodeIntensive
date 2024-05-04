@@ -218,9 +218,13 @@ const ContentsComponent = () => {
       ],
     },
     {
-      value: "contact",
+      value: "contact1",
       label: t("contact"),
       children: [
+        {
+          label: t("contact"),
+          value: "contact2",
+        },
         {
           label: t("service"),
           value: "service",
@@ -299,7 +303,7 @@ const ContentsComponent = () => {
               title={item.title}
               description={
                 <>
-                  <div style={{ maxHeight: "10000px", overflow: "hidden" }}>
+                  <div style={{ maxHeight: "100px", overflow: "hidden" }}>
                     <div
                       className="CKeditor"
                       dangerouslySetInnerHTML={{ __html: item.content }}
@@ -572,14 +576,16 @@ const ContentsComponent = () => {
               </TabPane>
               <TabPane tab={t("contact")} key="21">
                 <Tabs>
-                  <TabPane tab={t("service")} key="22">
+                  <TabPane tab={t("contact")} key="22">
                     {renderListContents(
                       contents.filter(
                         (element) =>
                           element.category &&
-                          element.category.includes("contact")
+                          element.category.includes("contact2")
                       )
                     )}
+                  </TabPane>
+                  <TabPane tab={t("service")} key="23">
                     {renderListContents(
                       contents.filter(
                         (element) =>

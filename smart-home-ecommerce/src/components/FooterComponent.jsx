@@ -81,7 +81,7 @@ const FooterComponent = () => {
               <Col span={8}>
                 <Button
                   type="text"
-                  onClick={() => navigate("/products")}
+                  onClick={() => navigate("/products/all")}
                   style={{
                     color: mode
                       ? "rgba(255, 255, 255, 0.65)"
@@ -94,7 +94,7 @@ const FooterComponent = () => {
               <Col span={8}>
                 <Button
                   type="text"
-                  onClick={() => navigate("/about")}
+                  onClick={() => navigate("/about/vtd")}
                   style={{
                     color: mode
                       ? "rgba(255, 255, 255, 0.65)"
@@ -120,7 +120,7 @@ const FooterComponent = () => {
               <Col span={8}>
                 <Button
                   type="text"
-                  onClick={() => navigate("/projects")}
+                  onClick={() => navigate("/projects/all")}
                   style={{
                     color: mode
                       ? "rgba(255, 255, 255, 0.65)"
@@ -133,7 +133,7 @@ const FooterComponent = () => {
               <Col span={8}>
                 <Button
                   type="text"
-                  onClick={() => navigate("/news")}
+                  onClick={() => navigate("/news/all")}
                   style={{
                     color: mode
                       ? "rgba(255, 255, 255, 0.65)"
@@ -159,7 +159,7 @@ const FooterComponent = () => {
               <Col span={8}>
                 <Button
                   type="text"
-                  onClick={() => navigate("/service")}
+                  onClick={() => navigate("/contact/service")}
                   style={{
                     color: mode
                       ? "rgba(255, 255, 255, 0.65)"

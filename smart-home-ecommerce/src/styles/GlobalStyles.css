@@ -111,6 +111,8 @@ video {
   width: 100%;
   height: 100%;
   border-radius: 15px;
+  object-fit: cover;
+  overflow: hidden;
 }
 
 .image.image_resized.image-style-side {
@@ -129,6 +131,7 @@ style-specific class will look like. */
 iframe {
   width: 100%;
   height: 600px;
+  border-radius: 15px;
 }
 
 /* .ant-card-meta-title,

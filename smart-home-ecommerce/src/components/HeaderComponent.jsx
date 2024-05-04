@@ -471,7 +471,7 @@ const HeaderComponent = () => {
     {
       label: (
         <NavLink
-          to={"/contact"}
+          to={"/contact/contact2"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           {t("contact")}
@@ -482,7 +482,7 @@ const HeaderComponent = () => {
       children: [
         {
           label: (
-            <NavLink to={"/service"} style={{ textDecoration: "none" }}>
+            <NavLink to={"/contact/service"} style={{ textDecoration: "none" }}>
               {t("service")}
             </NavLink>
           ),

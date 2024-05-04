@@ -147,7 +147,7 @@ const PurchaseComponent = () => {
       key: "all",
       label: (
         <>
-          <Badge count={myPurchase.length} size="small">
+          <Badge count={myPurchase && myPurchase.length} size="small">
             <Typography.Text
               className={tabKey === "all" ? "text-primary" : "none"}
             >
@@ -162,7 +162,8 @@ const PurchaseComponent = () => {
       key: "toPay",
       label: "To Pay",
       children: renderOrderItems(
-        myPurchase.filter((element) => element.orderStatus === "toPay")
+        myPurchase &&
+          myPurchase.filter((element) => element.orderStatus === "toPay")
       ),
     },
     {
@@ -171,6 +172,7 @@ const PurchaseComponent = () => {
         <>
           <Badge
             count={
+              myPurchase &&
               myPurchase.filter((element) => element.orderStatus === "toShip")
                 .length
             }
@@ -185,21 +187,24 @@ const PurchaseComponent = () => {
         </>
       ),
       children: renderOrderItems(
-        myPurchase.filter((element) => element.orderStatus === "toShip")
+        myPurchase &&
+          myPurchase.filter((element) => element.orderStatus === "toShip")
       ),
     },
     {
       key: "toReceive",
       label: "To Receive",
       children: renderOrderItems(
-        myPurchase.filter((element) => element.orderStatus === "toReceive")
+        myPurchase &&
+          myPurchase.filter((element) => element.orderStatus === "toReceive")
       ),
     },
     {
       key: "completed",
       label: "Completed",
       children: renderOrderItems(
-        myPurchase.filter((element) => element.orderStatus === "completed")
+        myPurchase &&
+          myPurchase.filter((element) => element.orderStatus === "completed")
       ),
     },
     {
@@ -208,6 +213,7 @@ const PurchaseComponent = () => {
         <>
           <Badge
             count={
+              myPurchase &&
               myPurchase.filter(
                 (element) => element.orderStatus === "cancelled"
               ).length
@@ -223,14 +229,16 @@ const PurchaseComponent = () => {
         </>
       ),
       children: renderOrderItems(
-        myPurchase.filter((element) => element.orderStatus === "cancelled")
+        myPurchase &&
+          myPurchase.filter((element) => element.orderStatus === "cancelled")
       ),
     },
     {
       key: "returnRefund",
       label: "Return/Refund",
       children: renderOrderItems(
-        myPurchase.filter((element) => element.orderStatus === "returnRefund")
+        myPurchase &&
+          myPurchase.filter((element) => element.orderStatus === "returnRefund")
       ),
     },
   ];
