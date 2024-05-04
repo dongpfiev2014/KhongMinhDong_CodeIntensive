@@ -344,7 +344,11 @@ const CartScreen = () => {
             type="primary"
             danger
             style={{ fontSize: "15px" }}
-            onClick={() => navigate("/checkout")}
+            onClick={() => {
+              if (selectedRowKeys && selectedRowKeys.length > 0) {
+                navigate("/checkout");
+              }
+            }}
           >
             Check Out!
           </Button>

@@ -13,9 +13,10 @@ import {
   Select,
 } from "antd";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { addToCart } from "../Redux-reducer/auth";
 
 const currentDate = moment();
 const deliveryDate = moment(currentDate).add(2, "days").format("DD-MM-YYYY");
@@ -100,6 +101,7 @@ const CheckoutScreen = () => {
   const auth = useSelector((state) => state.authen);
   const { product, ...rest } = (auth && auth.currentUser) || {};
   const selectedRowKeys = useSelector((state) => state.selectedRowKeys);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [totalCost, setTotalCost] = useState(0);
   const [randomPrices, setRandomPrices] = useState([]);
@@ -229,6 +231,26 @@ const CheckoutScreen = () => {
     setActiveTabKey1(key);
   };
 
+  const handlePlaceOrder = () => {
+    const updatedCart = [...auth.currentUser.product];
+    const updatedUser = {
+      ...rest,
+      product: updatedCart.filter((item) => !selectedRowKeys.includes(item.id)),
+      myPurchase: [
+        ...rest.myPurchase, // Sao chép các sản phẩm hiện có từ rest
+        ...dataSource.map((product) => ({
+          ...product,
+          orderStatus: "toShip",
+        })),
+      ],
+    };
+    dispatch(addToCart(updatedUser)).then((action) => {
+      if (action.payload) {
+        console.log(action.payload);
+        navigate("/accounts/purchase");
+      }
+    });
+  };
   return (
     <>
       {auth && auth.currentUser && (
@@ -373,7 +395,7 @@ const CheckoutScreen = () => {
                       danger
                       type="primary"
                       style={{ fontSize: "15px", width: "150px" }}
-                      onClick={() => navigate("/accounts/purchase")}
+                      onClick={handlePlaceOrder}
                     >
                       Place Order
                     </Button>

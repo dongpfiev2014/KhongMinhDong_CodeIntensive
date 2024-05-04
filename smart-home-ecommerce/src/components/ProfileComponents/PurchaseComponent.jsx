@@ -5,118 +5,236 @@ import {
   List,
   Row,
   Tabs,
-  Avatar,
+  Image,
   Button,
   Typography,
+  Space,
+  Divider,
+  Flex,
+  Modal,
 } from "antd";
-import React from "react";
-import { useSelector } from "react-redux";
-
-const items = [
-  {
-    key: "all",
-    label: "All",
-    children: "No orders yet",
-  },
-  {
-    key: "toPay",
-    label: "To Pay",
-    children: "No orders yet",
-  },
-  {
-    key: "toShip",
-    label: (
-      <>
-        <Badge count={5} size="small">
-          <div>To Ship</div>
-        </Badge>
-      </>
-    ),
-
-    children: "No orders yet",
-  },
-  {
-    key: "toReceive",
-    label: "To Receive",
-    children: "No orders yet",
-  },
-  {
-    key: "completed",
-    label: "Completed",
-    children: "No orders yet",
-  },
-  {
-    key: "cancelled",
-    label: "Cancelled",
-    children: "No orders yet",
-  },
-  {
-    key: "returnRefund",
-    label: "Return/Refund",
-    children: "No orders yet",
-  },
-];
-
-const renderOrderItems = (data) => (
-  <>
-    <List
-      // loading={isLoading}
-      pagination={{
-        onChange: (page) => {
-          console.log(page);
-        },
-        pageSize: 20,
-      }}
-      dataSource={data}
-      renderItem={(item) => (
-        <List.Item
-          key={item.id}
-          actions={[
-            <a key="list-loadmore-edit">edit</a>,
-            <a key="list-loadmore-more">more</a>,
-            <Typography.Text type="success">
-              Giao hàng thành công
-            </Typography.Text>,
-            <Typography.Text type="danger">COMPLETED</Typography.Text>,
-          ]}
-          extra={[
-            <>
-              <div>
-                <Button>Huy don hang</Button>
-              </div>
-            </>,
-          ]}
-        >
-          <List.Item.Meta
-            avatar={<Avatar src={item.picture.large} />}
-            title={<a href="https://ant.design">{item.name?.last}</a>}
-            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-          />
-        </List.Item>
-      )}
-    />
-  </>
-);
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { updateUserProfile } from "../../Redux-reducer/auth";
 
 const PurchaseComponent = () => {
   const auth = useSelector((state) => state.authen);
   const { mode } = useSelector((state) => state.darkMode);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   dispatch(getAllProducts()).then((action) => {
-  //     if (action.payload) {
-  //       setProducts(action.payload);
-  //       console.log(action.payload);
-  //       setIsLoading(false);
-  //     }
-  //   });
-  // }, []);
+  const { myPurchase, ...rest } = (auth && auth.currentUser) || {};
+  const dispatch = useDispatch();
+  const [tabKey, setTabKey] = useState("");
+  console.log(myPurchase);
 
   const onChange = (key) => {
-    console.log(key);
+    setTabKey(key);
   };
+
+  const renderOrderItems = (data) => (
+    <>
+      <List
+        // loading={isLoading}
+        itemLayout="vertical"
+        pagination={{
+          onChange: (page) => {
+            console.log(page);
+          },
+          pageSize: 20,
+        }}
+        dataSource={data}
+        renderItem={(item, index) => (
+          <List.Item
+            key={item.id}
+            actions={[
+              <>
+                <Button
+                  danger
+                  type="primary"
+                  size="middle"
+                  onClick={() =>
+                    Modal.confirm({
+                      title: "Cancel Order",
+                      icon: <ExclamationCircleOutlined />,
+                      content: "Are you sure to cancel this order?",
+                      okText: "Yes",
+                      cancelText: "No",
+                      onOk() {
+                        handleCancelOrder(item.id);
+                      },
+                      onCancel() {},
+                    })
+                  }
+                >
+                  Cancel Order
+                </Button>
+              </>,
+            ]}
+            extra={[
+              <>
+                <Space split={<Divider type="vertical" />}>
+                  <Typography.Text type="success">
+                    {item.orderStatus === "toShip" &&
+                      `Seller is preparing the order`}
+                  </Typography.Text>
+                  <Typography.Text type="danger">
+                    {item.orderStatus.toUpperCase().replace("TO", "TO ").trim()}
+                  </Typography.Text>
+                </Space>
+              </>,
+            ]}
+          >
+            <List.Item.Meta
+              avatar={
+                <Image
+                  preview={false}
+                  width={80}
+                  alt="logo"
+                  src={item.images[0]}
+                  style={{
+                    height: "100%",
+                    borderRadius: "5px",
+                    objectFit: "cover",
+                    overflow: "hidden",
+                  }}
+                />
+              }
+              title={item.title}
+              description={
+                <>
+                  <Flex justify="space-between">
+                    <div>x{item.amount}</div>
+                    <Space>
+                      <Typography.Text
+                        style={{
+                          textDecoration: "line-through",
+                          color: "grey",
+                        }}
+                      >
+                        {`${parseInt(
+                          item.price * (Math.random() + 1)
+                        ).toLocaleString()}đ`}
+                      </Typography.Text>
+                      <Typography.Text type="danger">
+                        {`${item.price.toLocaleString()}đ`}
+                      </Typography.Text>
+                    </Space>
+                  </Flex>
+                </>
+              }
+            />
+          </List.Item>
+        )}
+      />
+    </>
+  );
+  const handleCancelOrder = (id) => {
+    const newMyPurchase = myPurchase.map((item) => {
+      if (item.id === id) {
+        return { ...item, orderStatus: "cancelled" };
+      }
+      return item;
+    });
+    const updatedUser = { ...rest, myPurchase: newMyPurchase };
+    dispatch(updateUserProfile(updatedUser)).then((action) => {
+      if (action.payload) {
+        console.log(action.payload);
+      }
+    });
+  };
+
+  const items = [
+    {
+      key: "all",
+      label: (
+        <>
+          <Badge count={myPurchase.length} size="small">
+            <Typography.Text
+              className={tabKey === "all" ? "text-primary" : "none"}
+            >
+              All
+            </Typography.Text>
+          </Badge>
+        </>
+      ),
+      children: renderOrderItems(myPurchase),
+    },
+    {
+      key: "toPay",
+      label: "To Pay",
+      children: renderOrderItems(
+        myPurchase.filter((element) => element.orderStatus === "toPay")
+      ),
+    },
+    {
+      key: "toShip",
+      label: (
+        <>
+          <Badge
+            count={
+              myPurchase.filter((element) => element.orderStatus === "toShip")
+                .length
+            }
+            size="small"
+          >
+            <Typography.Text
+              className={tabKey === "toShip" ? "text-primary" : "none"}
+            >
+              To Ship
+            </Typography.Text>
+          </Badge>
+        </>
+      ),
+      children: renderOrderItems(
+        myPurchase.filter((element) => element.orderStatus === "toShip")
+      ),
+    },
+    {
+      key: "toReceive",
+      label: "To Receive",
+      children: renderOrderItems(
+        myPurchase.filter((element) => element.orderStatus === "toReceive")
+      ),
+    },
+    {
+      key: "completed",
+      label: "Completed",
+      children: renderOrderItems(
+        myPurchase.filter((element) => element.orderStatus === "completed")
+      ),
+    },
+    {
+      key: "cancelled",
+      label: (
+        <>
+          <Badge
+            count={
+              myPurchase.filter(
+                (element) => element.orderStatus === "cancelled"
+              ).length
+            }
+            size="small"
+          >
+            <Typography.Text
+              className={tabKey === "cancelled" ? "text-primary" : "none"}
+            >
+              Cancelled
+            </Typography.Text>
+          </Badge>
+        </>
+      ),
+      children: renderOrderItems(
+        myPurchase.filter((element) => element.orderStatus === "cancelled")
+      ),
+    },
+    {
+      key: "returnRefund",
+      label: "Return/Refund",
+      children: renderOrderItems(
+        myPurchase.filter((element) => element.orderStatus === "returnRefund")
+      ),
+    },
+  ];
+
   return (
     <>
       {auth && auth.currentUser && (
