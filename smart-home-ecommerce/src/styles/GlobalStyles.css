@@ -104,20 +104,24 @@ video {
   height: 100%;
   padding: 0 auto;
   margin: 0 auto;
+  font-family: "Helvetica Neue", sans-serif;
 }
 
 .CKeditor img {
   width: 100%;
   height: 100%;
+  border-radius: 15px;
 }
 
 .image.image_resized.image-style-side {
   float: right;
+  margin-left: 25px;
 }
 
 .image.image_resized {
   margin: 0 auto;
 }
+
 /* Defining the default content styles for the block images.
 This is what the newly inserted image without any
 style-specific class will look like. */

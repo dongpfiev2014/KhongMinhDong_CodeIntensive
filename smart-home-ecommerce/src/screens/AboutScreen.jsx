@@ -13,34 +13,39 @@ const AboutScreen = () => {
 
   useEffect(() => {
     dispatch(getContent({ category: id })).then((action) => {
-      const listContents = action.payload;
-      console.log(listContents);
-      setContent(listContents[listContents.length - 1].content);
+      if (action.payload) {
+        const listContents = action.payload;
+        console.log(listContents);
+        setContent(listContents[listContents.length - 1].content);
+      }
     });
   }, [dispatch, id]);
 
   return (
     <>
-      <Flex
-        style={{
-          backgroundColor: mode ? "#001529" : "white",
-        }}
-        justify="center"
-        align="center"
-      >
-        <Row
+      {content && (
+        <Flex
           style={{
-            width: "1400px",
-            minHeight: "75vh",
             backgroundColor: mode ? "#001529" : "white",
+            padding: "15px",
           }}
+          justify="center"
+          align="center"
         >
-          <div
-            className="CKeditor"
-            dangerouslySetInnerHTML={{ __html: content }}
-          ></div>
-        </Row>
-      </Flex>
+          <Row
+            style={{
+              width: "1200px",
+              minHeight: "75vh",
+              backgroundColor: mode ? "#001529" : "white",
+            }}
+          >
+            <div
+              className="CKeditor"
+              dangerouslySetInnerHTML={{ __html: content }}
+            ></div>
+          </Row>
+        </Flex>
+      )}
     </>
   );
 };

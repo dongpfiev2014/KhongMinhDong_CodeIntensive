@@ -12,6 +12,7 @@ import {
   Rate,
   Menu,
   Checkbox,
+  Radio,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../Redux-reducer/data";
@@ -42,9 +43,26 @@ const ProductsScreen = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { id } = params;
+  const [lowToHighChecked, setLowToHighChecked] = useState(false);
+  const [highToLowChecked, setHighToLowChecked] = useState(false);
+
   useEffect(() => {
     setActiveKeyTab(id);
   }, [id]);
+
+  const handleLowToHighChange = (checked) => {
+    setLowToHighChecked(checked);
+    if (checked) {
+      setHighToLowChecked(false);
+    }
+  };
+
+  const handleHighToLowChange = (checked) => {
+    setHighToLowChecked(checked);
+    if (checked) {
+      setLowToHighChecked(false);
+    }
+  };
 
   const handleBrandCheckboxChange = (selectedValues) => {
     setSelectedBrands(selectedValues);
@@ -87,15 +105,43 @@ const ProductsScreen = () => {
     return brandMatch && materialMatch && seriesMatch;
   });
 
+  const sortedFilteredProducts = [...filteredProducts];
+
+  if (lowToHighChecked) {
+    sortedFilteredProducts.sort((a, b) => {
+      if (a.price && b.price) {
+        return a.price - b.price;
+      } else if (!a.price && !b.price) {
+        return 0;
+      } else if (!a.price) {
+        return 1; // Sản phẩm không có giá sẽ được đưa lên cuối danh sách
+      } else {
+        return -1; // Sản phẩm không có giá sẽ được đưa lên đầu danh sách
+      }
+    });
+  } else if (highToLowChecked) {
+    sortedFilteredProducts.sort((a, b) => {
+      if (a.price && b.price) {
+        return b.price - a.price;
+      } else if (!a.price && !b.price) {
+        return 0;
+      } else if (!a.price) {
+        return 1; // Sản phẩm không có giá sẽ được đưa lên cuối danh sách
+      } else {
+        return -1; // Sản phẩm không có giá sẽ được đưa lên đầu danh sách
+      }
+    });
+  }
+
   const items = [
     {
       key: "all",
       label: "All",
       icon: <MdOutlineDensitySmall />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) =>
               element.category && element.category.includes("products")
           )
@@ -106,9 +152,9 @@ const ProductsScreen = () => {
       label: t("Switch"),
       icon: <SiNintendoswitch />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) => element.category && element.category.includes("switch")
           )
         ),
@@ -118,9 +164,9 @@ const ProductsScreen = () => {
       label: t("Door Entry Intercom"),
       icon: <GiGate />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) =>
               element.category && element.category.includes("doorEntry")
           )
@@ -131,9 +177,9 @@ const ProductsScreen = () => {
       label: t("Camera"),
       icon: <MdVideoCameraFront />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) => element.category && element.category.includes("camera")
           )
         ),
@@ -143,9 +189,9 @@ const ProductsScreen = () => {
       label: t("Alarm"),
       icon: <PiSirenDuotone />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) => element.category && element.category.includes("alarm")
           )
         ),
@@ -155,9 +201,9 @@ const ProductsScreen = () => {
       label: t("Door Lock"),
       icon: <GiEntryDoor />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) => element.category && element.category.includes("lock")
           )
         ),
@@ -167,9 +213,9 @@ const ProductsScreen = () => {
       label: t("Curtain Motor"),
       icon: <GiTheaterCurtains />,
       children:
-        filteredProducts &&
+        sortedFilteredProducts &&
         renderListProducts(
-          filteredProducts.filter(
+          sortedFilteredProducts.filter(
             (element) => element.category && element.category.includes("motor")
           )
         ),
@@ -183,11 +229,27 @@ const ProductsScreen = () => {
       children: [
         {
           key: "2",
-          label: <Checkbox>Price: Low to High</Checkbox>,
+          label: (
+            <Checkbox
+              value="lowToHigh"
+              checked={lowToHighChecked}
+              onChange={(e) => handleLowToHighChange(e.target.checked)}
+            >
+              Price: Low to High
+            </Checkbox>
+          ),
         },
         {
           key: "3",
-          label: <Checkbox>Price: High to Low</Checkbox>,
+          label: (
+            <Checkbox
+              value="highToLow"
+              checked={highToLowChecked}
+              onChange={(e) => handleHighToLowChange(e.target.checked)}
+            >
+              Price: High to Low
+            </Checkbox>
+          ),
         },
       ],
     },
@@ -317,6 +379,7 @@ const ProductsScreen = () => {
       <Flex
         style={{
           backgroundColor: mode ? "#001529" : "white",
+          padding: "10px",
         }}
         justify="center"
         align="center"

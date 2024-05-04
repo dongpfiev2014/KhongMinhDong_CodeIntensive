@@ -178,16 +178,8 @@ const HeaderComponent = () => {
       ],
     },
     {
-      label: (
-        <NavLink
-          to={"/smarthome"}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          {t("smart home")}
-        </NavLink>
-      ),
+      label: t("smart home"),
       key: "features",
-      onTitleClick: (val) => setCurrent(val.key),
       children: [
         {
           label: t("villa"),
@@ -302,14 +294,6 @@ const HeaderComponent = () => {
         },
       ],
     },
-    // {
-    //   label: (
-    //     <NavLink to={"/livedemo"} style={{ textDecoration: "none" }}>
-    //       {t("live demo")}
-    //     </NavLink>
-    //   ),
-    //   key: "live-demo",
-    // },
     {
       label: (
         <NavLink

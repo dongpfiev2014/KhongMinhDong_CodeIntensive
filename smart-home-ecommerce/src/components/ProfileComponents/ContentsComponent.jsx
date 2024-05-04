@@ -299,7 +299,7 @@ const ContentsComponent = () => {
               title={item.title}
               description={
                 <>
-                  <div style={{ maxHeight: "100px", overflow: "hidden" }}>
+                  <div style={{ maxHeight: "10000px", overflow: "hidden" }}>
                     <div
                       className="CKeditor"
                       dangerouslySetInnerHTML={{ __html: item.content }}

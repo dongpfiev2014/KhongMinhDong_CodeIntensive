@@ -30,7 +30,7 @@ const VideoLandingPage = () => {
           autoPlay
           loop
           muted
-          onClick={() => navigate("/livedemo")}
+          onClick={() => navigate("/products/all")}
           style={{ cursor: "pointer" }}
         />
         <Button

@@ -7,7 +7,6 @@ import NotFoundScreen from "./screens/NotFoundScreen";
 import AboutScreen from "./screens/AboutScreen";
 import FloatButtonComponent from "./components/FloatButtonComponent";
 import NewsletterSignupForm from "./components/SignupForm/NewsletterSignupForm";
-import LiveDemoScreen from "./screens/LiveDemoScreen";
 import "../src/styles/GlobalStyles.css";
 import ProfileScreen from "./screens/ProfileScreen";
 import LoginForm from "./auth/LoginForm";
@@ -19,7 +18,6 @@ import ProjectsScreen from "./screens/ProjectsScreen";
 import NewsScreen from "./screens/NewsScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ServiceScreen from "./screens/ServiceScreen";
-import SmartHomeScreen from "./screens/SmartHomeScreen";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./Redux-reducer/auth";
 import VillaComponent from "./components/SmartHomeComponents/VillaComponent";
@@ -27,6 +25,8 @@ import HotelComponent from "./components/SmartHomeComponents/HotelComponent";
 import ProductsDetail from "./screens/ProductsDetail";
 import CartScreen from "./screens/CartScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
+import ProjectsDetail from "./screens/ProjectsDetail";
+import NewDetail from "./screens/NewDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -55,16 +55,16 @@ function App() {
           <Routes>
             <Route path="/" element={<HomeScreen />} />
             <Route path="/about/:id" element={<AboutScreen />} />
-            <Route path="/smarthome" element={<SmartHomeScreen />} />
             <Route path="/villa/:id" element={<VillaComponent />} />
             <Route path="/hotel/:id" element={<HotelComponent />} />
-            <Route path="/livedemo" element={<LiveDemoScreen />} />
             <Route path="/products/:id" element={<ProductsScreen />} />
             <Route path="/product-detail" element={<ProductsDetail />} />
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/checkout" element={<CheckoutScreen />} />
-            <Route path="/projects" element={<ProjectsScreen />} />
-            <Route path="/news" element={<NewsScreen />} />
+            <Route path="/projects/:id" element={<ProjectsScreen />} />
+            <Route path="/project-detail" element={<ProjectsDetail />} />
+            <Route path="/news/:id" element={<NewsScreen />} />
+            <Route path="/new-detail" element={<NewDetail />} />
             <Route path="/contact" element={<ContactScreen />} />
             <Route path="/service" element={<ServiceScreen />} />
             <Route path="/accounts/*" element={<ProfileScreen />} />

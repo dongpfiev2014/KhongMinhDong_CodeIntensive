@@ -226,9 +226,9 @@ const CheckoutScreen = () => {
     ),
   }));
 
-  const [activeTabKey1, setActiveTabKey1] = useState("tab1");
-  const onTab1Change = (key) => {
-    setActiveTabKey1(key);
+  const [activeTabKey, setActiveTabKey] = useState("tab");
+  const onTabChange = (key) => {
+    setActiveTabKey(key);
   };
 
   const handlePlaceOrder = () => {
@@ -333,14 +333,14 @@ const CheckoutScreen = () => {
                   </>
                 }
                 tabList={tabList}
-                onTabChange={onTab1Change}
+                onTabChange={onTabChange}
                 tabProps={{
                   size: "middle",
                   type: "card",
                   centered: "true",
                 }}
               >
-                {contentList[activeTabKey1]}
+                {contentList[activeTabKey]}
               </Card>
               <Card
                 style={{
@@ -395,7 +395,9 @@ const CheckoutScreen = () => {
                       danger
                       type="primary"
                       style={{ fontSize: "15px", width: "150px" }}
-                      onClick={handlePlaceOrder}
+                      onClick={() =>
+                        activeTabKey === "cash" && handlePlaceOrder()
+                      }
                     >
                       Place Order
                     </Button>

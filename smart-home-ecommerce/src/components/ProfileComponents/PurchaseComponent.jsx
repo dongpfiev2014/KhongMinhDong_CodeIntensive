@@ -39,7 +39,7 @@ const PurchaseComponent = () => {
           onChange: (page) => {
             console.log(page);
           },
-          pageSize: 20,
+          pageSize: 10,
         }}
         dataSource={data}
         renderItem={(item, index) => (
@@ -87,7 +87,7 @@ const PurchaseComponent = () => {
               avatar={
                 <Image
                   preview={false}
-                  width={80}
+                  width={150}
                   alt="logo"
                   src={item.images[0]}
                   style={{
@@ -101,7 +101,7 @@ const PurchaseComponent = () => {
               title={item.title}
               description={
                 <>
-                  <Flex justify="space-between">
+                  <Flex justify="flex-start" gap={30}>
                     <div>x{item.amount}</div>
                     <Space>
                       <Typography.Text
