@@ -201,7 +201,7 @@ const ProjectsDetail = () => {
                 padding: "10px",
               }}
             >
-              <Row gutter={16} style={{ padding: "5px" }}>
+              <Row gutter={25} style={{ padding: "5px" }}>
                 <Col span={10}>
                   <Flex vertical gap="small">
                     <Carousel afterChange={handleAfterChange} ref={carouselRef}>
@@ -298,7 +298,10 @@ const ProjectsDetail = () => {
                   <Flex vertical gap={100}>
                     <Space direction="vertical">
                       <Card bordered={false}>
-                        <Typography.Title level={4}>
+                        <Typography.Title
+                          level={4}
+                          style={{ color: "#0070af" }}
+                        >
                           {product.title}
                         </Typography.Title>
                         <Flex justify="space-between">

@@ -133,17 +133,3 @@ iframe {
   height: 600px;
   border-radius: 15px;
 }
-
-/* .ant-card-meta-title,
-.ant-card-meta-description {
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-} */
-
-/* .card-title-meta {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  -webkit-line-clamp: 2;
-} */
