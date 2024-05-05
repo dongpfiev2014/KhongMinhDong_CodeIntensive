@@ -275,7 +275,7 @@ const ProductsScreen = () => {
             onChange: (page) => {
               console.log(page);
             },
-            pageSize: 20,
+            pageSize: 30,
           }}
           grid={{ gutter: 10, column: 5 }}
           dataSource={data}
@@ -307,12 +307,14 @@ const ProductsScreen = () => {
                     >
                       <Rate
                         disabled
-                        defaultValue={4}
+                        defaultValue={
+                          Math.floor(Math.random() * (5 - 3 + 1)) + 3
+                        }
                         style={{
                           fontSize: "11px",
                         }}
                       />
-                      <div>{12} sold</div>
+                      <div>{Math.floor(Math.random() * 50) + 1} sold</div>
                       <div>Còn hàng</div>
                     </Space>
                   </>,

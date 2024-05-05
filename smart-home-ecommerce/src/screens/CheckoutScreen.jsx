@@ -236,13 +236,20 @@ const CheckoutScreen = () => {
     const updatedUser = {
       ...rest,
       product: updatedCart.filter((item) => !selectedRowKeys.includes(item.id)),
-      myPurchase: [
-        ...rest.myPurchase, // Sao chép các sản phẩm hiện có từ rest
-        ...dataSource.map((product) => ({
-          ...product,
-          orderStatus: "toShip",
-        })),
-      ],
+      myPurchase: Array.isArray(rest.myPurchase)
+        ? [
+            ...rest.myPurchase,
+            ...dataSource.map((product) => ({
+              ...product,
+              orderStatus: "toShip",
+            })),
+          ]
+        : [
+            ...dataSource.map((product) => ({
+              ...product,
+              orderStatus: "toShip",
+            })),
+          ],
     };
     dispatch(addToCart(updatedUser)).then((action) => {
       if (action.payload) {

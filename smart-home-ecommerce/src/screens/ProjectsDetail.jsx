@@ -202,7 +202,7 @@ const ProjectsDetail = () => {
               }}
             >
               <Row gutter={25} style={{ padding: "5px" }}>
-                <Col span={10}>
+                <Col span={12}>
                   <Flex vertical gap="small">
                     <Carousel afterChange={handleAfterChange} ref={carouselRef}>
                       {product.images &&
@@ -292,7 +292,7 @@ const ProjectsDetail = () => {
                   </Flex>
                 </Col>
                 <Col
-                  span={14}
+                  span={12}
                   className="d-flex flex-column justify-content-between"
                 >
                   <Flex vertical gap={100}>

@@ -53,7 +53,7 @@ const FloatButtonComponent = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       showChatboxModal();
-    }, 30000);
+    }, 90000);
     return () => clearInterval(timer);
   }, []);
 
@@ -169,8 +169,8 @@ const FloatButtonComponent = () => {
               </Card>
             </>,
           ]}
-          open={false}
-          // open={chatBox}
+          // open={false}
+          open={chatBox}
           onOk={closeChatboxModal}
           onCancel={closeChatboxModal}
           maskClosable={true}

@@ -60,13 +60,36 @@ const VideoLandingPage = () => {
         />
         <div className="position-absolute bottom-0 start-50 translate-middle-x mb-5 d-flex flex-column justify-content-center align-items-center text-white">
           <Space direction="vertical" align="center" size="middle">
-            <h1 style={{ fontSize: "60px" }}>Welcome</h1>
-            <p style={{ fontSize: "20px" }}>To my site.</p>
+            <h1
+              style={{
+                fontSize: "60px",
+                fontFamily: '"Roboto Flex", sans-serif',
+              }}
+            >
+              Eikon Exé
+            </h1>
+            <p
+              style={{
+                fontSize: "28px",
+                fontFamily: '"Roboto Flex", sans-serif',
+              }}
+            >
+              You're never seen everything like this before
+            </p>
             <Flex gap="middle" align="center" justify="center">
-              <Button shape="round" size="large">
+              <Button
+                shape="round"
+                size="large"
+                style={{ fontFamily: '"Roboto Flex", sans-serif' }}
+              >
                 Learn More
               </Button>
-              <Button shape="round" size="large" className="custom-button">
+              <Button
+                shape="round"
+                size="large"
+                className="custom-button"
+                style={{ fontFamily: '"Roboto Flex", sans-serif' }}
+              >
                 Shop now
               </Button>
             </Flex>
