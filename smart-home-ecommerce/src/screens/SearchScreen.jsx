@@ -9,7 +9,7 @@ const SearchScreen = () => {
   const key = searchParams.get("key");
   const products = useSelector((state) => state.products);
   const contents = useSelector((state) => state.contents);
-  console.log(products, contents);
+  console.log(products, contents, key);
 
   const renderList = () => {};
 

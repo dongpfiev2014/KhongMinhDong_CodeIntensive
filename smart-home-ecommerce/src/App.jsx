@@ -28,7 +28,7 @@ import CheckoutScreen from "./screens/CheckoutScreen";
 import ProjectsDetail from "./screens/ProjectsDetail";
 import NewDetail from "./screens/NewDetail";
 import SearchScreen from "./screens/SearchScreen";
-import { getAllContents } from "./Redux-reducer/data";
+import { getAllContents, getAllProducts } from "./Redux-reducer/data";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,7 +37,8 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getAllContents());
+    dispatch(getAllContents()).then((action) => console.log(action.payload));
+    dispatch(getAllProducts()).then((action) => console.log(action.payload));
   }, []);
 
   return (
