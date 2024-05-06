@@ -53,7 +53,6 @@ const ProjectsScreen = () => {
     dispatch(getAllProducts()).then((action) => {
       if (action.payload) {
         setProducts(action.payload);
-        console.log(action.payload);
         setIsLoading(false);
       }
     });

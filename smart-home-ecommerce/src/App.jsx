@@ -27,12 +27,18 @@ import CartScreen from "./screens/CartScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 import ProjectsDetail from "./screens/ProjectsDetail";
 import NewDetail from "./screens/NewDetail";
+import SearchScreen from "./screens/SearchScreen";
+import { getAllContents } from "./Redux-reducer/data";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getAllContents());
+  }, []);
 
   return (
     <>
@@ -70,6 +76,7 @@ function App() {
             <Route path="/accounts/*" element={<ProfileScreen />} />
             <Route path="/accounts/login" element={<LoginForm />} />
             <Route path="/accounts/signup" element={<RegisterForm />} />
+            <Route path="/search" element={<SearchScreen />} />
             <Route path="*" element={<NotFoundScreen />} />
           </Routes>
           <NewsletterSignupForm />

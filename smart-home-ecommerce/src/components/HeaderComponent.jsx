@@ -41,6 +41,7 @@ const HeaderComponent = () => {
   const [totalCost, setTotalCost] = useState(0);
   const { product, ...rest } = (auth && auth.currentUser) || {};
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [pathToRerender, setPathToRerender] = useState("");
 
   const onClick = (val) => {
     setCurrent(val.key);
@@ -492,6 +493,18 @@ const HeaderComponent = () => {
     },
   ];
 
+  const handleSearch = (e) => {
+    const currentPath = window.location.pathname;
+    if (!currentPath.startsWith("/search")) {
+      setPathToRerender(currentPath);
+    }
+    if (e.target.value.trim()) {
+      navigate(`/search?key=${e.target.value}`);
+    } else {
+      navigate(pathToRerender);
+    }
+  };
+
   return (
     <>
       <Layout style={{ position: "sticky", zIndex: 1, top: 0 }}>
@@ -528,6 +541,7 @@ const HeaderComponent = () => {
                 selectedKeys={[current]}
                 mode="horizontal"
                 items={items}
+                disabledOverflow
               />
             </ConfigProvider>
             <Input.Search
@@ -538,6 +552,7 @@ const HeaderComponent = () => {
               style={{
                 width: 200,
               }}
+              onChange={(e) => handleSearch(e)}
             />
             <Switch
               checked={mode}
