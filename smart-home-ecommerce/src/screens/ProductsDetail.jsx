@@ -55,7 +55,6 @@ const ProductsDetail = () => {
     if (id) {
       dispatch(getIdProduct(id)).then((action) => {
         if (action.payload) {
-          console.log(action.payload);
           setProduct(action.payload);
         }
       });

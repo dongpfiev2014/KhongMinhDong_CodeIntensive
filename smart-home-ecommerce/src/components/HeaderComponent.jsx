@@ -29,6 +29,7 @@ import { addToCart, logout } from "../Redux-reducer/auth";
 import Logo from "../photos/vecteezy_smart-home-logo-icon-template_20040705.svg";
 import Typography from "antd/es/typography/Typography";
 import { BsTrash } from "react-icons/bs";
+import { setSearchValue } from "../Redux-reducer/search";
 
 const HeaderComponent = () => {
   const [current, setCurrent] = useState("about");
@@ -494,12 +495,16 @@ const HeaderComponent = () => {
   ];
 
   const handleSearch = (e) => {
-    const currentPath = window.location.pathname;
-    if (!currentPath.startsWith("/search")) {
-      setPathToRerender(currentPath);
+    const currentPath = window.location.href;
+    const url = new URL(currentPath);
+    const pathAfterDomain = url.pathname + url.search;
+
+    if (!pathAfterDomain.startsWith("/search")) {
+      setPathToRerender(pathAfterDomain);
     }
     if (e.target.value.trim()) {
-      navigate(`/search?key=${e.target.value}`);
+      navigate("/search");
+      dispatch(setSearchValue(e.target.value));
     } else {
       navigate(pathToRerender);
     }

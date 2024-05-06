@@ -247,7 +247,7 @@ const ProductsComponent = () => {
           onChange: (page) => {
             console.log(page);
           },
-          pageSize: 15,
+          pageSize: 5,
         }}
         dataSource={data}
         renderItem={(item, index) => (

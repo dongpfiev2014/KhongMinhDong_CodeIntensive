@@ -28,18 +28,12 @@ import CheckoutScreen from "./screens/CheckoutScreen";
 import ProjectsDetail from "./screens/ProjectsDetail";
 import NewDetail from "./screens/NewDetail";
 import SearchScreen from "./screens/SearchScreen";
-import { getAllContents, getAllProducts } from "./Redux-reducer/data";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getAllContents()).then((action) => console.log(action.payload));
-    dispatch(getAllProducts()).then((action) => console.log(action.payload));
-  }, []);
 
   return (
     <>

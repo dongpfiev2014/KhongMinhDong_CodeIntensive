@@ -30,7 +30,6 @@ const NewsScreen = () => {
     dispatch(getAllContents()).then((action) => {
       if (action.payload) {
         setContents(action.payload);
-        console.log(action.payload);
         setIsLoading(false);
       }
     });

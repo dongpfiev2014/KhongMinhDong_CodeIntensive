@@ -3,6 +3,7 @@ import darkModeReducer from "../Redux-reducer/darkModeSlice";
 import authenReducer from "../Redux-reducer/auth";
 import { contentsReducer, productsReducer } from "../Redux-reducer/data";
 import selectedRowKeysReducer from "../Redux-reducer/selectedRowKeys";
+import searchValueReducer from "../Redux-reducer/search";
 
 export const store = configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export const store = configureStore({
     contents: contentsReducer,
     products: productsReducer,
     selectedRowKeys: selectedRowKeysReducer,
+    searchValue: searchValueReducer,
   },
 });

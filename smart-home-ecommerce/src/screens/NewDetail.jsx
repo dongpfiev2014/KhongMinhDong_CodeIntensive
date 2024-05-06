@@ -17,7 +17,6 @@ const NewDetail = () => {
     if (id) {
       dispatch(getIdContent(id)).then((action) => {
         if (action.payload) {
-          console.log(action.payload);
           setContent(action.payload);
         }
       });
