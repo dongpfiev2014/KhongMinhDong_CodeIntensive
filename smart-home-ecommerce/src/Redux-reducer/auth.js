@@ -114,7 +114,7 @@ export const updateUserProfile = createAsyncThunk(
         `${API_USERS_URL}/${updatedData.id}`,
         updatedData
       );
-      console.log(response.data);
+
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -132,7 +132,7 @@ export const addToCart = createAsyncThunk(
         `${API_USERS_URL}/${updatedData.id}`,
         updatedData
       );
-      console.log(response.data);
+
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(

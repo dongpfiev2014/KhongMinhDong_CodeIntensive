@@ -253,7 +253,6 @@ const CheckoutScreen = () => {
     };
     dispatch(addToCart(updatedUser)).then((action) => {
       if (action.payload) {
-        console.log(action.payload);
         navigate("/accounts/purchase");
       }
     });

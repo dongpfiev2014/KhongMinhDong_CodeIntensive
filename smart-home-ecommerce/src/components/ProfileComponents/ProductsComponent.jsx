@@ -244,9 +244,6 @@ const ProductsComponent = () => {
         itemLayout="vertical"
         size="large"
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
           pageSize: 5,
         }}
         dataSource={data}
@@ -691,9 +688,7 @@ const ProductsComponent = () => {
     },
   ];
 
-  const onChange = (key) => {
-    console.log(key);
-  };
+  const onChange = (key) => {};
 
   const [messageApi, contextHolder] = message.useMessage();
   const success1 = () => {

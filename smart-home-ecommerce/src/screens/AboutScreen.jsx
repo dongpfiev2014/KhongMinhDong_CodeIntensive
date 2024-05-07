@@ -15,7 +15,7 @@ const AboutScreen = () => {
     dispatch(getContent({ category: id })).then((action) => {
       if (action.payload) {
         const listContents = action.payload;
-        console.log(listContents);
+
         setContent(listContents[listContents.length - 1].content);
       }
     });

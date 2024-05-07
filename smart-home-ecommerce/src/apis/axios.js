@@ -5,9 +5,7 @@ const API_URL = "https://6623c3b23e17a3ac847025a5.mockapi.io/api/user";
 
 axios
   .get(API_URL)
-  .then((response) => {
-    console.log("Dữ liệu từ API:", response.data);
-  })
+  .then((response) => {})
   .catch((error) => {
     console.error("Lỗi khi gửi yêu cầu:", error);
   });
@@ -19,9 +17,7 @@ const userData = {
 };
 axios
   .post(API_URL, userData)
-  .then((response) => {
-    console.log("Dữ liệu từ API:", response.data);
-  })
+  .then((response) => {})
   .catch((error) => {
     console.error("Lỗi khi gửi yêu cầu:", error);
   });

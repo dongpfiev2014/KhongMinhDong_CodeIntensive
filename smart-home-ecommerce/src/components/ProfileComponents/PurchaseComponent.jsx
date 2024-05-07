@@ -24,7 +24,6 @@ const PurchaseComponent = () => {
   const { myPurchase, ...rest } = (auth && auth.currentUser) || {};
   const dispatch = useDispatch();
   const [tabKey, setTabKey] = useState("");
-  console.log(myPurchase);
 
   const onChange = (key) => {
     setTabKey(key);
@@ -36,9 +35,6 @@ const PurchaseComponent = () => {
         // loading={isLoading}
         itemLayout="vertical"
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
           pageSize: 10,
         }}
         dataSource={data}
@@ -135,11 +131,7 @@ const PurchaseComponent = () => {
       return item;
     });
     const updatedUser = { ...rest, myPurchase: newMyPurchase };
-    dispatch(updateUserProfile(updatedUser)).then((action) => {
-      if (action.payload) {
-        console.log(action.payload);
-      }
-    });
+    dispatch(updateUserProfile(updatedUser));
   };
 
   const items = [

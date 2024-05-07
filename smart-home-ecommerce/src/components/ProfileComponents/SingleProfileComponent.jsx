@@ -41,7 +41,6 @@ const SingleProfileComponent = () => {
     setDateOfBirth(dateString);
   };
 
-  console.log(auth.currentUser.dateOfBirth);
   const dateString = auth.currentUser.dateOfBirth;
   const dateFormat = "YYYY-MM-DD";
   const dateValue = moment(dateString, dateFormat);

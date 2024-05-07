@@ -97,9 +97,6 @@ const NewsScreen = () => {
         <List
           loading={isLoading}
           pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
             pageSize: 16,
           }}
           grid={{ gutter: 10, column: 4 }}

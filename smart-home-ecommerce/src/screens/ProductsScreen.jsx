@@ -66,17 +66,14 @@ const ProductsScreen = () => {
 
   const handleBrandCheckboxChange = (selectedValues) => {
     setSelectedBrands(selectedValues);
-    console.log(selectedValues);
   };
 
   const handleMaterialCheckboxChange = (selectedValues) => {
     setSelectedMaterials(selectedValues);
-    console.log(selectedValues);
   };
 
   const handleSeriesCheckboxChange = (selectedValues) => {
     setSelectedSeries(selectedValues);
-    console.log(selectedValues);
   };
 
   const onClickFilter = (val) => {
@@ -271,9 +268,6 @@ const ProductsScreen = () => {
         <List
           loading={isLoading}
           pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
             pageSize: 30,
           }}
           grid={{ gutter: 10, column: 5 }}

@@ -40,12 +40,10 @@ const ProjectsScreen = () => {
 
   const handlePlaceCheckboxChange = (selectedValues) => {
     setSelectedPlaces(selectedValues);
-    console.log(selectedValues);
   };
 
   const handleYearCheckboxChange = (selectedValues) => {
     setSelectedYears(selectedValues);
-    console.log(selectedValues);
   };
 
   useEffect(() => {
@@ -131,9 +129,6 @@ const ProjectsScreen = () => {
         <List
           loading={isLoading}
           pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
             pageSize: 12,
           }}
           grid={{ gutter: 10, column: 3 }}

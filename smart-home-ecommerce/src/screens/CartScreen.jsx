@@ -82,11 +82,7 @@ const CartScreen = () => {
     const updatedCart = [...auth.currentUser.product];
     updatedCart.splice(index, 1);
     const updatedUser = { ...rest, product: updatedCart };
-    dispatch(addToCart(updatedUser)).then((action) => {
-      if (action.payload) {
-        console.log(action.payload);
-      }
-    });
+    dispatch(addToCart(updatedUser));
   };
 
   const handleRemoveSelectedItems = () => {
@@ -95,32 +91,20 @@ const CartScreen = () => {
       ...rest,
       product: updatedCart.filter((item) => !selectedRowKeys.includes(item.id)),
     };
-    console.log(updatedUser);
-    dispatch(addToCart(updatedUser)).then((action) => {
-      if (action.payload) {
-        console.log(action.payload);
-      }
-    });
+
+    dispatch(addToCart(updatedUser));
   };
 
   const handleRemoveAllItems = () => {
     const updatedUser = { ...rest, product: [] };
-    dispatch(addToCart(updatedUser)).then((action) => {
-      if (action.payload) {
-        console.log(action.payload);
-      }
-    });
+    dispatch(addToCart(updatedUser));
   };
 
   const handleIncreaseAmount = (index) => {
     const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
     updatedCart[index].amount += 1;
     const updatedUser = { ...rest, product: updatedCart };
-    dispatch(addToCart(updatedUser)).then((action) => {
-      if (action.payload) {
-        console.log(action.payload);
-      }
-    });
+    dispatch(addToCart(updatedUser));
   };
   const handleDecreaseAmount = (index) => {
     const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
@@ -129,11 +113,7 @@ const CartScreen = () => {
       showDeleteConfirm(index);
     } else {
       const updatedUser = { ...rest, product: updatedCart };
-      dispatch(addToCart(updatedUser)).then((action) => {
-        if (action.payload) {
-          console.log(action.payload);
-        }
-      });
+      dispatch(addToCart(updatedUser));
     }
   };
 
@@ -142,11 +122,7 @@ const CartScreen = () => {
       const updatedCart = JSON.parse(JSON.stringify(auth.currentUser.product));
       updatedCart[index].amount = value;
       const updatedUser = { ...rest, product: updatedCart };
-      dispatch(addToCart(updatedUser)).then((action) => {
-        if (action.payload) {
-          console.log(action.payload);
-        }
-      });
+      dispatch(addToCart(updatedUser));
     } else if (value === 0) {
       showDeleteConfirm(index);
     }
@@ -360,11 +336,11 @@ const CartScreen = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+      // console.log(
+      //   `selectedRowKeys: ${selectedRowKeys}`,
+      //   "selectedRows: ",
+      //   selectedRows
+      // );
       dispatch(setSelectedRowKeys(selectedRowKeys));
       if (selectedRows.length === auth.currentUser.product.length) {
         setCheckedSelectAll(true);
